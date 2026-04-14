@@ -1,0 +1,29 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Next.js
+.next/
+out/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# logs
+logs
+*.log
+
+# system
+.DS_Store
+Thumbs.db
+
+# build
+dist/
+coverage/
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
