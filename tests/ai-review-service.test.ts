@@ -211,7 +211,8 @@ describe("AI 抽样复核 service", () => {
     const failingProvider = {
       name: "mock" as const,
       isAvailable: () => true,
-      reviewRecord: vi.fn().mockRejectedValue(new Error("provider failed"))
+      reviewRecord: vi.fn().mockRejectedValue(new Error("provider failed")),
+      generateBatchReport: vi.fn()
     };
 
     const result = await reviewSampleRecords({

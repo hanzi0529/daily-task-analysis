@@ -168,6 +168,20 @@ export const dashboardSummarySchema = z
   })
   .passthrough();
 
+export const batchAiReportSchema = z
+  .object({
+    overview: z.string().default(""),
+    majorFindings: z.array(z.string()).default([]),
+    riskInsights: z.array(z.string()).default([]),
+    focusPeopleSuggestions: z.array(z.string()).default([]),
+    focusTaskSuggestions: z.array(z.string()).default([]),
+    managementSuggestions: z.array(z.string()).default([]),
+    reportingSummary: z.string().default(""),
+    generatedAt: z.string().nullable().optional(),
+    extra: extensibleObjectSchema.default({})
+  })
+  .passthrough();
+
 export const personSummarySchema = z
   .object({
     memberName: z.string(),
@@ -197,6 +211,7 @@ export const analysisDatasetSchema = z
     analyses: z.array(recordAnalysisResultSchema),
     recordList: z.array(recordListItemSchema),
     dashboard: dashboardSummarySchema,
-    people: z.array(personSummarySchema).default([])
+    people: z.array(personSummarySchema).default([]),
+    batchAiReport: batchAiReportSchema.nullable().optional()
   })
   .passthrough();

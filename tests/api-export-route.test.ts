@@ -27,6 +27,11 @@ describe("GET /api/export/latest", () => {
       XLSX.utils.json_to_sheet([{ 字段: "值" }]),
       "人员汇总"
     );
+    XLSX.utils.book_append_sheet(
+      workbook,
+      XLSX.utils.json_to_sheet([{ 字段: "值" }]),
+      "AI管理总结"
+    );
 
     exportLatestAnalysisWorkbook.mockResolvedValue(
       XLSX.write(workbook, {
@@ -47,6 +52,6 @@ describe("GET /api/export/latest", () => {
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
     expect(buffer.subarray(0, 4).toString("hex")).toBe("504b0304");
-    expect(workbook.SheetNames).toEqual(["日报核查明细", "人员汇总"]);
+    expect(workbook.SheetNames).toEqual(["日报核查明细", "人员汇总", "AI管理总结"]);
   });
 });

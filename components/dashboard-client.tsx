@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -39,13 +39,33 @@ interface DashboardResponse {
   managementSummary: string[];
 }
 
+interface AiReportResponse {
+  success: boolean;
+  status: "completed" | "skipped" | "no-data";
+  message?: string;
+  report: null | {
+    overview: string;
+    majorFindings: string[];
+    managementSuggestions: string[];
+    reportingSummary: string;
+    generatedAt?: string | null;
+  };
+}
+
 export function DashboardClient() {
   const [data, setData] = useState<DashboardResponse | null>(null);
+  const [aiReport, setAiReport] = useState<AiReportResponse | null>(null);
+  const [loadingAiReport, setLoadingAiReport] = useState(true);
 
   useEffect(() => {
     fetch("/api/dashboard")
       .then((response) => response.json())
       .then((result) => setData(result));
+
+    fetch("/api/ai/report")
+      .then((response) => response.json())
+      .then((result) => setAiReport(result))
+      .finally(() => setLoadingAiReport(false));
   }, []);
 
   if (!data) {
@@ -70,7 +90,7 @@ export function DashboardClient() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <SectionCard title="高风险人员 Top 10" description="按风险等级和异常数排序">
+        <SectionCard title="高风险人员 Top 10" description="按风险等级和异常数量排序。">
           <SimpleList
             rows={data.topPeople.map((item) => ({
               title: item.memberName,
@@ -80,7 +100,7 @@ export function DashboardClient() {
           />
         </SectionCard>
 
-        <SectionCard title="高风险任务 Top 10" description="按风险条数排序">
+        <SectionCard title="高风险任务 Top 10" description="按风险条数排序。">
           <SimpleList
             rows={data.topTasks.map((item) => ({
               title: item.taskName,
@@ -91,8 +111,8 @@ export function DashboardClient() {
         </SectionCard>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <SectionCard title="管理摘要" description="由 API 直接返回，不在前端计算。">
+      <section className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
+        <SectionCard title="管理摘要" description="由规则分析服务直接返回，前端不做核心指标计算。">
           <div className="space-y-3">
             {data.managementSummary.map((item) => (
               <div key={item} className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
@@ -104,7 +124,7 @@ export function DashboardClient() {
 
         <SectionCard
           title="数据来源"
-          description="页面只做展示和导出交互。"
+          description="页面只负责展示和导出交互。"
           action={
             <a
               href="/api/export/latest"
@@ -117,10 +137,29 @@ export function DashboardClient() {
           <div className="space-y-3 text-sm text-slate-600">
             <div className="rounded-2xl bg-white p-4">文件：{data.summary.fileName || "暂无"}</div>
             <div className="rounded-2xl bg-white p-4">导入时间：{data.summary.importedAt || "暂无"}</div>
-            <div className="rounded-2xl bg-white p-4">数据全部来自 `/api/dashboard`。</div>
+            <div className="rounded-2xl bg-white p-4">数据全部来自 `/api/dashboard` 与 `/api/ai/report`。</div>
           </div>
         </SectionCard>
       </section>
+
+      <SectionCard title="AI 管理总结" description="AI 基于结构化数据和已完成的抽样复核结果生成，不改写规则主判断。">
+        {loadingAiReport ? (
+          <div className="text-sm text-slate-500">正在生成 AI 管理总结...</div>
+        ) : !aiReport?.report ? (
+          <div className="rounded-2xl border border-dashed border-slate-300 p-6 text-sm text-slate-500">
+            {aiReport?.message || "当前尚未生成 AI 管理总结。"}
+          </div>
+        ) : (
+          <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
+            <div className="space-y-4">
+              <SummaryBlock title="整体概述" content={aiReport.report.overview} />
+              <ListBlock title="核心问题" items={aiReport.report.majorFindings} emptyText="当前暂无核心问题总结。" />
+              <ListBlock title="管理建议" items={aiReport.report.managementSuggestions} emptyText="当前暂无管理建议。" />
+            </div>
+            <SummaryBlock title="汇报话术" content={aiReport.report.reportingSummary} />
+          </div>
+        )}
+      </SectionCard>
     </div>
   );
 }
@@ -205,6 +244,42 @@ function SimpleList({
           <div className="mt-2 text-sm text-slate-600">{row.detail}</div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function SummaryBlock({ title, content }: { title: string; content: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+      <div className="mb-2 text-sm font-semibold text-ink">{title}</div>
+      <div className="whitespace-pre-wrap text-sm leading-6 text-slate-700">{content || "暂无内容"}</div>
+    </div>
+  );
+}
+
+function ListBlock({
+  title,
+  items,
+  emptyText
+}: {
+  title: string;
+  items: string[];
+  emptyText: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+      <div className="mb-2 text-sm font-semibold text-ink">{title}</div>
+      {items.length === 0 ? (
+        <div className="text-sm text-slate-500">{emptyText}</div>
+      ) : (
+        <div className="space-y-2">
+          {items.map((item) => (
+            <div key={item} className="text-sm leading-6 text-slate-700">
+              {item}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

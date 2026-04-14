@@ -61,4 +61,69 @@ describe("POST /api/ai/review-sample", () => {
     expect(payload.items[0]).toHaveProperty("aiReviewLabel");
     expect(payload.items[0]).toHaveProperty("aiReviewReason");
   });
+
+  it("未配置真实 provider 时，也会返回 skipped 而不是报错", async () => {
+    reviewSampleRecords.mockResolvedValueOnce({
+      success: true,
+      status: "skipped",
+      provider: "openai",
+      reviewedCount: 0,
+      candidateCount: 5,
+      items: [],
+      message: "AI provider openai 当前未配置，已跳过抽样复核。"
+    });
+
+    const { POST } = await import("@/app/api/ai/review-sample/route");
+    const response = await POST(
+      new Request("http://localhost/api/ai/review-sample", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+      })
+    );
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.status).toBe("skipped");
+    expect(payload.message).toContain("跳过");
+  });
+
+  it("即使 AI 调用失败，API 也能返回可解释响应", async () => {
+    reviewSampleRecords.mockResolvedValueOnce({
+      success: true,
+      status: "completed",
+      provider: "mock",
+      reviewedCount: 0,
+      candidateCount: 2,
+      items: [
+        {
+          recordId: "record_1",
+          aiReviewed: false,
+          aiSummary: null,
+          aiConfidence: null,
+          aiReviewLabel: null,
+          aiReviewReason: "provider failed"
+        }
+      ],
+      message: "已完成 0 条记录的 AI 抽样复核。"
+    });
+
+    const { POST } = await import("@/app/api/ai/review-sample/route");
+    const response = await POST(
+      new Request("http://localhost/api/ai/review-sample", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+      })
+    );
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.items[0].aiReviewed).toBe(false);
+    expect(payload.items[0].aiReviewReason).toBe("provider failed");
+  });
 });

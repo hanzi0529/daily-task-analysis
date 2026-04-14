@@ -1,11 +1,13 @@
 ﻿import * as XLSX from "xlsx";
 
 import { exportDetailFields, exportPeopleFields } from "@/config/exportFields";
+import { getStoredBatchAiReport } from "@/lib/services/ai-report-service";
 import { getPeopleListV2, getRecordListV2 } from "@/lib/services/query-service-v2";
 
 export async function exportLatestAnalysisWorkbook(datasetId?: string) {
   const records = await getRecordListV2(datasetId);
   const people = await getPeopleListV2(datasetId);
+  const batchAiReport = await getStoredBatchAiReport(datasetId);
 
   const detailRows = records.map((record) => {
     const source = {
@@ -48,12 +50,38 @@ export async function exportLatestAnalysisWorkbook(datasetId?: string) {
   const workbook = XLSX.utils.book_new();
   const detailSheet = XLSX.utils.json_to_sheet(detailRows);
   const peopleSheet = XLSX.utils.json_to_sheet(peopleRows);
+  const aiSummarySheet = XLSX.utils.json_to_sheet(buildAiSummaryRows(batchAiReport));
 
   XLSX.utils.book_append_sheet(workbook, detailSheet, "日报核查明细");
   XLSX.utils.book_append_sheet(workbook, peopleSheet, "人员汇总");
+  XLSX.utils.book_append_sheet(workbook, aiSummarySheet, "AI管理总结");
 
   return XLSX.write(workbook, {
     type: "buffer",
     bookType: "xlsx"
   });
+}
+
+function buildAiSummaryRows(
+  report:
+    | {
+        overview?: string;
+        majorFindings?: string[];
+        managementSuggestions?: string[];
+        reportingSummary?: string;
+      }
+    | null
+) {
+  if (!report) {
+    return [
+      { 模块: "生成状态", 内容: "当前尚未生成 AI 管理总结，可先调用 /api/ai/report。" }
+    ];
+  }
+
+  return [
+    { 模块: "整体概述", 内容: report.overview ?? "" },
+    { 模块: "核心问题", 内容: (report.majorFindings ?? []).join("\n") },
+    { 模块: "管理建议", 内容: (report.managementSuggestions ?? []).join("\n") },
+    { 模块: "汇报话术", 内容: report.reportingSummary ?? "" }
+  ];
 }

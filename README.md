@@ -8,8 +8,9 @@
 - 标准化 JSON 输出
 - 规则分析与 Dashboard 聚合
 - Dashboard / 上传页 / 日报明细页 / 人员分析页全部接入真实 API
-- 导出最新核查结果 Excel（2 个 sheet）
+- 导出最新核查结果 Excel（3 个 sheet）
 - AI 抽样复核已接入，作为可选增强，不参与主判断
+- AI 整体报告已接入，作为批次级管理总结层，不参与主判断
 
 ## 关键目录
 
@@ -159,6 +160,12 @@ GET /api/export/latest
 - `AI复核标签`
 - `AI置信度`
 
+导出文件当前包含 3 个 sheet：
+
+- `日报核查明细`
+- `人员汇总`
+- `AI管理总结`
+
 ## 如何启用 AI 抽样复核
 
 AI 复核默认是可关闭、限量执行的辅助层，不会改写规则主判断。
@@ -209,6 +216,70 @@ curl -X POST http://localhost:3000/api/ai/review-sample ^
 - `aiReviewLabel`
 - `aiReviewReason`
 
+## 如何生成 AI 管理总结
+
+AI 管理总结是 batch-level summary，面向管理者输出整体结论与汇报话术，不会重新逐条分析所有日报。
+
+调用接口：
+
+```bash
+curl http://localhost:3000/api/ai/report
+```
+
+可选环境变量：
+
+```bash
+AI_REPORT_ENABLED=true
+AI_REPORT_EXAMPLE_LIMIT=5
+```
+
+AI 报告的输入来源是结构化数据，而不是全量原始日报文本，主要包括：
+
+- `metrics`
+  - `totalRecords`
+  - `anomalyRecords`
+  - `anomalyRate`
+  - `highRiskPeopleCount`
+  - `needAiReviewCount`
+  - `totalHours`
+- 风险等级分布
+- 风险类型分布
+- `topPeople`
+- `topTasks`
+- 已完成的 AI 抽样复核摘要
+  - 复核条数
+  - 主要标签分布
+  - 最多 5 条典型 `aiSummary`
+
+职责边界：
+
+- 规则是基础判断层
+- AI 抽样复核是记录级辅助层
+- AI 管理总结是批次级总结层
+- AI 不会覆盖 `riskLevel` / `ruleFlags` / `riskScores`
+
+`/api/ai/report` 返回示例：
+
+```json
+{
+  "success": true,
+  "status": "completed",
+  "provider": "mock",
+  "report": {
+    "overview": "本批次共分析 485 条日报，其中 65 条进入核心异常口径。",
+    "majorFindings": [
+      "异常主要集中在少数人员和少数任务。",
+      "内容完整性与任务匹配仍是主要问题来源。"
+    ],
+    "managementSuggestions": [
+      "建议优先复核高风险人员和高风险任务。",
+      "建议继续对 needAiReview 样本做抽样复核。"
+    ],
+    "reportingSummary": "整体风险可控，但局部集中问题需要定向跟进。"
+  }
+}
+```
+
 ## 如何运行测试
 
 测试框架使用 `Vitest`，当前重点保护关键主链路，而不是追求覆盖率。
@@ -232,6 +303,15 @@ npm run test:watch
 - Dashboard / Records API 返回结构稳定性
 - Excel 导出文件、sheet 名称与列头配置一致性
 - AI 抽样候选筛选、限量、mock provider、失败兜底与 API 结构稳定性
+- AI 管理总结 service / API / 空数据稳定性
+
+AI 相关测试说明：
+
+- 当前 AI 测试全部使用 `mock provider`
+- 不依赖真实 API key
+- 不依赖真实外部模型
+- 当前只验证结构、稳定性、兼容性和降级行为
+- 如果后续需要评估 AI 文案质量，可再补人工评估集或评测样本
 
 测试样例位于：
 
@@ -255,6 +335,7 @@ npm run test:watch
 - `GET /api/people`
 - `GET /api/export/latest`
 - `POST /api/ai/review-sample`
+- `GET /api/ai/report`
 
 ## 当前真实数据统计结果
 
