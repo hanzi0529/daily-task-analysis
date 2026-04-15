@@ -49,7 +49,7 @@ export async function importBufferAndAnalyze(params: {
       registeredHours: record.registeredHours,
       workContent: record.workContent,
       relatedTaskName: record.relatedTaskName,
-      riskLevel: analysis?.riskLevel ?? "low",
+      riskLevel: analysis?.riskLevel ?? "normal",
       issueCount: analysis?.issueCount ?? 0,
       needAiReview: analysis?.needAiReview ?? false,
       ruleFlags: analysis?.ruleFlags ?? {},
@@ -59,6 +59,7 @@ export async function importBufferAndAnalyze(params: {
       aiSummary: analysis?.aiSummary ?? null,
       aiConfidence: analysis?.aiConfidence ?? null,
       aiReviewLabel: analysis?.aiReviewLabel ?? null,
+      aiSuggestion: analysis?.aiSuggestion ?? null,
       aiReviewReason: analysis?.aiReviewReason ?? null,
       aiReviewedAt: analysis?.aiReviewedAt ?? null,
       rawData: record.rawData,
@@ -75,6 +76,8 @@ export async function importBufferAndAnalyze(params: {
   const people = buildPeople(recordList);
 
   const output = analysisDatasetSchema.parse({
+    datasetId,
+    batchId,
     batch: {
       ...parsed.batch,
       status: "analyzed"
@@ -112,7 +115,7 @@ export async function getRecordList(
   filters?: {
     date?: string;
     memberName?: string;
-    riskLevel?: "low" | "medium" | "high";
+    riskLevel?: "normal" | "low" | "medium" | "high";
     needAiReview?: boolean;
   }
 ) {
@@ -143,17 +146,31 @@ export async function getRecordList(
       }
       return true;
     })
-    .map((item) => ({
-      ...item,
-      primaryIssueTypes: item.issueTitles.slice(0, 3),
-      riskReasons: item.issueTitles,
-      aiReviewed: item.aiReviewed ?? false,
-      aiSummary: item.aiSummary ?? null,
-      aiConfidence: item.aiConfidence ?? null,
-      aiReviewLabel: item.aiReviewLabel ?? null,
-      aiReviewReason: item.aiReviewReason ?? null,
-      aiReviewedAt: item.aiReviewedAt ?? null
-    }));
+    .map((item) => {
+      const aiReviewed = item.aiReviewed ?? false;
+      const aiSummary = item.aiSummary ?? null;
+      const aiReviewLabel = item.aiReviewLabel ?? null;
+      const aiSuggestion = item.aiSuggestion ?? null;
+      const aiReviewReason = item.aiReviewReason ?? null;
+      const hasAiContent = Boolean(
+        [aiSummary, aiReviewLabel, aiSuggestion, aiReviewReason].find((value) => Boolean(value))
+      );
+
+      return {
+        ...item,
+        needAiReview: item.needAiReview ?? false,
+        primaryIssueTypes: item.issueTitles.slice(0, 3),
+        riskReasons: item.issueTitles,
+        aiReviewed,
+        hasAiContent,
+        aiSummary,
+        aiConfidence: item.aiConfidence ?? null,
+        aiReviewLabel,
+        aiSuggestion,
+        aiReviewReason,
+        aiReviewedAt: item.aiReviewedAt ?? null
+      };
+    });
 }
 
 export async function getPeopleSummary(datasetId?: string) {
@@ -193,13 +210,17 @@ export async function getDashboardPayload(datasetId?: string) {
 
   const records = dataset.recordList;
   const analyses = dataset.analyses;
-  const abnormalRecords = records.filter((item) => item.riskLevel !== "low");
+  const abnormalRecords = records.filter(isAnomalyRiskRecord);
   const highRiskPeople = new Set(
     records.filter((item) => item.riskLevel === "high").map((item) => item.memberName)
   );
 
   const riskTypeMap = new Map<string, number>();
+  const recordRiskById = new Map(records.map((item) => [item.recordId, item.riskLevel] as const));
   for (const analysis of analyses) {
+    if (!isAnomalyRiskRecord({ riskLevel: recordRiskById.get(analysis.recordId) ?? "normal" })) {
+      continue;
+    }
     for (const issue of analysis.issues) {
       riskTypeMap.set(issue.title, (riskTypeMap.get(issue.title) ?? 0) + 1);
     }
@@ -208,12 +229,13 @@ export async function getDashboardPayload(datasetId?: string) {
   const riskLevelDistribution = [
     { label: "高风险", value: records.filter((item) => item.riskLevel === "high").length },
     { label: "中风险", value: records.filter((item) => item.riskLevel === "medium").length },
-    { label: "低风险", value: records.filter((item) => item.riskLevel === "low").length }
+    { label: "低风险", value: records.filter((item) => item.riskLevel === "low").length },
+    { label: "正常", value: records.filter((item) => item.riskLevel === "normal").length }
   ];
 
   const dailyTrendMap = new Map<string, number>();
   for (const item of records) {
-    if (item.riskLevel === "low") {
+    if (!isAnomalyRiskRecord(item)) {
       continue;
     }
     dailyTrendMap.set(item.workDate, (dailyTrendMap.get(item.workDate) ?? 0) + 1);
@@ -231,7 +253,7 @@ export async function getDashboardPayload(datasetId?: string) {
         continue;
       }
       task.totalCount += 1;
-      if (item.riskLevel !== "low") {
+      if (isAnomalyRiskRecord(item)) {
         task.riskCount += 1;
       }
     }
@@ -290,7 +312,11 @@ function buildManagementSummary(dataset: AnalysisDataset) {
     `需要 AI 复核 ${dataset.dashboard.needAiReviewCount} 条，高风险人员 ${new Set(dataset.recordList.filter((item) => item.riskLevel === "high").map((item) => item.memberName)).size} 人。`
   );
 
+  const riskRecordIds = new Set(
+    dataset.recordList.filter(isAnomalyRiskRecord).map((item) => item.recordId)
+  );
   const topIssue = dataset.analyses
+    .filter((item) => riskRecordIds.has(item.recordId))
     .flatMap((item) => item.issues.map((issue) => issue.title))
     .reduce<Map<string, number>>((map, title) => {
       map.set(title, (map.get(title) ?? 0) + 1);
@@ -314,7 +340,7 @@ function buildDashboard(params: {
 }): DashboardSummary {
   const abnormalPeople = new Set(
     params.recordList
-      .filter((item) => item.riskLevel !== "low")
+      .filter(isAnomalyRiskRecord)
       .map((item) => item.memberName)
   );
 
@@ -325,7 +351,7 @@ function buildDashboard(params: {
     importedAt: params.importedAt,
     totalRecords: params.recordList.length,
     analyzedRecords: params.recordList.length,
-    anomalyRecords: params.recordList.filter((item) => item.riskLevel !== "low").length,
+    anomalyRecords: params.recordList.filter(isAnomalyRiskRecord).length,
     abnormalPeopleCount: abnormalPeople.size,
     needAiReviewCount: params.recordList.filter((item) => item.needAiReview).length,
     duplicateRiskCount: params.recordList.filter(
@@ -363,18 +389,20 @@ function buildPeople(recordList: RecordListItem[]): PersonSummary[] {
       totalHours: 0,
       anomalyCount: 0,
       needAiReviewCount: 0,
-      riskLevel: "low" as const,
+      riskLevel: "normal" as const,
       highlights: []
     };
 
     current.recordCount += 1;
     current.totalHours += item.registeredHours ?? 0;
-    current.anomalyCount += item.riskLevel !== "low" ? 1 : 0;
+    current.anomalyCount += isAnomalyRiskRecord(item) ? 1 : 0;
     current.needAiReviewCount += item.needAiReview ? 1 : 0;
     if (item.riskLevel === "high") {
       current.riskLevel = "high";
-    } else if (item.riskLevel === "medium" && current.riskLevel === "low") {
+    } else if (item.riskLevel === "medium" && !["high", "medium"].includes(current.riskLevel)) {
       current.riskLevel = "medium";
+    } else if (item.riskLevel === "low" && current.riskLevel === "normal") {
+      current.riskLevel = "low";
     }
     current.highlights.push(...item.issueTitles);
     map.set(item.memberName, current);
@@ -410,12 +438,19 @@ function emptyDashboard() {
   });
 }
 
-function riskSortValue(level: "low" | "medium" | "high") {
+function riskSortValue(level: "normal" | "low" | "medium" | "high") {
   if (level === "high") {
     return 3;
   }
   if (level === "medium") {
     return 2;
   }
-  return 1;
+  if (level === "low") {
+    return 1;
+  }
+  return 0;
+}
+
+function isAnomalyRiskRecord(item: { riskLevel: "normal" | "low" | "medium" | "high" }) {
+  return item.riskLevel === "medium" || item.riskLevel === "high";
 }

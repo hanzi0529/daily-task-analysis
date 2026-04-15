@@ -8,15 +8,11 @@
   { key: "workContent", title: "工作内容描述" },
   { key: "riskLevel", title: "风险等级" },
   { key: "issueCount", title: "问题数量" },
-  { key: "needAiReview", title: "NeedAiReview" },
-  { key: "aiReviewed", title: "AI是否复核" },
-  { key: "aiSummary", title: "AI点评" },
+  { key: "needAiReview", title: "需AI复核" },
+  { key: "aiReviewed", title: "AI是否已复核" },
   { key: "aiReviewLabel", title: "AI复核标签" },
-  { key: "aiConfidence", title: "AI置信度" },
-  { key: "primaryIssueTypes", title: "主要问题类型" },
-  { key: "ruleFlagsText", title: "规则标记" },
-  { key: "riskScoresText", title: "风险分值" },
-  { key: "rawDataText", title: "原始字段JSON" }
+  { key: "aiReviewResult", title: "AI复核结果" },
+  { key: "primaryIssueTypes", title: "主要问题类型" }
 ] as const;
 
 export const exportPeopleFields = [
@@ -24,7 +20,7 @@ export const exportPeopleFields = [
   { key: "recordCount", title: "日报条数" },
   { key: "totalHours", title: "总工时" },
   { key: "anomalyCount", title: "异常条数" },
-  { key: "needAiReviewCount", title: "NeedAiReview次数" },
+  { key: "needAiReviewCount", title: "需AI复核次数" },
   { key: "highlights", title: "主要问题类型" },
   { key: "suggestion", title: "建议关注" }
 ] as const;

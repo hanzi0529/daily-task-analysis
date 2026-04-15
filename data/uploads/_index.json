@@ -1,5 +1,105 @@
 [
   {
+    "id": "file_1776241097287_bmbucl",
+    "originalFileName": "file_1776241013479_weyfk9_file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFileName": "file_1776241097287_bmbucl_file_1776241013479_weyfk9_file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776241097287_bmbucl_file_1776241013479_weyfk9_file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "sizeBytes": 24766,
+    "sourceType": "local-directory",
+    "importedAt": "2026-04-15T08:18:17.295Z",
+    "extra": {
+      "sourcePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776241013479_weyfk9_file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+      "sourceDirectory": "D:\\VB projects\\daily task analysis\\data\\uploads"
+    }
+  },
+  {
+    "id": "file_1776241013479_weyfk9",
+    "originalFileName": "file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFileName": "file_1776241013479_weyfk9_file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776241013479_weyfk9_file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "sizeBytes": 24766,
+    "sourceType": "local-directory",
+    "importedAt": "2026-04-15T08:16:53.486Z",
+    "extra": {
+      "sourcePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+      "sourceDirectory": "D:\\VB projects\\daily task analysis\\data\\uploads"
+    }
+  },
+  {
+    "id": "file_1776233953358_3up4q5",
+    "originalFileName": "file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFileName": "file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776233953358_3up4q5_file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "sizeBytes": 24766,
+    "sourceType": "local-directory",
+    "importedAt": "2026-04-15T06:19:13.363Z",
+    "extra": {
+      "sourcePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+      "sourceDirectory": "D:\\VB projects\\daily task analysis\\data\\uploads"
+    }
+  },
+  {
+    "id": "file_1776233949704_kbnafy",
+    "originalFileName": "file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFileName": "file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776233949704_kbnafy_file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "sizeBytes": 24766,
+    "sourceType": "local-directory",
+    "importedAt": "2026-04-15T06:19:09.708Z",
+    "extra": {
+      "sourcePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+      "sourceDirectory": "D:\\VB projects\\daily task analysis\\data\\uploads"
+    }
+  },
+  {
+    "id": "file_1776233943762_htcp6b",
+    "originalFileName": "工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFileName": "file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776233943762_htcp6b_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "sizeBytes": 24766,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-15T06:19:03.767Z",
+    "extra": {}
+  },
+  {
+    "id": "file_1776233918246_k39m6f",
+    "originalFileName": "工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFileName": "file_1776233918246_k39m6f_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776233918246_k39m6f_工时记录_2026-04-13-2026-04-14.xlsx.xlsx",
+    "sizeBytes": 24766,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-15T06:18:38.292Z",
+    "extra": {}
+  },
+  {
+    "id": "file_1776159058358_kqu5sd",
+    "originalFileName": "file_1776157153933_5s514f_file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
+    "storedFileName": "file_1776159058358_kqu5sd_file_1776157153933_5s514f_file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776159058358_kqu5sd_file_1776157153933_5s514f_file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
+    "sizeBytes": 41551,
+    "sourceType": "local-directory",
+    "importedAt": "2026-04-14T09:30:58.393Z",
+    "extra": {
+      "sourcePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776157153933_5s514f_file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
+      "sourceDirectory": "D:\\VB projects\\daily task analysis\\data\\uploads"
+    }
+  },
+  {
+    "id": "file_1776157153933_5s514f",
+    "originalFileName": "file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
+    "storedFileName": "file_1776157153933_5s514f_file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776157153933_5s514f_file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
+    "sizeBytes": 41551,
+    "sourceType": "local-directory",
+    "importedAt": "2026-04-14T08:59:13.960Z",
+    "extra": {
+      "sourcePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
+      "sourceDirectory": "D:\\VB projects\\daily task analysis\\data\\uploads"
+    }
+  },
+  {
     "id": "file_1776086946114_opiiql",
     "originalFileName": "file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",
     "storedFileName": "file_1776086946114_opiiql_file_1776086892333_5se89x_file_1776086745056_lb7wcr_file_1776086356160_c44xus_file_1776084897869_5o8hwc_file_1776084734724_rprcxw_工时记录_2026-04-06-2026-04-12.xlsx.xlsx",

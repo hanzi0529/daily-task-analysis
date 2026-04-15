@@ -1,4 +1,4 @@
-import { aiReviewConfig } from "@/config/ai-review";
+﻿import { aiReviewConfig } from "@/config/ai-review";
 
 export const aiReportConfig = {
   enabled: process.env.AI_REPORT_ENABLED === "true",

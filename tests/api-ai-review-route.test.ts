@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+﻿import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const ensureBootstrapped = vi.fn();
 const reviewSampleRecords = vi.fn();
@@ -24,10 +24,11 @@ describe("POST /api/ai/review-sample", () => {
         {
           recordId: "record_1",
           aiReviewed: true,
-          aiSummary: "任务相关且有进展",
+          aiSummary: "这条日报与任务相关，但结果表达还有补充空间。",
           aiConfidence: 0.86,
-          aiReviewLabel: "任务相关且有进展",
-          aiReviewReason: "输出了明确进展"
+          aiReviewLabel: "结果不明确",
+          aiSuggestion: "建议补充当前已完成的具体结果或下一步动作。",
+          aiReviewReason: "当前文本体现了动作，但结果与结论表达较弱。"
         }
       ],
       message: "已完成 2 条记录的 AI 抽样复核。"
@@ -59,6 +60,7 @@ describe("POST /api/ai/review-sample", () => {
     expect(payload.items[0]).toHaveProperty("aiSummary");
     expect(payload.items[0]).toHaveProperty("aiConfidence");
     expect(payload.items[0]).toHaveProperty("aiReviewLabel");
+    expect(payload.items[0]).toHaveProperty("aiSuggestion");
     expect(payload.items[0]).toHaveProperty("aiReviewReason");
   });
 
@@ -66,11 +68,11 @@ describe("POST /api/ai/review-sample", () => {
     reviewSampleRecords.mockResolvedValueOnce({
       success: true,
       status: "skipped",
-      provider: "openai",
+      provider: "glm",
       reviewedCount: 0,
       candidateCount: 5,
       items: [],
-      message: "AI provider openai 当前未配置，已跳过抽样复核。"
+      message: "AI provider glm 当前未配置，已跳过抽样复核。"
     });
 
     const { POST } = await import("@/app/api/ai/review-sample/route");
@@ -104,6 +106,7 @@ describe("POST /api/ai/review-sample", () => {
           aiSummary: null,
           aiConfidence: null,
           aiReviewLabel: null,
+          aiSuggestion: null,
           aiReviewReason: "provider failed"
         }
       ],
@@ -127,3 +130,4 @@ describe("POST /api/ai/review-sample", () => {
     expect(payload.items[0].aiReviewReason).toBe("provider failed");
   });
 });
+

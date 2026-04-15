@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+﻿import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const ensureBootstrapped = vi.fn();
 const generateBatchReport = vi.fn();
@@ -16,6 +16,8 @@ describe("GET /api/ai/report", () => {
     ensureBootstrapped.mockResolvedValue(undefined);
     generateBatchReport.mockResolvedValue({
       success: true,
+      skipped: false,
+      reason: null,
       status: "completed",
       provider: "mock",
       report: {
@@ -45,13 +47,15 @@ describe("GET /api/ai/report", () => {
     expect(payload.report).toHaveProperty("reportingSummary");
   });
 
-  it("未配置真实 provider 时，也会返回 skipped 而不是报错", async () => {
+  it("provider 降级时也会返回合法 JSON", async () => {
     generateBatchReport.mockResolvedValueOnce({
-      success: true,
+      success: false,
+      skipped: true,
+      reason: "provider_error",
       status: "skipped",
-      provider: "openai",
+      provider: "glm",
       report: null,
-      message: "AI provider openai 当前未配置，已跳过管理总结生成。"
+      message: "AI总结暂时未生成，请稍后重试。"
     });
 
     const { GET } = await import("@/app/api/ai/report/route");
@@ -59,25 +63,42 @@ describe("GET /api/ai/report", () => {
     const payload = await response.json();
 
     expect(response.status).toBe(200);
-    expect(payload.status).toBe("skipped");
-    expect(payload.message).toContain("跳过");
+    expect(payload.skipped).toBe(true);
+    expect(payload.reason).toBe("provider_error");
+    expect(payload.report).toBeNull();
   });
 
-  it("空数据时会返回可解释的降级响应", async () => {
+  it("空数据时会返回合法 JSON，而不是抛裸异常", async () => {
     generateBatchReport.mockResolvedValueOnce({
       success: false,
+      skipped: true,
+      reason: "no_data",
       status: "no-data",
       provider: "mock",
       report: null,
-      message: "当前没有可用于生成 AI 管理总结的分析结果。"
+      message: "AI总结暂时未生成，请稍后重试。"
     });
 
     const { GET } = await import("@/app/api/ai/report/route");
     const response = await GET(new Request("http://localhost/api/ai/report"));
     const payload = await response.json();
 
-    expect(response.status).toBe(404);
-    expect(payload.status).toBe("no-data");
+    expect(response.status).toBe(200);
+    expect(payload.reason).toBe("no_data");
+    expect(payload.report).toBeNull();
+  });
+
+  it("即使 service 抛错，route 也会返回可解释 JSON", async () => {
+    generateBatchReport.mockRejectedValueOnce(new Error("429 Too Many Requests"));
+
+    const { GET } = await import("@/app/api/ai/report/route");
+    const response = await GET(new Request("http://localhost/api/ai/report"));
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.success).toBe(false);
+    expect(payload.skipped).toBe(true);
+    expect(payload.reason).toBe("provider_error");
     expect(payload.report).toBeNull();
   });
 });

@@ -22,6 +22,11 @@ Thumbs.db
 # build
 dist/
 coverage/
+.next/
+start-*.log
+server-*.pid
+export-*.xlsx
+latest-export*.xlsx
 
 # IDE
 .vscode/*

@@ -12,26 +12,23 @@ interface RecordItem {
   relatedTaskName?: string;
   registeredHours?: number;
   workContent: string;
-  riskLevel: "low" | "medium" | "high";
+  riskLevel: "normal" | "low" | "medium" | "high";
   issueCount: number;
   needAiReview: boolean;
   primaryIssueTypes: string[];
-  ruleFlags: Record<string, unknown>;
-  riskScores: Record<string, unknown>;
-  rawData: Record<string, unknown>;
   riskReasons: string[];
   aiReviewed: boolean;
+  hasAiContent?: boolean;
   aiSummary?: string | null;
   aiConfidence?: number | null;
   aiReviewLabel?: string | null;
+  aiSuggestion?: string | null;
   aiReviewReason?: string | null;
 }
 
 export function RecordsClient() {
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [reviewing, setReviewing] = useState(false);
-  const [reviewMessage, setReviewMessage] = useState("");
   const [filters, setFilters] = useState({
     date: "",
     memberName: "",
@@ -72,38 +69,8 @@ export function RecordsClient() {
     };
   }, [queryString]);
 
-  async function reloadRecords() {
-    setLoading(true);
-    try {
-      const data = await fetchRecords(queryString);
-      setRecords(data);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleAiSampleReview() {
-    setReviewing(true);
-    setReviewMessage("");
-
-    try {
-      const response = await fetch("/api/ai/review-sample", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({})
-      });
-      const result = await response.json();
-      setReviewMessage(result.message || `已处理 ${result.reviewedCount || 0} 条 AI 复核样本`);
-      await reloadRecords();
-    } finally {
-      setReviewing(false);
-    }
-  }
-
   return (
-    <SectionCard title="日报明细" description="支持筛选、展开查看规则详情，并轻量展示 AI 抽样复核结果。">
+    <SectionCard title="日报明细" description="支持筛选、展开查看风险原因，并展示 AI 完整复核结果。">
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="grid gap-3 md:grid-cols-4 md:flex-1">
           <input
@@ -132,6 +99,7 @@ export function RecordsClient() {
             <option value="high">高风险</option>
             <option value="medium">中风险</option>
             <option value="low">低风险</option>
+            <option value="normal">正常</option>
           </select>
           <select
             value={filters.needAiReview}
@@ -140,23 +108,13 @@ export function RecordsClient() {
             }
             className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm"
           >
-            <option value="">全部 AI 候选状态</option>
+            <option value="">全部需AI复核状态</option>
             <option value="true">是</option>
             <option value="false">否</option>
           </select>
         </div>
 
-        <button
-          type="button"
-          onClick={() => void handleAiSampleReview()}
-          disabled={reviewing}
-          className="rounded-2xl bg-ink px-4 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {reviewing ? "AI复核中..." : "执行AI抽样复核"}
-        </button>
       </div>
-
-      {reviewMessage ? <div className="mb-4 text-sm text-slate-600">{reviewMessage}</div> : null}
 
       {loading ? (
         <div className="text-sm text-slate-500">正在加载明细...</div>
@@ -176,7 +134,7 @@ export function RecordsClient() {
                 <div className="mt-3 text-sm text-slate-700">{record.workContent || "-"}</div>
                 <div className="mt-2 grid gap-2 text-xs text-slate-500 md:grid-cols-4">
                   <div>问题数量：{record.issueCount}</div>
-                  <div>NeedAiReview：{record.needAiReview ? "是" : "否"}</div>
+                  <div>需AI复核：{record.needAiReview ? "是" : "否"}</div>
                   <div>AI已复核：{record.aiReviewed ? "是" : "否"}</div>
                   <div>主要问题类型：{record.primaryIssueTypes.join("；") || "无"}</div>
                 </div>
@@ -185,17 +143,14 @@ export function RecordsClient() {
               <div className="mt-4 grid gap-4 md:grid-cols-2">
                 <DetailBlock title="风险原因" value={record.riskReasons.join("；") || "无"} />
                 <DetailBlock
-                  title="AI点评"
+                  title="AI复核结果"
                   value={
                     record.aiSummary
-                      ? `${record.aiSummary}${record.aiReviewLabel ? `\n标签：${record.aiReviewLabel}` : ""}${typeof record.aiConfidence === "number" ? `\n置信度：${record.aiConfidence}` : ""}${record.aiReviewReason ? `\n原因：${record.aiReviewReason}` : ""}`
-                      : "当前未执行 AI 抽样复核"
+                      ? `${record.aiSummary}${record.aiReviewLabel ? `\n标签：${record.aiReviewLabel}` : ""}${record.aiSuggestion ? `\n建议：${record.aiSuggestion}` : ""}${typeof record.aiConfidence === "number" ? `\n置信度：${record.aiConfidence}` : ""}${record.aiReviewReason ? `\n原因：${record.aiReviewReason}` : ""}`
+                      : "当前尚未生成 AI 复核内容"
                   }
                   code
                 />
-                <DetailBlock title="Rule Flags" value={JSON.stringify(record.ruleFlags, null, 2)} code />
-                <DetailBlock title="Risk Scores" value={JSON.stringify(record.riskScores, null, 2)} code />
-                <DetailBlock title="Raw Data" value={JSON.stringify(record.rawData, null, 2)} code />
               </div>
             </details>
           ))}

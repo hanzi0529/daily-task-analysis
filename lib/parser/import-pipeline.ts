@@ -71,6 +71,8 @@ export function parseExcelFileToDataset(params: {
   });
 
   return parsedDatasetSchema.parse({
+    datasetId: params.datasetId,
+    batchId: params.batchId,
     batch,
     rawRecords,
     normalizedRecords

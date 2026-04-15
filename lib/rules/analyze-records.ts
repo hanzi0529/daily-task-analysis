@@ -119,6 +119,7 @@ function createBaseResult(record: NormalizedRecord): RecordAnalysisResult {
     aiSummary: null,
     aiConfidence: null,
     aiReviewLabel: null,
+    aiSuggestion: null,
     aiReviewReason: null,
     aiReviewedAt: null,
     extra: {}

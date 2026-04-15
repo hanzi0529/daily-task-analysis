@@ -1,4 +1,4 @@
-export type AiReviewProviderName = "mock" | "glm" | "openai";
+﻿export type AiReviewProviderName = "mock" | "glm" | "openai";
 
 export const aiReviewConfig = {
   enabled: process.env.AI_REVIEW_ENABLED === "true",
@@ -7,9 +7,22 @@ export const aiReviewConfig = {
   candidateRules: {
     needAiReview: process.env.AI_REVIEW_INCLUDE_NEED_AI !== "false",
     mediumRisk: process.env.AI_REVIEW_INCLUDE_MEDIUM !== "false",
-    managementAmbiguous:
-      process.env.AI_REVIEW_INCLUDE_MANAGEMENT !== "false",
+    managementAmbiguous: process.env.AI_REVIEW_INCLUDE_MANAGEMENT !== "false",
     focusSamples: process.env.AI_REVIEW_INCLUDE_FOCUS !== "false"
+  },
+  glm: {
+    apiKey: process.env.GLM_API_KEY || "",
+    model: process.env.GLM_MODEL || "glm-4.7",
+    baseUrl:
+      process.env.GLM_BASE_URL ||
+      "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+  },
+  openai: {
+    apiKey: process.env.OPENAI_API_KEY || "",
+    model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
+    baseUrl:
+      process.env.OPENAI_BASE_URL ||
+      "https://api.openai.com/v1/chat/completions"
   }
 } as const;
 

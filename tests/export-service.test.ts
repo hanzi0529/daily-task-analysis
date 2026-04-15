@@ -35,12 +35,14 @@ describe("导出 service", () => {
             "task.weak-match": 0.3
           },
           issueTitles: ["内容过短", "任务匹配较弱"],
-          aiReviewed: false,
-          aiSummary: null,
-          aiConfidence: null,
-          aiReviewLabel: null
+          aiReviewed: true,
+          aiSummary: "这条日报与任务相关，但结果表达还有补充空间。",
+          aiConfidence: 0.83,
+          aiReviewLabel: "结果不明确",
+          aiSuggestion: "建议补充当前已完成的具体结果或后续动作。"
         }),
-        primaryIssueTypes: ["内容完整性", "任务匹配"]
+        primaryIssueTypes: ["内容完整性", "任务匹配"],
+        hasAiContent: true
       }
     ]);
     getPeopleListV2.mockResolvedValue([
@@ -72,22 +74,66 @@ describe("导出 service", () => {
 
     expect(workbook.SheetNames).toEqual(["日报核查明细", "人员汇总", "AI管理总结"]);
 
-    const detailHeaders = XLSX.utils.sheet_to_json(workbook.Sheets["日报核查明细"], {
+    const detailRows = XLSX.utils.sheet_to_json(workbook.Sheets["日报核查明细"], {
       header: 1
-    })[0] as string[];
+    }) as string[][];
+    const detailHeaders = detailRows[0];
+    const firstDataRow = detailRows[1];
     const peopleHeaders = XLSX.utils.sheet_to_json(workbook.Sheets["人员汇总"], {
       header: 1
     })[0] as string[];
 
     expect(detailHeaders).toEqual(exportDetailFields.map((field) => field.title));
     expect(peopleHeaders).toEqual(exportPeopleFields.map((field) => field.title));
-    expect(detailHeaders).toContain("AI是否复核");
-    expect(detailHeaders).toContain("AI点评");
+    expect(detailHeaders).toContain("AI是否已复核");
+    expect(detailHeaders).toContain("AI复核结果");
+    expect(detailHeaders).not.toContain("AI是否有内容");
+    expect(detailHeaders).not.toContain("AI置信度");
+    expect(detailHeaders).not.toContain("规则标记");
+    expect(detailHeaders).not.toContain("风险分值");
+    expect(detailHeaders).not.toContain("原始字段JSON");
     expect(workbook.Sheets["AI管理总结"]).toBeTruthy();
+    expect(firstDataRow).toContain("是");
+    expect(firstDataRow.join("\n")).toContain("分析：这条日报与任务相关，但结果表达还有补充空间。");
+    expect(firstDataRow.join("\n")).toContain("建议：建议补充当前已完成的具体结果或后续动作。");
+  });
+
+  it("导出中的 needAiReview 列映射到规则层字段", async () => {
+    const { exportLatestAnalysisWorkbook } = await import(
+      "@/lib/services/export-service-v2"
+    );
+    const buffer = await exportLatestAnalysisWorkbook();
+    const workbook = XLSX.read(buffer, { type: "buffer" });
+    const detailRows = XLSX.utils.sheet_to_json(workbook.Sheets["日报核查明细"], {
+      header: 1
+    }) as string[][];
+
+    const detailHeaders = detailRows[0];
+    const firstRow = detailRows[1];
+    const needAiReviewIndex = detailHeaders.indexOf("需AI复核");
+    const aiReviewedIndex = detailHeaders.indexOf("AI是否已复核");
+
+    expect(firstRow[needAiReviewIndex]).toBe("是");
+    expect(firstRow[aiReviewedIndex]).toBe("是");
   });
 
   it("即使 AI 总结为空，也不会影响导出", async () => {
     getStoredBatchAiReport.mockResolvedValueOnce(null);
+    getRecordListV2.mockResolvedValueOnce([
+      {
+        ...createRecordListItem({
+          memberName: "李四",
+          needAiReview: false,
+          aiReviewed: false,
+          aiSummary: null,
+          aiConfidence: null,
+          aiReviewLabel: null,
+          aiSuggestion: null
+        }),
+        primaryIssueTypes: [],
+        hasAiContent: false
+      }
+    ]);
 
     const { exportLatestAnalysisWorkbook } = await import(
       "@/lib/services/export-service-v2"
@@ -96,5 +142,10 @@ describe("导出 service", () => {
     const workbook = XLSX.read(buffer, { type: "buffer" });
 
     expect(workbook.SheetNames).toContain("AI管理总结");
+    const detailHeaders = XLSX.utils.sheet_to_json(workbook.Sheets["日报核查明细"], {
+      header: 1
+    })[0] as string[];
+    expect(detailHeaders).toContain("AI复核结果");
+    expect(detailHeaders).toContain("需AI复核");
   });
 });

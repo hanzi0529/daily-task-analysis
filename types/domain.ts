@@ -2,6 +2,7 @@ import type { z } from "zod";
 
 import type {
   analysisDatasetSchema,
+  aiReviewProgressSchema,
   dashboardSummarySchema,
   batchAiReportSchema,
   importBatchSchema,
@@ -35,6 +36,7 @@ export type NormalizedRecord = z.infer<typeof normalizedRecordSchema>;
 export type RecordAnalysisResult = z.infer<typeof recordAnalysisResultSchema>;
 export type RecordListItem = z.infer<typeof recordListItemSchema>;
 export type DashboardSummary = z.infer<typeof dashboardSummarySchema>;
+export type AiReviewProgress = z.infer<typeof aiReviewProgressSchema>;
 export type BatchAiReport = z.infer<typeof batchAiReportSchema>;
 export type PersonSummary = z.infer<typeof personSummarySchema>;
 export type ParsedDataset = z.infer<typeof parsedDatasetSchema>;

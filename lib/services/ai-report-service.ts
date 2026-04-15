@@ -1,8 +1,14 @@
-import { aiReportConfig } from "@/config/ai-report";
+﻿import { aiReportConfig } from "@/config/ai-report";
 import { getAIReviewProvider } from "@/lib/ai/review-provider";
 import { batchAiReportSchema } from "@/lib/schemas/domain";
 import { repositories } from "@/lib/storage/repositories";
 import type { AnalysisDataset, BatchAiReport } from "@/types/domain";
+
+export type AiReportFailureReason =
+  | "rate_limited"
+  | "provider_error"
+  | "no_data"
+  | "disabled";
 
 export async function generateBatchReport(params?: {
   datasetId?: string;
@@ -13,68 +19,77 @@ export async function generateBatchReport(params?: {
     : await repositories.analysis.getLatest();
 
   if (!dataset) {
-    return {
-      success: false,
-      status: "no-data" as const,
+    return createSkippedBatchReportResult({
       provider: aiReportConfig.provider,
+      reason: "no_data",
+      message: "AI总结暂时未生成，请稍后重试。",
       report: null,
-      message: "当前没有可用于生成 AI 管理总结的分析结果。"
-    };
+      status: "no-data"
+    });
   }
 
   const enabled = params?.enabled ?? aiReportConfig.enabled;
   if (!enabled) {
-    return {
-      success: true,
-      status: "skipped" as const,
+    return createSkippedBatchReportResult({
       provider: aiReportConfig.provider,
-      report: dataset.batchAiReport ?? null,
-      message: "AI 管理总结当前处于关闭状态。"
-    };
+      reason: "disabled",
+      message: "AI总结暂未启用。",
+      report: null
+    });
   }
 
   const provider = getAIReviewProvider(aiReportConfig.provider);
   if (!provider.isAvailable()) {
-    return {
-      success: true,
-      status: "skipped" as const,
+    return createSkippedBatchReportResult({
       provider: provider.name,
-      report: dataset.batchAiReport ?? null,
-      message: `AI provider ${provider.name} 当前未配置，已跳过管理总结生成。`
-    };
+      reason: "provider_error",
+      message: "AI总结暂时未生成，请稍后重试。",
+      report: dataset.batchAiReport ?? null
+    });
   }
 
-  const input = buildBatchReportInput(dataset);
-  const reportPayload = await provider.generateBatchReport(input);
-  const report = batchAiReportSchema.parse({
-    ...reportPayload,
-    generatedAt: new Date().toISOString(),
-    extra: {
-      provider: provider.name,
-      aiInput: {
-        metrics: input.metrics,
-        aiReviewSummary: {
-          reviewedCount: input.aiReviewSummary.reviewedCount,
-          labelDistribution: input.aiReviewSummary.labelDistribution
+  try {
+    const input = buildBatchReportInput(dataset);
+    const reportPayload = await provider.generateBatchReport(input);
+    const report = batchAiReportSchema.parse({
+      ...reportPayload,
+      generatedAt: new Date().toISOString(),
+      extra: {
+        provider: provider.name,
+        aiInput: {
+          metrics: input.metrics,
+          aiReviewSummary: {
+            reviewedCount: input.aiReviewSummary.reviewedCount,
+            labelDistribution: input.aiReviewSummary.labelDistribution
+          }
         }
       }
-    }
-  });
+    });
 
-  const updatedDataset = {
-    ...dataset,
-    batchAiReport: report
-  };
+    const updatedDataset = {
+      ...dataset,
+      batchAiReport: report
+    };
 
-  await repositories.analysis.save(updatedDataset);
+    await repositories.analysis.save(updatedDataset);
 
-  return {
-    success: true,
-    status: "completed" as const,
-    provider: provider.name,
-    report,
-    message: "AI 管理总结已生成。"
-  };
+    return {
+      success: true,
+      skipped: false,
+      reason: null,
+      status: "completed" as const,
+      provider: provider.name,
+      report,
+      message: "AI 管理总结已生成。"
+    };
+  } catch (error) {
+    return createSkippedBatchReportResult({
+      provider: provider.name,
+      reason: isRateLimitedError(error) ? "rate_limited" : "provider_error",
+      message: "AI总结暂时未生成，请稍后重试。",
+      report: dataset.batchAiReport ?? null
+    });
+  }
 }
 
 export async function getStoredBatchAiReport(datasetId?: string) {
@@ -87,7 +102,7 @@ export async function getStoredBatchAiReport(datasetId?: string) {
 
 export function buildBatchReportInput(dataset: AnalysisDataset) {
   const totalRecords = dataset.dashboard.totalRecords;
-  const anomalyRecords = dataset.recordList.filter((item) => item.riskLevel !== "low").length;
+  const anomalyRecords = dataset.recordList.filter(isAnomalyRiskRecord).length;
   const anomalyRate =
     totalRecords > 0 ? Number(((anomalyRecords / totalRecords) * 100).toFixed(1)) : 0;
   const highRiskPeopleCount = new Set(
@@ -100,11 +115,21 @@ export function buildBatchReportInput(dataset: AnalysisDataset) {
       label: "medium",
       value: dataset.recordList.filter((item) => item.riskLevel === "medium").length
     },
-    { label: "low", value: dataset.recordList.filter((item) => item.riskLevel === "low").length }
+    { label: "low", value: dataset.recordList.filter((item) => item.riskLevel === "low").length },
+    {
+      label: "normal",
+      value: dataset.recordList.filter((item) => item.riskLevel === "normal").length
+    }
   ];
 
   const riskTypeMap = new Map<string, number>();
+  const riskRecordIds = new Set(
+    dataset.recordList.filter(isAnomalyRiskRecord).map((item) => item.recordId)
+  );
   for (const analysis of dataset.analyses) {
+    if (!riskRecordIds.has(analysis.recordId)) {
+      continue;
+    }
     for (const issue of analysis.issues) {
       riskTypeMap.set(issue.title, (riskTypeMap.get(issue.title) ?? 0) + 1);
     }
@@ -148,7 +173,9 @@ export function buildBatchReportInput(dataset: AnalysisDataset) {
         .map(([label, value]) => ({ label, value }))
         .sort((left, right) => right.value - left.value),
       examples: reviewedItems
-        .map((item) => item.aiSummary)
+        .map((item) =>
+          [item.aiSummary, item.aiSuggestion].filter((part): part is string => Boolean(part)).join(" | ")
+        )
         .filter((item): item is string => Boolean(item))
         .slice(0, aiReportConfig.exampleLimit)
     }
@@ -170,7 +197,7 @@ function buildTopTasks(dataset: AnalysisDataset) {
     };
 
     current.totalCount += 1;
-    if (item.riskLevel !== "low") {
+    if (isAnomalyRiskRecord(item)) {
       current.riskCount += 1;
     }
     map.set(item.relatedTaskName, current);
@@ -179,6 +206,10 @@ function buildTopTasks(dataset: AnalysisDataset) {
   return [...map.values()]
     .filter((item) => item.riskCount > 0)
     .sort((left, right) => right.riskCount - left.riskCount);
+}
+
+function isAnomalyRiskRecord(item: { riskLevel: string }) {
+  return item.riskLevel === "medium" || item.riskLevel === "high";
 }
 
 export function emptyBatchAiReport(): BatchAiReport {
@@ -193,4 +224,30 @@ export function emptyBatchAiReport(): BatchAiReport {
     generatedAt: null,
     extra: {}
   });
+}
+
+function createSkippedBatchReportResult(params: {
+  provider: string;
+  reason: AiReportFailureReason;
+  message: string;
+  report: BatchAiReport | null;
+  status?: "skipped" | "no-data";
+}) {
+  return {
+    success: false,
+    skipped: true,
+    reason: params.reason,
+    status: params.status ?? (params.reason === "no_data" ? "no-data" : "skipped"),
+    provider: params.provider,
+    report: params.report,
+    message: params.message
+  };
+}
+
+function isRateLimitedError(error: unknown) {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  return /429|rate limit|too many requests/i.test(error.message);
 }

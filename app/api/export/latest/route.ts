@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { exportQuerySchema } from "@/lib/schemas/api";
 import { ensureBootstrapped } from "@/lib/services/bootstrap";
-import { exportLatestAnalysisWorkbook } from "@/lib/services/export-service-v2";
+import { prepareLatestAnalysisWorkbook } from "@/lib/services/export-service-v2";
 
 export const dynamic = "force-dynamic";
 
@@ -18,9 +18,21 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "导出参数不合法" }, { status: 400 });
   }
 
-  const buffer = await exportLatestAnalysisWorkbook(parsed.data.datasetId);
+  const result = await prepareLatestAnalysisWorkbook(parsed.data.datasetId);
 
-  return new NextResponse(buffer, {
+  if (!result.ready || !result.buffer) {
+    return NextResponse.json(
+      {
+        success: false,
+        exportReady: false,
+        message: result.message,
+        progress: result.progress ?? null
+      },
+      { status: 409 }
+    );
+  }
+
+  return new NextResponse(result.buffer, {
     status: 200,
     headers: {
       "Content-Type":

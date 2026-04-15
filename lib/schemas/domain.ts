@@ -8,7 +8,8 @@ export const uploadSourceTypeSchema = z.enum([
   "local-directory",
   "future-auto-fetch"
 ]);
-export const riskLevelSchema = z.enum(["low", "medium", "high"]);
+export const riskLevelSchema = z.enum(["normal", "low", "medium", "high"]);
+export const issueSeveritySchema = z.enum(["low", "medium", "high"]);
 
 export const uploadFileMetaSchema = z
   .object({
@@ -83,7 +84,7 @@ export const normalizedRecordSchema = z
 export const recordIssueSchema = z
   .object({
     ruleKey: z.string(),
-    severity: riskLevelSchema,
+    severity: issueSeveritySchema,
     title: z.string(),
     message: z.string(),
     extra: extensibleObjectSchema.default({})
@@ -111,6 +112,7 @@ export const recordAnalysisResultSchema = z
     aiSummary: z.string().nullable().optional(),
     aiConfidence: z.number().nullable().optional(),
     aiReviewLabel: z.string().nullable().optional(),
+    aiSuggestion: z.string().nullable().optional(),
     aiReviewReason: z.string().nullable().optional(),
     aiReviewedAt: z.string().nullable().optional(),
     extra: extensibleObjectSchema.default({})
@@ -142,6 +144,7 @@ export const recordListItemSchema = z
     aiSummary: z.string().nullable().optional(),
     aiConfidence: z.number().nullable().optional(),
     aiReviewLabel: z.string().nullable().optional(),
+    aiSuggestion: z.string().nullable().optional(),
     aiReviewReason: z.string().nullable().optional(),
     aiReviewedAt: z.string().nullable().optional(),
     rawData: extensibleObjectSchema,
@@ -165,6 +168,21 @@ export const dashboardSummarySchema = z
     totalHours: z.number().nonnegative(),
     averageHours: z.number().nonnegative(),
     extra: extensibleObjectSchema.default({})
+  })
+  .passthrough();
+
+export const aiReviewProgressSchema = z
+  .object({
+    status: z.enum(["idle", "running", "completed", "failed"]).default("idle"),
+    totalCandidates: z.number().nonnegative().default(0),
+    completedCount: z.number().nonnegative().default(0),
+    successCount: z.number().nonnegative().default(0),
+    failedCount: z.number().nonnegative().default(0),
+    pendingCount: z.number().nonnegative().default(0),
+    exportReady: z.boolean().default(false),
+    startedAt: z.string().nullable().optional(),
+    finishedAt: z.string().nullable().optional(),
+    message: z.string().nullable().optional()
   })
   .passthrough();
 
@@ -197,6 +215,8 @@ export const personSummarySchema = z
 
 export const parsedDatasetSchema = z
   .object({
+    datasetId: z.string(),
+    batchId: z.string(),
     batch: importBatchSchema,
     rawRecords: z.array(rawRecordSchema),
     normalizedRecords: z.array(normalizedRecordSchema)
@@ -205,6 +225,8 @@ export const parsedDatasetSchema = z
 
 export const analysisDatasetSchema = z
   .object({
+    datasetId: z.string(),
+    batchId: z.string(),
     batch: importBatchSchema,
     rawRecords: z.array(rawRecordSchema),
     normalizedRecords: z.array(normalizedRecordSchema),
@@ -212,6 +234,7 @@ export const analysisDatasetSchema = z
     recordList: z.array(recordListItemSchema),
     dashboard: dashboardSummarySchema,
     people: z.array(personSummarySchema).default([]),
+    aiReviewProgress: aiReviewProgressSchema.optional(),
     batchAiReport: batchAiReportSchema.nullable().optional()
   })
   .passthrough();

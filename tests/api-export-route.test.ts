@@ -2,14 +2,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const ensureBootstrapped = vi.fn();
-const exportLatestAnalysisWorkbook = vi.fn();
+const prepareLatestAnalysisWorkbook = vi.fn();
 
 vi.mock("@/lib/services/bootstrap", () => ({
   ensureBootstrapped
 }));
 
 vi.mock("@/lib/services/export-service-v2", () => ({
-  exportLatestAnalysisWorkbook
+  prepareLatestAnalysisWorkbook
 }));
 
 describe("GET /api/export/latest", () => {
@@ -33,12 +33,15 @@ describe("GET /api/export/latest", () => {
       "AI管理总结"
     );
 
-    exportLatestAnalysisWorkbook.mockResolvedValue(
-      XLSX.write(workbook, {
+    prepareLatestAnalysisWorkbook.mockResolvedValue({
+      ready: true,
+      message: null,
+      progress: null,
+      buffer: XLSX.write(workbook, {
         type: "buffer",
         bookType: "xlsx"
       })
-    );
+    });
   });
 
   it("返回 Excel 文件响应，且 content-type 正确", async () => {
@@ -53,5 +56,34 @@ describe("GET /api/export/latest", () => {
     );
     expect(buffer.subarray(0, 4).toString("hex")).toBe("504b0304");
     expect(workbook.SheetNames).toEqual(["日报核查明细", "人员汇总", "AI管理总结"]);
+  });
+
+  it("AI 复核未完成时返回 409 JSON，而不是直接导出", async () => {
+    prepareLatestAnalysisWorkbook.mockResolvedValueOnce({
+      ready: false,
+      message: "AI 复核尚未完成，暂时不能导出完整版。",
+      progress: {
+        status: "running",
+        totalCandidates: 19,
+        completedCount: 8,
+        successCount: 8,
+        failedCount: 0,
+        pendingCount: 11,
+        exportReady: false,
+        startedAt: "2026-04-15T02:00:00.000Z",
+        finishedAt: null,
+        message: "AI 正在执行完整复核，请稍候。"
+      },
+      buffer: null
+    });
+
+    const { GET } = await import("@/app/api/export/latest/route");
+    const response = await GET(new Request("http://localhost/api/export/latest"));
+    const payload = await response.json();
+
+    expect(response.status).toBe(409);
+    expect(payload.success).toBe(false);
+    expect(payload.exportReady).toBe(false);
+    expect(payload.progress?.totalCandidates).toBe(19);
   });
 });

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+﻿import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AnalysisDataset } from "@/types/domain";
 import { createRecordListItem } from "@/tests/fixtures/report-samples";
@@ -41,9 +41,10 @@ function createDataset(): AnalysisDataset {
       needAiReview: true,
       issueTitles: ["内容过短", "任务匹配较弱"],
       aiReviewed: true,
-      aiSummary: "任务相关但结果较弱，建议补充输出。",
+      aiSummary: "这条日报与任务相关，但结果表达还有补充空间。",
       aiConfidence: 0.76,
-      aiReviewLabel: "任务相关但结果较弱",
+      aiReviewLabel: "结果不明确",
+      aiSuggestion: "建议补充本次联调形成的问题清单或处理结论。",
       aiReviewReason: "结果痕迹较弱"
     }),
     createRecordListItem({
@@ -57,9 +58,10 @@ function createDataset(): AnalysisDataset {
       needAiReview: true,
       issueTitles: ["任务匹配较弱"],
       aiReviewed: true,
-      aiSummary: "管理推进类记录，建议结合上下文复核。",
+      aiSummary: "这条记录偏过程化，建议补充会议结论或阶段性输出。",
       aiConfidence: 0.72,
-      aiReviewLabel: "管理推进类记录",
+      aiReviewLabel: "会议描述泛化",
+      aiSuggestion: "建议说明本次沟通形成的结论、分工或下一步动作。",
       aiReviewReason: "更像协调推进过程"
     })
   ];
@@ -116,9 +118,10 @@ function createDataset(): AnalysisDataset {
         ],
         summary: "内容过短",
         aiReviewed: true,
-        aiSummary: "任务相关但结果较弱，建议补充输出。",
+        aiSummary: "这条日报与任务相关，但结果表达还有补充空间。",
         aiConfidence: 0.76,
-        aiReviewLabel: "任务相关但结果较弱",
+        aiReviewLabel: "结果不明确",
+        aiSuggestion: "建议补充本次联调形成的问题清单或处理结论。",
         aiReviewReason: "结果痕迹较弱",
         aiReviewedAt: "2026-04-14T01:00:00.000Z",
         extra: {}
@@ -146,9 +149,10 @@ function createDataset(): AnalysisDataset {
         ],
         summary: "任务匹配较弱",
         aiReviewed: true,
-        aiSummary: "管理推进类记录，建议结合上下文复核。",
+        aiSummary: "这条记录偏过程化，建议补充会议结论或阶段性输出。",
         aiConfidence: 0.72,
-        aiReviewLabel: "管理推进类记录",
+        aiReviewLabel: "会议描述泛化",
+        aiSuggestion: "建议说明本次沟通形成的结论、分工或下一步动作。",
         aiReviewReason: "更像协调推进过程",
         aiReviewedAt: "2026-04-14T01:00:00.000Z",
         extra: {}
@@ -299,3 +303,4 @@ describe("AI batch report service", () => {
     expect(savedDataset.analyses.map((item) => item.ruleFlags)).toEqual(originalRuleFlags);
   });
 });
+

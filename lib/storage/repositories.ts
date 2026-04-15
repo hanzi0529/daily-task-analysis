@@ -123,9 +123,14 @@ class LocalFileRepository implements FileRepository {
 class LocalParsedRepository implements ParsedRepository {
   async save(parsed: ParsedDataset) {
     await ensureDataDirectories();
+    const datasetId = getDatasetIdFromContainer(parsed);
     await writeJsonFile(
-      path.join(storagePaths.parsedDir, `${parsed.datasetId}.json`),
-      parsed
+      path.join(storagePaths.parsedDir, `${datasetId}.json`),
+      {
+        ...parsed,
+        datasetId,
+        batchId: getBatchIdFromContainer(parsed)
+      }
     );
   }
 
@@ -134,16 +139,21 @@ class LocalParsedRepository implements ParsedRepository {
     if (!(await fileExists(filePath))) {
       return null;
     }
-    return readJsonFile<ParsedDataset>(filePath);
+    return hydrateDatasetIdentity(await readJsonFile<ParsedDataset>(filePath));
   }
 }
 
 class LocalAnalysisRepository implements AnalysisRepository {
   async save(result: AnalysisDataset) {
     await ensureDataDirectories();
+    const datasetId = getDatasetIdFromContainer(result);
     await writeJsonFile(
-      path.join(storagePaths.cacheDir, `${result.datasetId}.json`),
-      result
+      path.join(storagePaths.cacheDir, `${datasetId}.json`),
+      {
+        ...result,
+        datasetId,
+        batchId: getBatchIdFromContainer(result)
+      }
     );
   }
 
@@ -153,7 +163,7 @@ class LocalAnalysisRepository implements AnalysisRepository {
       return null;
     }
 
-    return readJsonFile<AnalysisDataset>(filePath);
+    return hydrateDatasetIdentity(await readJsonFile<AnalysisDataset>(filePath));
   }
 
   async getLatest() {
@@ -164,7 +174,7 @@ class LocalAnalysisRepository implements AnalysisRepository {
       return null;
     }
 
-    return readJsonFile<AnalysisDataset>(latest.filePath);
+    return hydrateDatasetIdentity(await readJsonFile<AnalysisDataset>(latest.filePath));
   }
 }
 
@@ -173,3 +183,31 @@ export const repositories = {
   parsed: new LocalParsedRepository(),
   analysis: new LocalAnalysisRepository()
 };
+
+function getDatasetIdFromContainer(value: { datasetId?: string; batch?: { datasetId?: string } }) {
+  const datasetId = value.datasetId ?? value.batch?.datasetId;
+  if (!datasetId) {
+    throw new Error("Dataset container is missing datasetId");
+  }
+
+  return datasetId;
+}
+
+function getBatchIdFromContainer(value: { batchId?: string; batch?: { batchId?: string } }) {
+  const batchId = value.batchId ?? value.batch?.batchId;
+  if (!batchId) {
+    throw new Error("Dataset container is missing batchId");
+  }
+
+  return batchId;
+}
+
+function hydrateDatasetIdentity<T extends { datasetId?: string; batchId?: string; batch?: { datasetId?: string; batchId?: string } }>(
+  value: T
+) {
+  return {
+    ...value,
+    datasetId: value.datasetId ?? value.batch?.datasetId,
+    batchId: value.batchId ?? value.batch?.batchId
+  } as T;
+}

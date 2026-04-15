@@ -24,7 +24,7 @@ export async function getRecordListV2(
   filters?: {
     date?: string;
     memberName?: string;
-    riskLevel?: "low" | "medium" | "high";
+    riskLevel?: "normal" | "low" | "medium" | "high";
     needAiReview?: boolean;
   }
 ) {

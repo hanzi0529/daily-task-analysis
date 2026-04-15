@@ -136,6 +136,7 @@ export function createRecordListItem(
     aiSummary: overrides.aiSummary ?? null,
     aiConfidence: overrides.aiConfidence ?? null,
     aiReviewLabel: overrides.aiReviewLabel ?? null,
+    aiSuggestion: overrides.aiSuggestion ?? null,
     aiReviewReason: overrides.aiReviewReason ?? null,
     aiReviewedAt: overrides.aiReviewedAt ?? null,
     rawData: overrides.rawData ?? baseRecord.rawData,

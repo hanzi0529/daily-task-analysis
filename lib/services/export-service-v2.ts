@@ -1,6 +1,7 @@
 ﻿import * as XLSX from "xlsx";
 
 import { exportDetailFields, exportPeopleFields } from "@/config/exportFields";
+import { getAiReviewProgress } from "@/lib/services/ai-review-service";
 import { getStoredBatchAiReport } from "@/lib/services/ai-report-service";
 import { getPeopleListV2, getRecordListV2 } from "@/lib/services/query-service-v2";
 
@@ -10,9 +11,17 @@ export async function exportLatestAnalysisWorkbook(datasetId?: string) {
   const batchAiReport = await getStoredBatchAiReport(datasetId);
 
   const detailRows = records.map((record) => {
+    const hasAiContent = Boolean(
+      [record.aiSummary, record.aiReviewLabel, record.aiSuggestion, record.aiReviewReason].find(
+        (value) => Boolean(value)
+      )
+    );
     const source = {
       ...record,
+      needAiReview: record.needAiReview ? "是" : "否",
       aiReviewed: record.aiReviewed ? "是" : "否",
+      hasAiContent: hasAiContent ? "是" : "否",
+      aiReviewResult: buildAiReviewResultText(record),
       aiConfidence:
         typeof record.aiConfidence === "number" ? record.aiConfidence : "",
       primaryIssueTypes: (record.primaryIssueTypes || []).join("；"),
@@ -60,6 +69,43 @@ export async function exportLatestAnalysisWorkbook(datasetId?: string) {
     type: "buffer",
     bookType: "xlsx"
   });
+}
+
+function buildAiReviewResultText(record: {
+  aiSummary?: string | null;
+  aiSuggestion?: string | null;
+  aiReviewReason?: string | null;
+}) {
+  const parts = [
+    record.aiSummary ? `分析：${record.aiSummary}` : "",
+    record.aiSuggestion ? `建议：${record.aiSuggestion}` : "",
+    !record.aiSummary && !record.aiSuggestion && record.aiReviewReason
+      ? `说明：${record.aiReviewReason}`
+      : ""
+  ].filter(Boolean);
+
+  return parts.join("\n");
+}
+
+export async function prepareLatestAnalysisWorkbook(datasetId?: string) {
+  const reviewProgressResult = await getAiReviewProgress(datasetId);
+
+  if (reviewProgressResult.success && !reviewProgressResult.progress.exportReady) {
+    return {
+      ready: false as const,
+      message: reviewProgressResult.progress.message ?? "AI 复核尚未完成，暂时不能导出完整版。",
+      progress: reviewProgressResult.progress,
+      buffer: null
+    };
+  }
+
+  const buffer = await exportLatestAnalysisWorkbook(datasetId);
+  return {
+    ready: true as const,
+    message: null,
+    progress: reviewProgressResult.progress,
+    buffer
+  };
 }
 
 function buildAiSummaryRows(

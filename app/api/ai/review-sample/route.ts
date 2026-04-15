@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 import { aiReviewSampleRequestSchema } from "@/lib/schemas/api";
 import { ensureBootstrapped } from "@/lib/services/bootstrap";
@@ -25,3 +25,4 @@ export async function POST(request: Request) {
     status: result.success ? 200 : 404
   });
 }
+

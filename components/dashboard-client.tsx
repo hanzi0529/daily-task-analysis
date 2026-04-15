@@ -1,7 +1,17 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
+import {
+  EMPTY_AI_REVIEW_PROGRESS,
+  fetchAiReviewProgress,
+  startFullAiReview,
+  type AiReviewProgressPayload
+} from "@/lib/client/ai-review-client";
+import {
+  type DashboardAiReportPayload,
+  fetchDashboardAiReport
+} from "@/lib/client/fetch-dashboard-ai-report";
 import { MetricCard } from "@/components/metric-card";
 import { SectionCard } from "@/components/section-card";
 
@@ -39,34 +49,126 @@ interface DashboardResponse {
   managementSummary: string[];
 }
 
-interface AiReportResponse {
-  success: boolean;
-  status: "completed" | "skipped" | "no-data";
-  message?: string;
-  report: null | {
-    overview: string;
-    majorFindings: string[];
-    managementSuggestions: string[];
-    reportingSummary: string;
-    generatedAt?: string | null;
-  };
-}
-
 export function DashboardClient() {
   const [data, setData] = useState<DashboardResponse | null>(null);
-  const [aiReport, setAiReport] = useState<AiReportResponse | null>(null);
+  const [aiReport, setAiReport] = useState<DashboardAiReportPayload | null>(null);
+  const [reviewProgress, setReviewProgress] = useState<AiReviewProgressPayload>(
+    EMPTY_AI_REVIEW_PROGRESS
+  );
   const [loadingAiReport, setLoadingAiReport] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(true);
+  const [reviewingAll, setReviewingAll] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [actionMessage, setActionMessage] = useState("");
+
+  const progressPercent = useMemo(() => {
+    if (reviewProgress.totalCandidates <= 0) {
+      return 100;
+    }
+
+    return Math.min(
+      100,
+      Math.round((reviewProgress.completedCount / reviewProgress.totalCandidates) * 100)
+    );
+  }, [reviewProgress]);
 
   useEffect(() => {
-    fetch("/api/dashboard")
-      .then((response) => response.json())
-      .then((result) => setData(result));
-
-    fetch("/api/ai/report")
-      .then((response) => response.json())
-      .then((result) => setAiReport(result))
-      .finally(() => setLoadingAiReport(false));
+    void refreshDashboard();
+    void refreshAiReport();
+    void refreshProgress();
   }, []);
+
+  useEffect(() => {
+    if (!reviewingAll && reviewProgress.status !== "running") {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      void refreshProgress();
+    }, 2000);
+
+    return () => window.clearInterval(timer);
+  }, [reviewingAll, reviewProgress.status]);
+
+  async function refreshDashboard() {
+    const response = await fetch("/api/dashboard", { cache: "no-store" });
+    const result = await response.json();
+    setData(result);
+  }
+
+  async function refreshAiReport() {
+    setLoadingAiReport(true);
+    try {
+      const result = await fetchDashboardAiReport();
+      setAiReport(result);
+    } finally {
+      setLoadingAiReport(false);
+    }
+  }
+
+  async function refreshProgress() {
+    setLoadingProgress(true);
+    try {
+      const result = await fetchAiReviewProgress();
+      setReviewProgress(result.progress ?? EMPTY_AI_REVIEW_PROGRESS);
+      if (result.message) {
+        setActionMessage(result.message);
+      }
+    } finally {
+      setLoadingProgress(false);
+    }
+  }
+
+  async function handleStartFullReview() {
+    setReviewingAll(true);
+    setActionMessage("AI 正在执行完整复核，请稍候...");
+    const timer = window.setInterval(() => {
+      void refreshProgress();
+    }, 1500);
+
+    try {
+      const result = await startFullAiReview({
+        force: reviewProgress.successCount > 0 || reviewProgress.failedCount > 0
+      });
+      setActionMessage(result.message || "AI 完整复核已执行。");
+      await refreshProgress();
+      await refreshAiReport();
+      await refreshDashboard();
+    } catch {
+      setActionMessage("AI 完整复核执行失败，请稍后重试。");
+    } finally {
+      window.clearInterval(timer);
+      setReviewingAll(false);
+    }
+  }
+
+  async function handleExport() {
+    setExporting(true);
+    setActionMessage("");
+
+    try {
+      const response = await fetch("/api/export/latest", { cache: "no-store" });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        setActionMessage(payload?.message || "当前尚未达到完整版导出条件，请先完成 AI 复核。");
+        await refreshProgress();
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "daily-audit-latest.xlsx";
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      window.URL.revokeObjectURL(url);
+      setActionMessage("完整版 Excel 已开始下载。");
+    } finally {
+      setExporting(false);
+    }
+  }
 
   if (!data) {
     return <div className="panel p-6 text-sm text-slate-500">正在加载 Dashboard...</div>;
@@ -79,7 +181,7 @@ export function DashboardClient() {
         <MetricCard label="异常日报数" value={data.metrics.anomalyRecords} accent="text-ember" />
         <MetricCard label="异常率" value={`${data.metrics.anomalyRate}%`} />
         <MetricCard label="高风险人员数" value={data.metrics.highRiskPeopleCount} accent="text-ember" />
-        <MetricCard label="NeedAiReview 数" value={data.metrics.needAiReviewCount} accent="text-moss" />
+        <MetricCard label="需AI复核数" value={data.metrics.needAiReviewCount} accent="text-moss" />
         <MetricCard label="总工时" value={data.metrics.totalHours} />
       </section>
 
@@ -111,11 +213,11 @@ export function DashboardClient() {
         </SectionCard>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
+      <section className="grid gap-6 lg:grid-cols-2">
         <SectionCard title="管理摘要" description="由规则分析服务直接返回，前端不做核心指标计算。">
           <div className="space-y-3">
             {data.managementSummary.map((item) => (
-              <div key={item} className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
+              <div key={item} className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-700">
                 {item}
               </div>
             ))}
@@ -123,21 +225,63 @@ export function DashboardClient() {
         </SectionCard>
 
         <SectionCard
-          title="数据来源"
-          description="页面只负责展示和导出交互。"
+          title="数据来源与导出"
+          description="需AI复核的记录全部完成后，才允许导出完整版。"
           action={
-            <a
-              href="/api/export/latest"
-              className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white"
-            >
-              导出最新 Excel
-            </a>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => void handleStartFullReview()}
+                disabled={reviewingAll || reviewProgress.status === "running"}
+                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {reviewingAll || reviewProgress.status === "running" ? "AI复核中..." : reviewProgress.successCount > 0 ? "重新AI复核" : "开始AI复核"}
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleExport()}
+                disabled={!reviewProgress.exportReady || exporting || reviewingAll || reviewProgress.status === "running"}
+                className="rounded-2xl bg-ink px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {exporting ? "导出中..." : "导出完整Excel"}
+              </button>
+            </div>
           }
         >
-          <div className="space-y-3 text-sm text-slate-600">
-            <div className="rounded-2xl bg-white p-4">文件：{data.summary.fileName || "暂无"}</div>
+          <div className="space-y-4 text-sm text-slate-600">
+            <div className="rounded-2xl bg-white p-4 break-all">文件：{data.summary.fileName || "暂无"}</div>
             <div className="rounded-2xl bg-white p-4">导入时间：{data.summary.importedAt || "暂无"}</div>
-            <div className="rounded-2xl bg-white p-4">数据全部来自 `/api/dashboard` 与 `/api/ai/report`。</div>
+            <div className="rounded-2xl bg-white p-4">数据全部来自 `/api/dashboard`、`/api/ai/review-progress` 与 `/api/ai/report`。</div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <div className="text-sm font-semibold text-ink">AI复核进度</div>
+                <div className="text-xs text-slate-500">
+                  {loadingProgress
+                    ? "加载中..."
+                    : `${reviewProgress.completedCount}/${reviewProgress.totalCandidates}`}
+                </div>
+              </div>
+              <div className="h-2 rounded-full bg-slate-200">
+                <div
+                  className="h-2 rounded-full bg-ink transition-all"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+              <div className="mt-3 grid gap-2 text-xs text-slate-500 md:grid-cols-2">
+                <div>需复核总数：{reviewProgress.totalCandidates}</div>
+                <div>已完成：{reviewProgress.completedCount}</div>
+                <div>成功：{reviewProgress.successCount}</div>
+                <div>失败：{reviewProgress.failedCount}</div>
+              </div>
+              <div className="mt-3 text-sm text-slate-600">
+                {reviewProgress.message || "当前尚未开始 AI 完整复核。"}
+              </div>
+            </div>
+            {actionMessage ? (
+              <div className="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-600">
+                {actionMessage}
+              </div>
+            ) : null}
           </div>
         </SectionCard>
       </section>

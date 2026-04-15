@@ -40,7 +40,7 @@ export function PeopleClient() {
               <div>日报数：{row.recordCount}</div>
               <div>总工时：{row.totalHours}</div>
               <div>异常数：{row.anomalyCount}</div>
-              <div>NeedAiReview：{row.needAiReviewCount}</div>
+              <div>需AI复核：{row.needAiReviewCount}</div>
             </div>
             <div className="mt-3 text-sm text-slate-600">
               主要问题：{row.highlights.join("；") || "暂无"}

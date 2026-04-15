@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+﻿import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AnalysisDataset } from "@/types/domain";
 import { createRecordListItem } from "@/tests/fixtures/report-samples";
@@ -27,14 +27,17 @@ function createAnalysisDataset(recordCount = 3): AnalysisDataset {
       account: `user${index + 1}`,
       relatedTaskName: index === 2 ? "项目管理" : "接口联调",
       workContent:
-        index === 2
-          ? "协调推进项目计划并同步进展"
-          : "完成接口联调并输出问题清单",
+        index === 2 ? "协调推进项目计划并同步进展" : "完成接口联调并输出问题清单",
       riskLevel: index === 1 ? "medium" : "low",
       needAiReview: index !== 0,
       issueCount: index === 0 ? 0 : 1,
-      issueTitles:
-        index === 2 ? ["任务匹配较弱"] : index === 1 ? ["内容过短"] : []
+      issueTitles: index === 2 ? ["任务匹配较弱"] : index === 1 ? ["内容过短"] : [],
+      ruleFlags:
+        index === 2
+          ? { "task.weak-match": true, "content.generic-process": true }
+          : index === 1
+            ? { "content.too-short": true }
+            : {}
     })
   );
 
@@ -90,6 +93,7 @@ function createAnalysisDataset(recordCount = 3): AnalysisDataset {
       aiSummary: null,
       aiConfidence: null,
       aiReviewLabel: null,
+      aiSuggestion: null,
       aiReviewReason: null,
       aiReviewedAt: null,
       extra: {}
@@ -138,9 +142,8 @@ describe("AI 抽样复核 service", () => {
     const dataset = createAnalysisDataset(3);
     const candidates = selectAiReviewCandidates(dataset, 10);
 
-    expect(candidates.map((item) => item.recordId)).toEqual(
-      expect.arrayContaining(["record_2", "record_3"])
-    );
+    expect(candidates.map((item) => item.recordId)).toEqual(["record_2", "record_3"]);
+    expect(candidates[0].candidateReasons).toContain("need-ai-review");
     expect(candidates[1].candidateReasons).toContain("management-ambiguous");
   });
 
@@ -174,6 +177,7 @@ describe("AI 抽样复核 service", () => {
       aiSummary: null,
       aiConfidence: null,
       aiReviewLabel: null,
+      aiSuggestion: null,
       aiReviewReason: null,
       aiReviewedAt: null,
       extra: {}
@@ -194,6 +198,10 @@ describe("AI 抽样复核 service", () => {
       registeredHours: 7.5,
       ruleSummary: "任务匹配较弱",
       primaryIssueTypes: ["任务匹配"],
+      ruleFlags: {
+        "task.weak-match": true,
+        "content.generic-process": true
+      },
       isManagementTask: false
     });
 
@@ -201,6 +209,7 @@ describe("AI 抽样复核 service", () => {
     expect(typeof review.aiSummary).toBe("string");
     expect(typeof review.aiConfidence).toBe("number");
     expect(review.aiReviewLabel).toBeTruthy();
+    expect(typeof review.aiSuggestion).toBe("string");
   });
 
   it("AI 调用失败时不影响主流程", async () => {
@@ -224,6 +233,8 @@ describe("AI 抽样复核 service", () => {
     expect(result.reviewedCount).toBe(0);
     expect(result.items.length).toBeGreaterThan(0);
     expect(result.items[0].aiReviewed).toBe(false);
+    expect(result.items[0].aiSuggestion).toBeNull();
     expect(analysisSave).toHaveBeenCalledTimes(1);
   });
 });
+

@@ -48,6 +48,8 @@ describe("Excel 字段映射与标准化", () => {
 
     expect(dataset.rawRecords).toHaveLength(1);
     expect(dataset.normalizedRecords).toHaveLength(1);
+    expect(dataset.datasetId).toBe("dataset_parser_test");
+    expect(dataset.batchId).toBe("batch_parser_test");
 
     const rawRecord = dataset.rawRecords[0];
     const normalizedRecord = dataset.normalizedRecords[0];
