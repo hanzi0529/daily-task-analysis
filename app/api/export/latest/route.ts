@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 import { exportQuerySchema } from "@/lib/schemas/api";
 import { ensureBootstrapped } from "@/lib/services/bootstrap";
@@ -25,10 +25,10 @@ export async function GET(request: Request) {
       {
         success: false,
         exportReady: false,
-        message: result.message,
+        message: result.message ?? "导出失败，请稍后重试。",
         progress: result.progress ?? null
       },
-      { status: 409 }
+      { status: 500 }
     );
   }
 

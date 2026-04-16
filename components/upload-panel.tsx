@@ -49,7 +49,7 @@ export function UploadPanel() {
         <div>
           <p className="text-lg font-semibold text-ink">手动上传 Excel</p>
           <p className="mt-2 text-sm text-slate-500">
-            上传后会保存原始文件、解析标准化 JSON、执行基础规则并刷新 Dashboard。
+            上传后会保存原始文件、解析标准化 JSON、执行基础规则并刷新数据看板。
           </p>
         </div>
         <input

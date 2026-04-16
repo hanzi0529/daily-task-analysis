@@ -1,9 +1,9 @@
-import type { Route } from "next";
+﻿import type { Route } from "next";
 import Link from "next/link";
 import { PropsWithChildren } from "react";
 
 const navItems: Array<{ href: Route; label: string }> = [
-  { href: "/", label: "Dashboard" },
+  { href: "/", label: "数据看板" },
   { href: "/upload", label: "文件上传" },
   { href: "/reports", label: "日报明细" },
   { href: "/people", label: "人员分析" }

@@ -26,6 +26,13 @@ interface RecordItem {
   aiReviewReason?: string | null;
 }
 
+const riskLevelText: Record<RecordItem["riskLevel"], string> = {
+  high: "高风险",
+  medium: "中风险",
+  low: "低风险",
+  normal: "正常"
+};
+
 export function RecordsClient() {
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -129,7 +136,7 @@ export function RecordsClient() {
                   <div className="text-sm text-slate-600">{record.account || "-"}</div>
                   <div className="text-sm text-slate-700">{record.relatedTaskName || "-"}</div>
                   <div className="text-sm text-slate-700">{record.registeredHours ?? "-"}</div>
-                  <div className="text-sm text-slate-700">{record.riskLevel}</div>
+                  <div className="text-sm text-slate-700">{riskLevelText[record.riskLevel]}</div>
                 </div>
                 <div className="mt-3 text-sm text-slate-700">{record.workContent || "-"}</div>
                 <div className="mt-2 grid gap-2 text-xs text-slate-500 md:grid-cols-4">

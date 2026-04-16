@@ -241,22 +241,39 @@ export async function getDashboardPayload(datasetId?: string) {
     dailyTrendMap.set(item.workDate, (dailyTrendMap.get(item.workDate) ?? 0) + 1);
   }
 
-  const topTasks = [...new Map(
+  const issueTitlesByRecordId = new Map(
+    analyses.map((item) => [item.recordId, item.issues.map((issue) => issue.title)] as const)
+  );
+  const highRiskTasks = [...new Map(
     records
-      .filter((item) => item.relatedTaskName)
-      .map((item) => [item.relatedTaskName!, { taskName: item.relatedTaskName!, riskCount: 0, totalCount: 0 }])
+      .filter((item) => item.riskLevel === "high")
+      .map((item) => {
+        const taskName = item.relatedTaskName || "未关联任务";
+        return [
+          taskName,
+          {
+            taskName,
+            riskCount: 0,
+            totalCount: 0,
+            issueTypes: [] as string[]
+          }
+        ];
+      })
   ).values()];
 
-  for (const task of topTasks) {
+  for (const task of highRiskTasks) {
     for (const item of records) {
-      if (item.relatedTaskName !== task.taskName) {
+      const taskName = item.relatedTaskName || "未关联任务";
+      if (taskName !== task.taskName) {
         continue;
       }
       task.totalCount += 1;
-      if (isAnomalyRiskRecord(item)) {
+      if (item.riskLevel === "high") {
         task.riskCount += 1;
+        task.issueTypes.push(...(issueTitlesByRecordId.get(item.recordId) ?? item.issueTitles));
       }
     }
+    task.issueTypes = [...new Set(task.issueTypes)];
   }
 
   return {
@@ -288,19 +305,29 @@ export async function getDashboardPayload(datasetId?: string) {
         .sort((left, right) => left.date.localeCompare(right.date))
     },
     topPeople: [...dataset.people]
+      .filter((item) => item.riskLevel === "high")
       .sort((left, right) => {
         if (right.riskLevel !== left.riskLevel) {
           return riskSortValue(right.riskLevel) - riskSortValue(left.riskLevel);
         }
         return right.anomalyCount - left.anomalyCount;
-      })
-      .slice(0, 10),
-    topTasks: topTasks
+      }),
+    topTasks: highRiskTasks
       .filter((item) => item.riskCount > 0)
-      .sort((left, right) => right.riskCount - left.riskCount)
-      .slice(0, 10),
+      .sort((left, right) => {
+        const leftMissing = hasMissingContentIssue(left.issueTypes) ? 1 : 0;
+        const rightMissing = hasMissingContentIssue(right.issueTypes) ? 1 : 0;
+        if (rightMissing !== leftMissing) {
+          return rightMissing - leftMissing;
+        }
+        return right.riskCount - left.riskCount;
+      }),
     managementSummary: buildManagementSummary(dataset)
   };
+}
+
+function hasMissingContentIssue(issueTypes: string[]) {
+  return issueTypes.some((title) => title.includes("缺少日报内容") || title.includes("工时缺失"));
 }
 
 function buildManagementSummary(dataset: AnalysisDataset) {

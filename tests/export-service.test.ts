@@ -112,9 +112,11 @@ describe("导出 service", () => {
     const firstRow = detailRows[1];
     const needAiReviewIndex = detailHeaders.indexOf("需AI复核");
     const aiReviewedIndex = detailHeaders.indexOf("AI是否已复核");
+    const riskLevelIndex = detailHeaders.indexOf("风险等级");
 
     expect(firstRow[needAiReviewIndex]).toBe("是");
     expect(firstRow[aiReviewedIndex]).toBe("是");
+    expect(firstRow[riskLevelIndex]).toBe("中风险");
   });
 
   it("即使 AI 总结为空，也不会影响导出", async () => {

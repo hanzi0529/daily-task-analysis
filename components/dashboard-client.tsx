@@ -45,6 +45,7 @@ interface DashboardResponse {
     taskName: string;
     riskCount: number;
     totalCount: number;
+    issueTypes?: string[];
   }>;
   managementSummary: string[];
 }
@@ -128,7 +129,7 @@ export function DashboardClient() {
 
     try {
       const result = await startFullAiReview({
-        force: reviewProgress.successCount > 0 || reviewProgress.failedCount > 0
+        force: false
       });
       setActionMessage(result.message || "AI 完整复核已执行。");
       await refreshProgress();
@@ -150,7 +151,7 @@ export function DashboardClient() {
       const response = await fetch("/api/export/latest", { cache: "no-store" });
       if (!response.ok) {
         const payload = await response.json().catch(() => null);
-        setActionMessage(payload?.message || "当前尚未达到完整版导出条件，请先完成 AI 复核。");
+        setActionMessage(payload?.message || "导出失败，请稍后重试。");
         await refreshProgress();
         return;
       }
@@ -164,14 +165,14 @@ export function DashboardClient() {
       anchor.click();
       anchor.remove();
       window.URL.revokeObjectURL(url);
-      setActionMessage("完整版 Excel 已开始下载。");
+      setActionMessage("最新 Excel 已开始下载，文件会包含当前已完成的 AI 复核结果。");
     } finally {
       setExporting(false);
     }
   }
 
   if (!data) {
-    return <div className="panel p-6 text-sm text-slate-500">正在加载 Dashboard...</div>;
+    return <div className="panel p-6 text-sm text-slate-500">正在加载数据看板...</div>;
   }
 
   return (
@@ -192,8 +193,9 @@ export function DashboardClient() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <SectionCard title="高风险人员 Top 10" description="按风险等级和异常数量排序。">
+        <SectionCard title="高风险人员" description="存在至少一条高风险日报的人员。">
           <SimpleList
+            scrollable
             rows={data.topPeople.map((item) => ({
               title: item.memberName,
               meta: `${item.anomalyCount} 条异常 · ${item.totalHours}h`,
@@ -202,12 +204,15 @@ export function DashboardClient() {
           />
         </SectionCard>
 
-        <SectionCard title="高风险任务 Top 10" description="按风险条数排序。">
+        <SectionCard title="高风险任务" description="列出所有高风险任务，缺少日报内容或工时缺失优先展示。">
           <SimpleList
+            scrollable
             rows={data.topTasks.map((item) => ({
               title: item.taskName,
               meta: `${item.riskCount} 条风险 · ${item.totalCount} 条记录`,
-              detail: "建议结合任务上下文做抽样复核"
+              detail: item.issueTypes?.length
+                ? `问题类型：${item.issueTypes.join("；")}`
+                : "建议结合任务上下文做抽样复核"
             }))}
           />
         </SectionCard>
@@ -226,7 +231,7 @@ export function DashboardClient() {
 
         <SectionCard
           title="数据来源与导出"
-          description="需AI复核的记录全部完成后，才允许导出完整版。"
+          description="可随时导出当前最新 Excel；AI 复核完成多少，导出中就体现多少。"
           action={
             <div className="grid gap-2 sm:grid-cols-2">
               <button
@@ -235,15 +240,20 @@ export function DashboardClient() {
                 disabled={reviewingAll || reviewProgress.status === "running"}
                 className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {reviewingAll || reviewProgress.status === "running" ? "AI复核中..." : reviewProgress.successCount > 0 ? "重新AI复核" : "开始AI复核"}
+                {reviewingAll || reviewProgress.status === "running"
+                  ? "AI复核中..."
+                  : (reviewProgress.pendingCount > 0 && reviewProgress.completedCount > 0) ||
+                      reviewProgress.failedCount > 0
+                    ? "继续复核"
+                    : "开始AI复核"}
               </button>
               <button
                 type="button"
                 onClick={() => void handleExport()}
-                disabled={!reviewProgress.exportReady || exporting || reviewingAll || reviewProgress.status === "running"}
+                disabled={exporting}
                 className="rounded-2xl bg-ink px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {exporting ? "导出中..." : "导出完整Excel"}
+                {exporting ? "导出中..." : "导出最新Excel"}
               </button>
             </div>
           }
@@ -251,7 +261,6 @@ export function DashboardClient() {
           <div className="space-y-4 text-sm text-slate-600">
             <div className="rounded-2xl bg-white p-4 break-all">文件：{data.summary.fileName || "暂无"}</div>
             <div className="rounded-2xl bg-white p-4">导入时间：{data.summary.importedAt || "暂无"}</div>
-            <div className="rounded-2xl bg-white p-4">数据全部来自 `/api/dashboard`、`/api/ai/review-progress` 与 `/api/ai/report`。</div>
             <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <div className="mb-2 flex items-center justify-between gap-3">
                 <div className="text-sm font-semibold text-ink">AI复核进度</div>
@@ -369,16 +378,18 @@ function TrendCard({
 }
 
 function SimpleList({
-  rows
+  rows,
+  scrollable = false
 }: {
   rows: Array<{ title: string; meta: string; detail: string }>;
+  scrollable?: boolean;
 }) {
   if (rows.length === 0) {
     return <div className="text-sm text-slate-500">暂无数据</div>;
   }
 
   return (
-    <div className="space-y-3">
+    <div className={scrollable ? "max-h-[420px] space-y-3 overflow-y-auto pr-2" : "space-y-3"}>
       {rows.map((row) => (
         <div key={`${row.title}-${row.meta}`} className="rounded-2xl border border-slate-200 bg-white p-4">
           <div className="flex items-center justify-between gap-3">

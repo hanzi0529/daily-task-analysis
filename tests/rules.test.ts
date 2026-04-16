@@ -55,6 +55,33 @@ describe("规则引擎", () => {
 
     expect(result.ruleFlags["fields.missing-core"]).toBe(true);
     expect(result.issues[0]?.title).toBe("缺少日报内容");
+    expect(result.riskLevel).toBe("high");
+    expect(result.needAiReview).toBe(false);
+  });
+
+  it("已登记工时为空或为 0 会判为高风险且不进入 AI 复核", () => {
+    const missingHours = createNormalizedRecord({
+        id: "record_missing_hours",
+        rawRecordId: "raw_missing_hours",
+        workContent: "完成接口联调并确认问题清单",
+        relatedTaskName: "接口联调"
+    });
+    delete missingHours.registeredHours;
+
+    const results = analyzeRecordsV2([
+      missingHours,
+      createNormalizedRecord({
+        id: "record_zero_hours",
+        rawRecordId: "raw_zero_hours",
+        registeredHours: 0,
+        workContent: "完成接口联调并确认问题清单",
+        relatedTaskName: "接口联调"
+      })
+    ]);
+
+    expect(results.every((item) => item.ruleFlags["fields.missing-core"] === true)).toBe(true);
+    expect(results.every((item) => item.riskLevel === "high")).toBe(true);
+    expect(results.every((item) => item.needAiReview === false)).toBe(true);
   });
 
   it("内容过短会命中 content.too-short", () => {

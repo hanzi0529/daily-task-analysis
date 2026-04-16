@@ -180,14 +180,16 @@ export async function reviewAllNeedAiRecords(params?: {
     };
   }
 
-  const dataset = params?.force ? resetAiReviewForNeedAiRecords(loadedDataset) : loadedDataset;
-  if (params?.force) {
+  const dataset = params?.force
+    ? resetAiReviewForNeedAiRecords(loadedDataset)
+    : clearIncompleteAiReviewForRetry(loadedDataset);
+  if (params?.force || dataset !== loadedDataset) {
     await repositories.analysis.save(dataset);
   }
 
   const enabled = params?.enabled ?? aiReviewConfig.enabled;
   const allCandidates = selectAllAiReviewCandidates(dataset);
-  const unresolvedCandidates = allCandidates.filter((candidate) => !hasAiContent(candidate));
+  const unresolvedCandidates = allCandidates.filter((candidate) => !isAiReviewCompleted(candidate));
 
   if (!enabled) {
     const progress = aiReviewProgressSchema.parse({
@@ -246,13 +248,14 @@ export async function reviewAllNeedAiRecords(params?: {
     };
   }
 
+  const initialProgress = buildAiReviewProgressFromDataset(dataset);
   let workingDataset = analysisDatasetSchema.parse({
     ...dataset,
     aiReviewProgress: aiReviewProgressSchema.parse({
       status: unresolvedCandidates.length === 0 ? "completed" : "running",
       totalCandidates: allCandidates.length,
-      completedCount: allCandidates.length - unresolvedCandidates.length,
-      successCount: allCandidates.length - unresolvedCandidates.length,
+      completedCount: initialProgress.successCount,
+      successCount: initialProgress.successCount,
       failedCount: 0,
       pendingCount: unresolvedCandidates.length,
       exportReady: unresolvedCandidates.length === 0,
@@ -260,7 +263,7 @@ export async function reviewAllNeedAiRecords(params?: {
       finishedAt: unresolvedCandidates.length === 0 ? new Date().toISOString() : null,
       message:
         unresolvedCandidates.length === 0
-          ? "当前批次的 AI 复核已完成，可直接导出完整版。"
+          ? "当前批次的 AI 复核已完成，可导出包含完整 AI 结果的 Excel。"
           : "AI 正在执行完整复核，请稍候。"
     })
   });
@@ -297,7 +300,7 @@ export async function reviewAllNeedAiRecords(params?: {
     startedAt: workingDataset.aiReviewProgress?.startedAt ?? new Date().toISOString(),
     finishedAt: new Date().toISOString(),
     message: progressBase.exportReady
-      ? "AI 完整复核已完成，可以导出完整版 Excel。"
+      ? "AI 完整复核已完成，可以导出包含完整 AI 结果的 Excel。"
       : "仍有部分 AI 复核未完成，请重试失败项。"
   });
 
@@ -355,7 +358,7 @@ export async function startAiReviewAllInBackground(params?: {
       status: "completed" as const,
       started: false,
       provider: params?.provider?.name ?? aiReviewConfig.provider,
-      message: "当前批次的 AI 复核已完成，可直接导出完整版。",
+      message: "当前批次的 AI 复核已完成，可导出包含完整 AI 结果的 Excel。",
       progress: currentProgress
     };
   }
@@ -465,6 +468,70 @@ function resetAiReviewForNeedAiRecords(dataset: AnalysisDataset) {
   });
 }
 
+function clearIncompleteAiReviewForRetry(dataset: AnalysisDataset) {
+  const shouldClear = (item: {
+    needAiReview: boolean;
+    aiReviewed?: boolean;
+    aiSummary?: string | null;
+    aiReviewLabel?: string | null;
+    aiSuggestion?: string | null;
+    aiReviewReason?: string | null;
+  }) =>
+    item.needAiReview &&
+    !isAiReviewCompleted({
+      aiReviewed: item.aiReviewed ?? false,
+      aiSummary: item.aiSummary ?? null,
+      aiReviewLabel: item.aiReviewLabel ?? null,
+      aiSuggestion: item.aiSuggestion ?? null,
+      aiReviewReason: item.aiReviewReason ?? null
+    });
+
+  const hasIncomplete = dataset.recordList.some(shouldClear) || dataset.analyses.some(shouldClear);
+  if (!hasIncomplete) {
+    return dataset;
+  }
+
+  const analyses = dataset.analyses.map((item) =>
+    shouldClear(item)
+      ? recordAnalysisResultSchema.parse({
+          ...item,
+          aiReviewed: false,
+          aiSummary: null,
+          aiConfidence: null,
+          aiReviewLabel: null,
+          aiSuggestion: null,
+          aiReviewReason: null,
+          aiReviewedAt: null
+        })
+      : item
+  );
+  const recordList = dataset.recordList.map((item) =>
+    shouldClear(item)
+      ? recordListItemSchema.parse({
+          ...item,
+          aiReviewed: false,
+          aiSummary: null,
+          aiConfidence: null,
+          aiReviewLabel: null,
+          aiSuggestion: null,
+          aiReviewReason: null,
+          aiReviewedAt: null
+        })
+      : item
+  );
+
+  return analysisDatasetSchema.parse({
+    ...dataset,
+    analyses,
+    recordList,
+    aiReviewProgress: buildAiReviewProgressFromDataset({
+      ...dataset,
+      analyses,
+      recordList
+    } as AnalysisDataset)
+  });
+}
+
 export async function getAiReviewProgress(datasetId?: string) {
   const dataset = await loadAnalysisDataset(datasetId);
   if (!dataset) {
@@ -494,10 +561,10 @@ export function selectAiReviewCandidates(dataset: AnalysisDataset, limit?: numbe
 export function buildAiReviewProgressFromDataset(dataset: AnalysisDataset) {
   const totalCandidates = dataset.recordList.filter((item) => item.needAiReview).length;
   const successCount = dataset.recordList.filter(
-    (item) => item.needAiReview && item.aiReviewed && hasAiContent(item)
+    (item) => item.needAiReview && isAiReviewCompleted(item)
   ).length;
   const failedCount = dataset.recordList.filter(
-    (item) => item.needAiReview && !hasAiContent(item) && Boolean(item.aiReviewReason)
+    (item) => item.needAiReview && !item.aiReviewed && Boolean(item.aiReviewReason)
   ).length;
   const pendingCount = Math.max(totalCandidates - successCount - failedCount, 0);
   const completedCount = successCount + failedCount;
@@ -523,7 +590,7 @@ export function buildAiReviewProgressFromDataset(dataset: AnalysisDataset) {
       totalCandidates === 0
         ? "当前批次没有需要 AI 复核的记录，可直接导出。"
         : exportReady
-          ? "AI 完整复核已完成，可以导出完整版 Excel。"
+          ? "AI 完整复核已完成，可以导出包含完整 AI 结果的 Excel。"
           : failedCount > 0
             ? "存在未完成的 AI 复核记录，请重试。"
             : "尚未开始完整 AI 复核。"
@@ -539,6 +606,17 @@ export function hasAiContent(
       >
 ) {
   return Boolean(item.aiSummary || item.aiReviewLabel || item.aiSuggestion || item.aiReviewReason);
+}
+
+function isAiReviewCompleted(
+  item:
+    | Pick<RecordListItem, "aiReviewed" | "aiSummary" | "aiReviewLabel" | "aiSuggestion" | "aiReviewReason">
+    | Pick<
+        RecordAnalysisResult,
+        "aiReviewed" | "aiSummary" | "aiReviewLabel" | "aiSuggestion" | "aiReviewReason"
+      >
+) {
+  return item.aiReviewed === true && hasAiContent(item);
 }
 
 function selectAllAiReviewCandidates(dataset: AnalysisDataset) {
@@ -744,7 +822,7 @@ function calculateRunningProgress(dataset: AnalysisDataset) {
     finishedAt: isComplete ? new Date().toISOString() : null,
     message: isComplete
       ? progress.exportReady
-        ? "AI 完整复核已完成，可以导出完整版 Excel。"
+        ? "AI 完整复核已完成，可以导出包含完整 AI 结果的 Excel。"
         : "仍有部分 AI 复核失败，请重试。"
       : `AI 正在完整复核中，已完成 ${progress.completedCount}/${progress.totalCandidates}。`
   });

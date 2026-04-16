@@ -18,6 +18,7 @@ export async function exportLatestAnalysisWorkbook(datasetId?: string) {
     );
     const source = {
       ...record,
+      riskLevel: formatRiskLevel(record.riskLevel),
       needAiReview: record.needAiReview ? "是" : "否",
       aiReviewed: record.aiReviewed ? "是" : "否",
       hasAiContent: hasAiContent ? "是" : "否",
@@ -46,6 +47,7 @@ export async function exportLatestAnalysisWorkbook(datasetId?: string) {
 
     const source = {
       ...person,
+      riskLevel: formatRiskLevel(person.riskLevel),
       highlights: person.highlights.join("；"),
       suggestion
     } as Record<string, unknown>;
@@ -71,6 +73,19 @@ export async function exportLatestAnalysisWorkbook(datasetId?: string) {
   });
 }
 
+function formatRiskLevel(level?: string) {
+  if (level === "high") {
+    return "高风险";
+  }
+  if (level === "medium") {
+    return "中风险";
+  }
+  if (level === "low") {
+    return "低风险";
+  }
+  return "正常";
+}
+
 function buildAiReviewResultText(record: {
   aiSummary?: string | null;
   aiSuggestion?: string | null;
@@ -89,15 +104,6 @@ function buildAiReviewResultText(record: {
 
 export async function prepareLatestAnalysisWorkbook(datasetId?: string) {
   const reviewProgressResult = await getAiReviewProgress(datasetId);
-
-  if (reviewProgressResult.success && !reviewProgressResult.progress.exportReady) {
-    return {
-      ready: false as const,
-      message: reviewProgressResult.progress.message ?? "AI 复核尚未完成，暂时不能导出完整版。",
-      progress: reviewProgressResult.progress,
-      buffer: null
-    };
-  }
 
   const buffer = await exportLatestAnalysisWorkbook(datasetId);
   return {

@@ -1,4 +1,4 @@
-export interface AiReviewProgressPayload {
+﻿export interface AiReviewProgressPayload {
   status: "idle" | "running" | "completed" | "failed";
   totalCandidates: number;
   completedCount: number;
@@ -13,13 +13,7 @@ export interface AiReviewProgressPayload {
 
 export interface AiReviewAllResponse {
   success: boolean;
-  status:
-    | "started"
-    | "running"
-    | "completed"
-    | "failed"
-    | "skipped"
-    | "no-data";
+  status: "started" | "running" | "completed" | "failed" | "skipped" | "no-data";
   started?: boolean;
   provider?: string;
   message?: string | null;

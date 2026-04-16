@@ -251,16 +251,15 @@ export function getAIReviewProvider(
 }
 
 function buildRecordReviewPrompt(input: AiRecordReviewInput) {
+  const ruleSignals = buildReadableRuleSignals(input.ruleFlags ?? {});
   return [
-    "你是一名日报填写质量助手。",
-    "你的任务不是裁判员工工作真假，也不是判断是否敷衍，而是用中性、克制、建议式语言，解释这条日报为什么值得补充说明。",
-    "必须遵守：",
-    "1. 不允许使用“无效工作、敷衍、不合格、明显异常、严重问题”等强否定结论。",
-    "2. 不允许否定工作真实性。",
-    "3. 只围绕表达完整性、结果表达、进度表达、会议结论、任务匹配清晰度给建议。",
-    "4. 输出 JSON，不要输出额外解释。",
-    "5. aiReviewLabel 只从以下标签中选择一个：描述偏简、结果不明确、进度表达不足、会议描述泛化、任务匹配待确认、表达基本合理。",
-    "6. aiSuggestion 必须是一句温和、可执行的补充建议。",
+    "你是“日报填写质量复核助手”，服务对象是管理者和员工本人。",
+    "你的职责：基于系统规则标签，对单条日报的表达质量做温和复核，说明可能需要补充的信息，并给出具体可执行的改写建议。",
+    "边界：不判断工作真实性，不评价员工态度，不替代规则系统做风险判定，不修改 riskLevel、ruleFlags、needAiReview。",
+    "严禁使用：无效工作、敷衍、不合格、明显异常、严重问题。",
+    "判断重点：工作内容是否具体；是否体现阶段结果、产出、结论或下一步；是否体现进度、状态或卡点；会议/沟通类是否说明主题、结论、分工或后续行动；任务抽象时只提示待确认。",
+    "输出要求：只输出 JSON；aiSummary 控制在 40 字以内；aiSuggestion 控制在 50 字以内；aiReviewReason 控制在 60 字以内。",
+    "aiReviewLabel 只从以下标签中选择一个：描述偏简、结果不明确、进度表达不足、会议描述泛化、任务匹配待确认、表达基本合理。",
     "返回格式：{\"aiSummary\":string,\"aiReviewLabel\":string,\"aiSuggestion\":string,\"aiConfidence\":number,\"aiReviewReason\":string}",
     "以下是结构化输入：",
     JSON.stringify(
@@ -271,6 +270,7 @@ function buildRecordReviewPrompt(input: AiRecordReviewInput) {
         riskLevel: input.riskLevel ?? null,
         primaryIssueType: input.primaryIssueTypes ?? [],
         ruleSummary: input.ruleSummary ?? null,
+        ruleSignals,
         ruleFlags: input.ruleFlags ?? {},
         isManagementTask: input.isManagementTask
       },
@@ -278,6 +278,21 @@ function buildRecordReviewPrompt(input: AiRecordReviewInput) {
       2
     )
   ].join("\n");
+}
+
+function buildReadableRuleSignals(flags: Record<string, unknown>) {
+  const signalMap: Array<[string, string]> = [
+    ["task.weak-match", "任务匹配较弱"],
+    ["content.missing-result-signal", "结果痕迹较弱"],
+    ["content.generic-process", "过程描述偏泛"],
+    ["content.missing-progress", "进度表达不足"],
+    ["content.meeting-too-generic", "会议沟通描述泛化"],
+    ["content.too-short", "描述偏短"]
+  ];
+
+  return signalMap
+    .filter(([key]) => flags[key] === true)
+    .map(([, label]) => label);
 }
 
 function buildBatchReportPrompt(input: BatchAiReportInput) {

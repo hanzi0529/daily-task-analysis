@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 import { aiReviewAllRequestSchema } from "@/lib/schemas/api";
 import { ensureBootstrapped } from "@/lib/services/bootstrap";
