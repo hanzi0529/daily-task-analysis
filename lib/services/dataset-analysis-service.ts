@@ -192,11 +192,22 @@ export async function getPeopleSummary(datasetId?: string) {
   return dataset?.people ?? [];
 }
 
+function computeHighestRiskLevel(riskLevels: string[]): string {
+  const order = ["high", "medium", "low", "normal"];
+  for (const level of order) {
+    if (riskLevels.includes(level)) return level;
+  }
+  return "normal";
+}
+
 export async function getPeopleAnalysis(
   datasetId?: string,
   filters?: {
     memberName?: string;
     riskLevel?: "normal" | "low" | "medium" | "high";
+    startDate?: string;
+    endDate?: string;
+    needAiReview?: boolean;
   }
 ) {
   const dataset = datasetId
@@ -216,6 +227,12 @@ export async function getPeopleAnalysis(
     recordMap.set(record.memberName, current);
   }
 
+  const hasRecordFilter =
+    filters?.startDate !== undefined ||
+    filters?.endDate !== undefined ||
+    filters?.needAiReview !== undefined ||
+    filters?.riskLevel !== undefined;
+
   return dataset.people
     .filter((person) => {
       if (
@@ -224,21 +241,40 @@ export async function getPeopleAnalysis(
       ) {
         return false;
       }
-      if (filters?.riskLevel && person.riskLevel !== filters.riskLevel) {
-        return false;
-      }
       return true;
     })
-    .map((person) => ({
-      ...person,
-      records: (recordMap.get(person.memberName) ?? [])
+    .map((person) => {
+      const filteredRecords = (recordMap.get(person.memberName) ?? [])
+        .filter((record) => {
+          if (filters?.startDate && record.workDate < filters.startDate) return false;
+          if (filters?.endDate && record.workDate > filters.endDate) return false;
+          if (filters?.needAiReview !== undefined && record.needAiReview !== filters.needAiReview) return false;
+          if (filters?.riskLevel && record.riskLevel !== filters.riskLevel) return false;
+          return true;
+        })
         .sort((left, right) => {
           if (right.workDate !== left.workDate) {
             return right.workDate.localeCompare(left.workDate);
           }
           return left.rowIndex - right.rowIndex;
-        })
-        .map((record) => ({
+        });
+
+      const derivedStats = hasRecordFilter
+        ? {
+            recordCount: filteredRecords.length,
+            totalHours: Math.round(
+              filteredRecords.reduce((sum, r) => sum + (r.registeredHours ?? 0), 0) * 10
+            ) / 10,
+            anomalyCount: filteredRecords.filter((r) => r.riskLevel !== "normal").length,
+            needAiReviewCount: filteredRecords.filter((r) => r.needAiReview).length,
+            riskLevel: computeHighestRiskLevel(filteredRecords.map((r) => r.riskLevel))
+          }
+        : {};
+
+      return {
+        ...person,
+        ...derivedStats,
+        records: filteredRecords.map((record) => ({
           id: record.id,
           workDate: record.workDate,
           relatedTaskName: record.relatedTaskName ?? "-",
@@ -257,7 +293,9 @@ export async function getPeopleAnalysis(
           aiSuggestion: record.aiSuggestion,
           aiReviewReason: record.aiReviewReason
         }))
-    }))
+      };
+    })
+    .filter((person) => !hasRecordFilter || person.records.length > 0)
     .sort((left, right) => {
       if (right.anomalyCount !== left.anomalyCount) {
         return right.anomalyCount - left.anomalyCount;
@@ -557,7 +595,7 @@ function emptyDashboard() {
   });
 }
 
-function riskSortValue(level: "normal" | "low" | "medium" | "high") {
+function riskSortValue(level: string) {
   if (level === "high") {
     return 3;
   }

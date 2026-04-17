@@ -41,6 +41,9 @@ export async function getPeopleAnalysisV2(
   filters?: {
     memberName?: string;
     riskLevel?: "normal" | "low" | "medium" | "high";
+    startDate?: string;
+    endDate?: string;
+    needAiReview?: boolean;
   }
 ) {
   return getPeopleAnalysis(datasetId, filters);

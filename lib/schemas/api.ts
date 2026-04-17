@@ -28,5 +28,11 @@ export const aiReviewAllRequestSchema = z.object({
 export const peopleQuerySchema = z.object({
   datasetId: z.string().optional(),
   memberName: z.string().optional(),
-  riskLevel: z.enum(["normal", "low", "medium", "high"]).optional()
+  riskLevel: z.enum(["normal", "low", "medium", "high"]).optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  needAiReview: z
+    .enum(["true", "false"])
+    .transform((v) => v === "true")
+    .optional()
 });

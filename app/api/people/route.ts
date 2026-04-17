@@ -11,7 +11,10 @@ export async function GET(request: Request) {
   const parsed = peopleQuerySchema.safeParse({
     datasetId: searchParams.get("datasetId") ?? undefined,
     memberName: searchParams.get("memberName") ?? undefined,
-    riskLevel: searchParams.get("riskLevel") ?? undefined
+    riskLevel: searchParams.get("riskLevel") ?? undefined,
+    startDate: searchParams.get("startDate") ?? undefined,
+    endDate: searchParams.get("endDate") ?? undefined,
+    needAiReview: searchParams.get("needAiReview") ?? undefined
   });
 
   if (!parsed.success) {
@@ -20,7 +23,10 @@ export async function GET(request: Request) {
 
   const data = await getPeopleAnalysisV2(parsed.data.datasetId, {
     memberName: parsed.data.memberName,
-    riskLevel: parsed.data.riskLevel
+    riskLevel: parsed.data.riskLevel,
+    startDate: parsed.data.startDate,
+    endDate: parsed.data.endDate,
+    needAiReview: parsed.data.needAiReview
   });
 
   return NextResponse.json({

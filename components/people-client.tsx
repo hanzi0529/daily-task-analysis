@@ -42,13 +42,19 @@ export function PeopleClient() {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     memberName: "",
-    riskLevel: ""
+    riskLevel: "",
+    startDate: "",
+    endDate: "",
+    needAiReview: ""
   });
 
   const queryString = useMemo(() => {
     const params = new URLSearchParams();
     if (filters.memberName) params.set("memberName", filters.memberName);
     if (filters.riskLevel) params.set("riskLevel", filters.riskLevel);
+    if (filters.startDate) params.set("startDate", filters.startDate);
+    if (filters.endDate) params.set("endDate", filters.endDate);
+    if (filters.needAiReview) params.set("needAiReview", filters.needAiReview);
     return params.toString();
   }, [filters]);
 
@@ -80,8 +86,8 @@ export function PeopleClient() {
   }, [queryString]);
 
   return (
-    <SectionCard title="人员分析">
-      <div className="mb-5 grid gap-3 md:grid-cols-4">
+    <SectionCard title="日报分析">
+      <div className="mb-5 grid gap-3 md:grid-cols-2 xl:grid-cols-[1fr_1fr_auto_1fr_auto]">
         <input
           value={filters.memberName}
           onChange={(event) =>
@@ -103,10 +109,47 @@ export function PeopleClient() {
           <option value="low">低风险</option>
           <option value="normal">正常</option>
         </select>
+        <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 md:col-span-2 xl:col-span-1">
+          <input
+            type="date"
+            value={filters.startDate}
+            onChange={(event) =>
+              setFilters((current) => ({ ...current, startDate: event.target.value }))
+            }
+            className="flex-1 min-w-0 bg-transparent text-sm outline-none"
+          />
+          <span className="shrink-0 text-xs text-slate-400">至</span>
+          <input
+            type="date"
+            value={filters.endDate}
+            onChange={(event) =>
+              setFilters((current) => ({ ...current, endDate: event.target.value }))
+            }
+            className="flex-1 min-w-0 bg-transparent text-sm outline-none"
+          />
+        </div>
+        <select
+          value={filters.needAiReview}
+          onChange={(event) =>
+            setFilters((current) => ({ ...current, needAiReview: event.target.value }))
+          }
+          className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-ink"
+        >
+          <option value="">AI复核状态</option>
+          <option value="true">需AI复核</option>
+          <option value="false">无需AI复核</option>
+        </select>
+        <button
+          type="button"
+          onClick={() => setFilters({ memberName: "", riskLevel: "", startDate: "", endDate: "", needAiReview: "" })}
+          className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 outline-none transition hover:border-ink hover:text-ink whitespace-nowrap"
+        >
+          重置筛选
+        </button>
       </div>
 
       {loading ? (
-        <div className="text-sm text-slate-500">正在加载人员分析...</div>
+        <div className="text-sm text-slate-500">正在加载日报分析...</div>
       ) : (
         <div className="space-y-3">
           {rows.map((row) => (
@@ -179,7 +222,7 @@ export function PeopleClient() {
           ))}
           {rows.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-slate-300 p-8 text-sm text-slate-500">
-              当前筛选条件下暂无人员分析结果
+              当前筛选条件下暂无日报分析结果
             </div>
           ) : null}
         </div>

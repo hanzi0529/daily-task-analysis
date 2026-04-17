@@ -4,9 +4,8 @@ import { PropsWithChildren } from "react";
 
 const navItems: Array<{ href: Route; label: string }> = [
   { href: "/", label: "数据看板" },
-  { href: "/upload", label: "文件上传" },
-  { href: "/reports", label: "日报明细" },
-  { href: "/people", label: "人员分析" }
+  { href: "/people", label: "日报分析" },
+  { href: "/upload", label: "文件上传" }
 ];
 
 export function AppShell({ children }: PropsWithChildren) {
