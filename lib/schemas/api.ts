@@ -19,5 +19,14 @@ export const aiReviewSampleRequestSchema = z.object({
 
 export const aiReviewAllRequestSchema = z.object({
   datasetId: z.string().optional(),
-  force: z.boolean().optional()
+  force: z.boolean().optional(),
+  action: z
+    .enum(["start", "continue", "restart", "retry-failed", "cancel"])
+    .optional()
+});
+
+export const peopleQuerySchema = z.object({
+  datasetId: z.string().optional(),
+  memberName: z.string().optional(),
+  riskLevel: z.enum(["normal", "low", "medium", "high"]).optional()
 });

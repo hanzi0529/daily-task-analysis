@@ -117,6 +117,9 @@ function createBaseResult(record: NormalizedRecord): RecordAnalysisResult {
     workDate: record.workDate,
     relatedTaskName: record.relatedTaskName,
     riskLevel: "normal",
+    ruleRiskLevel: "normal",
+    aiRiskLevel: null,
+    finalRiskLevel: "normal",
     issueCount: 0,
     needAiReview: false,
     ruleFlags: {},
@@ -354,6 +357,8 @@ function finalizeResult(record: NormalizedRecord, result: RecordAnalysisResult) 
           )
           ? "low"
           : "normal";
+  result.ruleRiskLevel = result.riskLevel;
+  result.finalRiskLevel = result.aiRiskLevel ?? result.ruleRiskLevel;
 
   result.needAiReview = shouldMarkNeedAiReview(record, result);
   if (result.needAiReview) {

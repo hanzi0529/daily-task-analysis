@@ -6,7 +6,7 @@ export interface AiRecordReviewInput {
   relatedTaskName?: string;
   workContent: string;
   registeredHours?: number;
-  riskLevel?: "normal" | "low" | "medium" | "high";
+  ruleRiskLevel?: "normal" | "low" | "medium" | "high";
   ruleSummary?: string;
   primaryIssueTypes?: string[];
   ruleFlags?: Record<string, unknown>;
@@ -15,6 +15,7 @@ export interface AiRecordReviewInput {
 
 export interface AiRecordReviewResult {
   aiReviewed: boolean;
+  aiRiskLevel?: "low" | "medium" | "high" | null;
   aiSummary?: string | null;
   aiConfidence?: number | null;
   aiReviewLabel?: string | null;
@@ -64,7 +65,10 @@ export interface BatchAiReportResult {
 export interface AIReviewProvider {
   name: AiReviewProviderName;
   isAvailable(): boolean;
-  reviewRecord(input: AiRecordReviewInput): Promise<AiRecordReviewResult>;
+  reviewRecord(
+    input: AiRecordReviewInput,
+    options?: { signal?: AbortSignal }
+  ): Promise<AiRecordReviewResult>;
   generateBatchReport(input: BatchAiReportInput): Promise<BatchAiReportResult>;
 }
 
@@ -90,9 +94,11 @@ class MockAIReviewProvider implements AIReviewProvider {
     const labels = buildAdvisorySignals(input);
     const primaryLabel = labels[0] ?? GENTLE_LABELS.reasonable;
     const aiSuggestion = buildSuggestion(labels);
+    const aiRiskLevel = buildMockAiRiskLevel(input, labels);
 
     return {
       aiReviewed: true,
+      aiRiskLevel,
       aiSummary: buildMockSummary(input, primaryLabel),
       aiConfidence: labels.length > 0 ? 0.82 : 0.73,
       aiReviewLabel: primaryLabel,
@@ -174,7 +180,10 @@ class GLMReviewProvider implements AIReviewProvider {
     return Boolean(aiReviewConfig.glm.apiKey);
   }
 
-  async reviewRecord(input: AiRecordReviewInput): Promise<AiRecordReviewResult> {
+  async reviewRecord(
+    input: AiRecordReviewInput,
+    options?: { signal?: AbortSignal }
+  ): Promise<AiRecordReviewResult> {
     if (!this.isAvailable()) {
       return unavailableReviewResult("GLM provider 未配置 API key，已跳过真实复核。");
     }
@@ -186,10 +195,12 @@ class GLMReviewProvider implements AIReviewProvider {
       model: aiReviewConfig.glm.model,
       prompt,
       temperature: 0.2,
-      topP: 0.7
+      topP: 0.7,
+      signal: options?.signal
     });
 
     const parsed = parseJsonObject<{
+      aiRiskLevel?: "high" | "medium" | "low";
       aiSummary?: string;
       aiReviewLabel?: string;
       aiSuggestion?: string;
@@ -199,6 +210,7 @@ class GLMReviewProvider implements AIReviewProvider {
 
     return {
       aiReviewed: true,
+      aiRiskLevel: normalizeAiRiskLevel(parsed.aiRiskLevel),
       aiSummary: normalizeAssistantText(parsed.aiSummary),
       aiReviewLabel: normalizeAssistantText(parsed.aiReviewLabel),
       aiSuggestion: normalizeAssistantText(parsed.aiSuggestion),
@@ -253,22 +265,27 @@ export function getAIReviewProvider(
 function buildRecordReviewPrompt(input: AiRecordReviewInput) {
   const ruleSignals = buildReadableRuleSignals(input.ruleFlags ?? {});
   return [
-    "你是“日报填写质量复核助手”，服务对象是管理者和员工本人。",
-    "你的职责：基于系统规则标签，对单条日报的表达质量做温和复核，说明可能需要补充的信息，并给出具体可执行的改写建议。",
-    "边界：不判断工作真实性，不评价员工态度，不替代规则系统做风险判定，不修改 riskLevel、ruleFlags、needAiReview。",
-    "严禁使用：无效工作、敷衍、不合格、明显异常、严重问题。",
-    "判断重点：工作内容是否具体；是否体现阶段结果、产出、结论或下一步；是否体现进度、状态或卡点；会议/沟通类是否说明主题、结论、分工或后续行动；任务抽象时只提示待确认。",
-    "输出要求：只输出 JSON；aiSummary 控制在 40 字以内；aiSuggestion 控制在 50 字以内；aiReviewReason 控制在 60 字以内。",
+    "你是一名企业内部管理分析助手，负责判断“员工日报内容”与“所关联任务”的语义匹配程度。",
+    "你的判断目标不是文学评价，而是从管理视角判断：该员工当天的工作，是否可以合理认为是在推进该任务。",
+    "本次输入已经由规则系统筛选为需要语义复核的样本。你只判断任务语义风险，不重新判断工时异常、字段缺失、重复填报等硬规则问题。",
+    "严禁：不要评价员工态度，不要否定工作真实性，不要使用“敷衍、无效工作、不合格、明显异常、严重问题、乱填”等强否定词。",
+    "风险标准：",
+    "1. high：明显不相关，或只有极泛化行为且没有具体对象/任务指向，无法合理证明在推进该任务。",
+    "2. medium：可能相关，但证据不足，缺少具体对象、动作、结果或阶段进展，无法确认是否真正推进任务。",
+    "3. low：可以合理认为在推进该任务，内容与任务语义一致，并有具体动作、对象、结果或状态支撑。",
+    "重要规则：项目管理、协调推进、沟通类任务允许较抽象表达，不应轻易判为 high；不要因为没有写百分比就判为风险；判断重点是是否能支持该任务被推进。",
+    "补充约束：如果日报内容达到 20 字，且已经出现具体动作、对象、结果或状态线索，最高只判定为 medium，不要轻易给 high。",
+    "输出要求：只输出 JSON；aiSummary 控制在 40 字以内；aiSuggestion 控制在 50 字以内；aiReviewReason 控制在 60 字以内；语气中性、审慎、建议式。",
     "aiReviewLabel 只从以下标签中选择一个：描述偏简、结果不明确、进度表达不足、会议描述泛化、任务匹配待确认、表达基本合理。",
-    "返回格式：{\"aiSummary\":string,\"aiReviewLabel\":string,\"aiSuggestion\":string,\"aiConfidence\":number,\"aiReviewReason\":string}",
+    "返回格式：{\"aiRiskLevel\":\"high|medium|low\",\"aiSummary\":string,\"aiReviewLabel\":string,\"aiSuggestion\":string,\"aiConfidence\":number,\"aiReviewReason\":string}",
     "以下是结构化输入：",
     JSON.stringify(
       {
         taskName: input.relatedTaskName ?? null,
         workContent: input.workContent,
         reportedHours: input.registeredHours ?? null,
-        riskLevel: input.riskLevel ?? null,
-        primaryIssueType: input.primaryIssueTypes ?? [],
+        ruleRiskLevel: input.ruleRiskLevel ?? null,
+        primaryIssueTypes: input.primaryIssueTypes ?? [],
         ruleSummary: input.ruleSummary ?? null,
         ruleSignals,
         ruleFlags: input.ruleFlags ?? {},
@@ -317,9 +334,12 @@ async function callChatCompletion(params: {
   prompt: string;
   temperature: number;
   topP: number;
+  signal?: AbortSignal;
 }) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), MODEL_REQUEST_TIMEOUT_MS);
+  const abortHandler = () => controller.abort();
+  params.signal?.addEventListener("abort", abortHandler, { once: true });
 
   let response: Response;
   try {
@@ -352,6 +372,7 @@ async function callChatCompletion(params: {
     throw error;
   } finally {
     clearTimeout(timeout);
+    params.signal?.removeEventListener("abort", abortHandler);
   }
 
   if (!response.ok) {
@@ -429,9 +450,48 @@ function buildMockReason(input: AiRecordReviewInput, labels: string[]) {
   return `当前规则标签主要提示：${labels.join("、")}。AI 仅基于这些结构化信号补充解释与建议。`;
 }
 
+function buildMockAiRiskLevel(input: AiRecordReviewInput, labels: string[]) {
+  const flags = input.ruleFlags ?? {};
+  const contentLength = normalizeText(input.workContent).length;
+  const hasWeakMatch = flags["task.weak-match"] === true;
+  const hasWeakResult =
+    flags["content.missing-result-signal"] === true ||
+    flags["content.generic-process"] === true ||
+    flags["content.missing-progress"] === true ||
+    flags["content.meeting-too-generic"] === true;
+  const hasStructuredClues =
+    /完成|输出|提交|确认|解决|修复|联调|测试|开发|优化|排查|实现|进行中|已完成|待验证|方案|接口|模块|系统|需求/.test(
+      input.workContent
+    ) || /[，。；、]/.test(input.workContent);
+
+  if (
+    hasWeakMatch &&
+    !input.isManagementTask &&
+    contentLength <= 18 &&
+    !hasWeakResult
+  ) {
+    return "high" as const;
+  }
+
+  if (
+    hasWeakMatch &&
+    hasWeakResult &&
+    !(contentLength >= 20 && hasStructuredClues)
+  ) {
+    return input.isManagementTask ? ("medium" as const) : ("high" as const);
+  }
+
+  if (hasWeakMatch || hasWeakResult || labels.length > 0) {
+    return "medium" as const;
+  }
+
+  return "low" as const;
+}
+
 function unavailableReviewResult(message: string): AiRecordReviewResult {
   return {
     aiReviewed: false,
+    aiRiskLevel: null,
     aiSummary: null,
     aiConfidence: null,
     aiReviewLabel: null,
@@ -462,6 +522,13 @@ function normalizeConfidence(value?: number | null) {
     return null;
   }
   return Number(Math.max(0, Math.min(1, value)).toFixed(3));
+}
+
+function normalizeAiRiskLevel(value?: string | null) {
+  if (value === "high" || value === "medium" || value === "low") {
+    return value;
+  }
+  return null;
 }
 
 function normalizeStringArray(value: unknown) {

@@ -127,6 +127,14 @@ export function createRecordListItem(
     relatedTaskName:
       overrides.relatedTaskName ?? baseRecord.relatedTaskName,
     riskLevel: overrides.riskLevel ?? "low",
+    ruleRiskLevel: overrides.ruleRiskLevel ?? overrides.riskLevel ?? "low",
+    aiRiskLevel: overrides.aiRiskLevel ?? null,
+    finalRiskLevel:
+      overrides.finalRiskLevel ??
+      overrides.aiRiskLevel ??
+      overrides.ruleRiskLevel ??
+      overrides.riskLevel ??
+      "low",
     issueCount: overrides.issueCount ?? 0,
     needAiReview: overrides.needAiReview ?? false,
     ruleFlags: overrides.ruleFlags ?? {},

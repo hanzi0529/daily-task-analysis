@@ -196,6 +196,7 @@ describe("AI 抽样复核 service", () => {
       relatedTaskName: "接口联调",
       workContent: "完成接口联调并输出问题清单",
       registeredHours: 7.5,
+      ruleRiskLevel: "medium",
       ruleSummary: "任务匹配较弱",
       primaryIssueTypes: ["任务匹配"],
       ruleFlags: {
@@ -206,6 +207,7 @@ describe("AI 抽样复核 service", () => {
     });
 
     expect(review.aiReviewed).toBe(true);
+    expect(["high", "medium", "low"]).toContain(review.aiRiskLevel);
     expect(typeof review.aiSummary).toBe("string");
     expect(typeof review.aiConfidence).toBe("number");
     expect(review.aiReviewLabel).toBeTruthy();
@@ -235,6 +237,99 @@ describe("AI 抽样复核 service", () => {
     expect(result.items[0].aiReviewed).toBe(false);
     expect(result.items[0].aiSuggestion).toBeNull();
     expect(analysisSave).toHaveBeenCalledTimes(1);
+  });
+
+  it("needAiReview 样本在 AI 成功返回后会生成 finalRiskLevel", async () => {
+    const { reviewSampleRecords } = await import("@/lib/services/ai-review-service");
+    analysisGetLatest.mockResolvedValue(createAnalysisDataset(3));
+    analysisSave.mockResolvedValue(undefined);
+
+    const provider = {
+      name: "mock" as const,
+      isAvailable: () => true,
+      reviewRecord: vi.fn().mockResolvedValue({
+        aiReviewed: true,
+        aiRiskLevel: "high",
+        aiSummary: "任务与日报语义关联不足，建议补充具体对象。",
+        aiConfidence: 0.88,
+        aiReviewLabel: "任务匹配待确认",
+        aiSuggestion: "建议补充具体处理对象和阶段结果。",
+        aiReviewReason: "当前表达缺少任务对象和结果支撑。"
+      }),
+      generateBatchReport: vi.fn()
+    };
+
+    const result = await reviewSampleRecords({
+      enabled: true,
+      provider
+    });
+
+    expect(result.success).toBe(true);
+    const savedDataset = analysisSave.mock.calls.at(-1)?.[0] as AnalysisDataset;
+    const reviewedRecord = savedDataset.recordList.find((item) => item.recordId === "record_3");
+    expect(reviewedRecord?.aiRiskLevel).toBe("high");
+    expect(reviewedRecord?.finalRiskLevel).toBe("high");
+  });
+
+  it("长文本且已有具体线索时，AI high 会被收敛为 medium", async () => {
+    const { reviewSampleRecords } = await import("@/lib/services/ai-review-service");
+    const dataset = createAnalysisDataset(3);
+    dataset.recordList[1] = {
+      ...dataset.recordList[1],
+      needAiReview: true,
+      workContent: "继续推进接口联调问题修复，完成参数校验调整并同步联调结果",
+      relatedTaskName: "接口联调问题修复",
+      ruleFlags: {
+        "task.weak-match": true,
+        "content.missing-result-signal": true
+      },
+      issueTitles: ["任务匹配较弱", "结果痕迹较弱"],
+      riskLevel: "medium",
+      ruleRiskLevel: "medium",
+      finalRiskLevel: "medium"
+    };
+    dataset.analyses[1] = {
+      ...dataset.analyses[1],
+      needAiReview: true,
+      relatedTaskName: "接口联调问题修复",
+      ruleFlags: {
+        "task.weak-match": true,
+        "content.missing-result-signal": true
+      },
+      riskLevel: "medium",
+      ruleRiskLevel: "medium",
+      finalRiskLevel: "medium"
+    };
+    analysisGetLatest.mockResolvedValue(dataset);
+    analysisSave.mockResolvedValue(undefined);
+
+    const provider = {
+      name: "mock" as const,
+      isAvailable: () => true,
+      reviewRecord: vi.fn().mockResolvedValue({
+        aiReviewed: true,
+        aiRiskLevel: "high",
+        aiSummary: "任务推进证据仍需补充。",
+        aiConfidence: 0.86,
+        aiReviewLabel: "任务匹配待确认",
+        aiSuggestion: "建议补充本次处理对象和联调结论。",
+        aiReviewReason: "语义仍有边界，但已有较多具体线索。"
+      }),
+      generateBatchReport: vi.fn()
+    };
+
+    await reviewSampleRecords({
+      enabled: true,
+      provider,
+      limit: 2
+    });
+
+    const savedDataset = analysisSave.mock.calls.at(-1)?.[0] as AnalysisDataset;
+    const reviewedRecord = savedDataset.recordList.find(
+      (item) => item.recordId === dataset.recordList[1].recordId
+    );
+    expect(reviewedRecord?.aiRiskLevel).toBe("medium");
+    expect(reviewedRecord?.finalRiskLevel).toBe("medium");
   });
 });
 

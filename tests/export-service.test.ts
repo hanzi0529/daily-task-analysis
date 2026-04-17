@@ -24,6 +24,9 @@ describe("导出 service", () => {
         ...createRecordListItem({
           memberName: "张三",
           riskLevel: "medium",
+          ruleRiskLevel: "medium",
+          aiRiskLevel: "high",
+          finalRiskLevel: "high",
           issueCount: 2,
           needAiReview: true,
           ruleFlags: {
@@ -85,6 +88,8 @@ describe("导出 service", () => {
 
     expect(detailHeaders).toEqual(exportDetailFields.map((field) => field.title));
     expect(peopleHeaders).toEqual(exportPeopleFields.map((field) => field.title));
+    expect(detailHeaders).toContain("规则风险等级");
+    expect(detailHeaders).toContain("AI复核风险等级");
     expect(detailHeaders).toContain("AI是否已复核");
     expect(detailHeaders).toContain("AI复核结果");
     expect(detailHeaders).not.toContain("AI是否有内容");
@@ -113,10 +118,14 @@ describe("导出 service", () => {
     const needAiReviewIndex = detailHeaders.indexOf("需AI复核");
     const aiReviewedIndex = detailHeaders.indexOf("AI是否已复核");
     const riskLevelIndex = detailHeaders.indexOf("风险等级");
+    const ruleRiskLevelIndex = detailHeaders.indexOf("规则风险等级");
+    const aiRiskLevelIndex = detailHeaders.indexOf("AI复核风险等级");
 
     expect(firstRow[needAiReviewIndex]).toBe("是");
     expect(firstRow[aiReviewedIndex]).toBe("是");
-    expect(firstRow[riskLevelIndex]).toBe("中风险");
+    expect(firstRow[riskLevelIndex]).toBe("高风险");
+    expect(firstRow[ruleRiskLevelIndex]).toBe("中风险");
+    expect(firstRow[aiRiskLevelIndex]).toBe("高风险");
   });
 
   it("即使 AI 总结为空，也不会影响导出", async () => {

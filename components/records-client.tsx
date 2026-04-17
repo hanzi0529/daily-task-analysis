@@ -142,22 +142,24 @@ export function RecordsClient() {
                 <div className="mt-2 grid gap-2 text-xs text-slate-500 md:grid-cols-4">
                   <div>问题数量：{record.issueCount}</div>
                   <div>需AI复核：{record.needAiReview ? "是" : "否"}</div>
-                  <div>AI已复核：{record.aiReviewed ? "是" : "否"}</div>
+                  <div>{record.needAiReview ? `AI已复核：${record.aiReviewed ? "是" : "否"}` : ""}</div>
                   <div>主要问题类型：{record.primaryIssueTypes.join("；") || "无"}</div>
                 </div>
               </summary>
 
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <div className={`mt-4 grid gap-4 ${record.needAiReview ? "md:grid-cols-2" : ""}`}>
                 <DetailBlock title="风险原因" value={record.riskReasons.join("；") || "无"} />
-                <DetailBlock
-                  title="AI复核结果"
-                  value={
-                    record.aiSummary
-                      ? `${record.aiSummary}${record.aiReviewLabel ? `\n标签：${record.aiReviewLabel}` : ""}${record.aiSuggestion ? `\n建议：${record.aiSuggestion}` : ""}${typeof record.aiConfidence === "number" ? `\n置信度：${record.aiConfidence}` : ""}${record.aiReviewReason ? `\n原因：${record.aiReviewReason}` : ""}`
-                      : "当前尚未生成 AI 复核内容"
-                  }
-                  code
-                />
+                {record.needAiReview ? (
+                  <DetailBlock
+                    title="AI复核结果"
+                    value={
+                      record.aiSummary
+                        ? `${record.aiSummary}${record.aiReviewLabel ? `\n标签：${record.aiReviewLabel}` : ""}${record.aiSuggestion ? `\n建议：${record.aiSuggestion}` : ""}${typeof record.aiConfidence === "number" ? `\n置信度：${record.aiConfidence}` : ""}${record.aiReviewReason ? `\n原因：${record.aiReviewReason}` : ""}`
+                        : "当前尚未生成 AI 复核内容"
+                    }
+                    code
+                  />
+                ) : null}
               </div>
             </details>
           ))}

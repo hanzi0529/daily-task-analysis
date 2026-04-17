@@ -18,7 +18,9 @@ export async function exportLatestAnalysisWorkbook(datasetId?: string) {
     );
     const source = {
       ...record,
-      riskLevel: formatRiskLevel(record.riskLevel),
+      riskLevel: formatRiskLevel(record.finalRiskLevel ?? record.riskLevel),
+      ruleRiskLevel: formatRiskLevel(record.ruleRiskLevel ?? record.riskLevel),
+      aiRiskLevel: record.aiRiskLevel ? formatRiskLevel(record.aiRiskLevel) : "",
       needAiReview: record.needAiReview ? "是" : "否",
       aiReviewed: record.aiReviewed ? "是" : "否",
       hasAiContent: hasAiContent ? "是" : "否",

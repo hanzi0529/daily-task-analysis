@@ -4,6 +4,11 @@ export const aiReviewConfig = {
   enabled: process.env.AI_REVIEW_ENABLED === "true",
   provider: (process.env.AI_REVIEW_PROVIDER || "mock") as AiReviewProviderName,
   sampleLimit: Number(process.env.AI_REVIEW_SAMPLE_LIMIT || 20),
+  queue: {
+    batchSize: Number(process.env.AI_REVIEW_BATCH_SIZE || 1),
+    batchCooldownMs: Number(process.env.AI_REVIEW_BATCH_COOLDOWN_MS || 20000),
+    rateLimitCooldownMs: Number(process.env.AI_REVIEW_RATE_LIMIT_COOLDOWN_MS || 60000)
+  },
   candidateRules: {
     needAiReview: process.env.AI_REVIEW_INCLUDE_NEED_AI !== "false",
     mediumRisk: process.env.AI_REVIEW_INCLUDE_MEDIUM !== "false",
@@ -33,4 +38,12 @@ export function normalizeAiSampleLimit(limit?: number) {
   }
 
   return Math.max(1, Math.min(100, Math.floor(value)));
+}
+
+export function normalizeAiBatchSize(value?: number) {
+  if (value == null || !Number.isFinite(value)) {
+    return 3;
+  }
+
+  return Math.max(1, Math.min(10, Math.floor(value)));
 }

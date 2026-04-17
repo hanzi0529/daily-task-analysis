@@ -46,7 +46,7 @@ export async function getLatestDatasetSnapshotV2() {
 }
 
 async function findLatestExcelCandidate() {
-  const candidateDirectories = [localSourceOptions.directoryPath, storagePaths.uploadsDir];
+  const candidateDirectories = [localSourceOptions.directoryPath];
   const candidates: Array<{
     name: string;
     filePath: string;

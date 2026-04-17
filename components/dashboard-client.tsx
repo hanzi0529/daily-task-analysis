@@ -50,6 +50,8 @@ interface DashboardResponse {
   managementSummary: string[];
 }
 
+type ReviewAction = "start" | "continue" | "restart" | "retry-failed" | "cancel";
+
 export function DashboardClient() {
   const [data, setData] = useState<DashboardResponse | null>(null);
   const [aiReport, setAiReport] = useState<DashboardAiReportPayload | null>(null);
@@ -80,16 +82,16 @@ export function DashboardClient() {
   }, []);
 
   useEffect(() => {
-    if (!reviewingAll && reviewProgress.status !== "running") {
+    if (reviewProgress.status !== "running") {
       return;
     }
 
     const timer = window.setInterval(() => {
       void refreshProgress();
-    }, 2000);
+    }, 3000);
 
     return () => window.clearInterval(timer);
-  }, [reviewingAll, reviewProgress.status]);
+  }, [reviewProgress.status]);
 
   async function refreshDashboard() {
     const response = await fetch("/api/dashboard", { cache: "no-store" });
@@ -120,25 +122,20 @@ export function DashboardClient() {
     }
   }
 
-  async function handleStartFullReview() {
+  async function handleReviewAction(action: ReviewAction) {
     setReviewingAll(true);
-    setActionMessage("AI 正在执行完整复核，请稍候...");
-    const timer = window.setInterval(() => {
-      void refreshProgress();
-    }, 1500);
+    setActionMessage(getReviewActionMessage(action));
 
     try {
-      const result = await startFullAiReview({
-        force: false
-      });
-      setActionMessage(result.message || "AI 完整复核已执行。");
+      const result = await startFullAiReview({ action, force: action === "restart" });
+      setActionMessage(result.message || "AI 复核状态已更新。");
+      setReviewProgress(result.progress ?? EMPTY_AI_REVIEW_PROGRESS);
       await refreshProgress();
       await refreshAiReport();
       await refreshDashboard();
     } catch {
-      setActionMessage("AI 完整复核执行失败，请稍后重试。");
+      setActionMessage("AI 复核操作执行失败，请稍后重试。");
     } finally {
-      window.clearInterval(timer);
       setReviewingAll(false);
     }
   }
@@ -174,6 +171,9 @@ export function DashboardClient() {
   if (!data) {
     return <div className="panel p-6 text-sm text-slate-500">正在加载数据看板...</div>;
   }
+
+  const importedAtText = formatBeijingDateTime(data.summary.importedAt);
+  const reviewActionButtons = buildReviewActionButtons(reviewProgress);
 
   return (
     <div className="space-y-6">
@@ -218,8 +218,8 @@ export function DashboardClient() {
         </SectionCard>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-2">
-        <SectionCard title="管理摘要" description="由规则分析服务直接返回，前端不做核心指标计算。">
+      <section className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+        <SectionCard title="管理摘要" description="基于规则分析结果生成，用于快速了解本批次关注点。">
           <div className="space-y-3">
             {data.managementSummary.map((item) => (
               <div key={item} className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-700">
@@ -232,35 +232,36 @@ export function DashboardClient() {
         <SectionCard
           title="数据来源与导出"
           description="可随时导出当前最新 Excel；AI 复核完成多少，导出中就体现多少。"
-          action={
-            <div className="grid gap-2 sm:grid-cols-2">
-              <button
-                type="button"
-                onClick={() => void handleStartFullReview()}
-                disabled={reviewingAll || reviewProgress.status === "running"}
-                className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {reviewingAll || reviewProgress.status === "running"
-                  ? "AI复核中..."
-                  : (reviewProgress.pendingCount > 0 && reviewProgress.completedCount > 0) ||
-                      reviewProgress.failedCount > 0
-                    ? "继续复核"
-                    : "开始AI复核"}
-              </button>
-              <button
-                type="button"
-                onClick={() => void handleExport()}
-                disabled={exporting}
-                className="rounded-2xl bg-ink px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {exporting ? "导出中..." : "导出最新Excel"}
-              </button>
-            </div>
-          }
         >
           <div className="space-y-4 text-sm text-slate-600">
-            <div className="rounded-2xl bg-white p-4 break-all">文件：{data.summary.fileName || "暂无"}</div>
-            <div className="rounded-2xl bg-white p-4">导入时间：{data.summary.importedAt || "暂无"}</div>
+            <div className="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-start">
+              <div className="space-y-3">
+                <div className="rounded-2xl bg-white p-4 break-all">文件：{data.summary.fileName || "暂无"}</div>
+                <div className="rounded-2xl bg-white p-4">导入时间：{importedAtText}</div>
+              </div>
+              <div className="grid min-w-[220px] gap-2 sm:grid-cols-2 lg:grid-cols-1">
+                {reviewActionButtons.map((button) => (
+                  <button
+                    key={button.action}
+                    type="button"
+                    onClick={() => void handleReviewAction(button.action)}
+                    disabled={reviewingAll || exporting}
+                    className={button.className}
+                  >
+                    {button.label}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => void handleExport()}
+                  disabled={exporting || reviewingAll}
+                  className="rounded-2xl bg-ink px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {exporting ? "导出中..." : "导出最新Excel"}
+                </button>
+              </div>
+            </div>
+
             <div className="rounded-2xl border border-slate-200 bg-white p-4">
               <div className="mb-2 flex items-center justify-between gap-3">
                 <div className="text-sm font-semibold text-ink">AI复核进度</div>
@@ -271,21 +272,34 @@ export function DashboardClient() {
                 </div>
               </div>
               <div className="h-2 rounded-full bg-slate-200">
-                <div
-                  className="h-2 rounded-full bg-ink transition-all"
-                  style={{ width: `${progressPercent}%` }}
-                />
+                <div className="h-2 rounded-full bg-ink transition-all" style={{ width: `${progressPercent}%` }} />
               </div>
               <div className="mt-3 grid gap-2 text-xs text-slate-500 md:grid-cols-2">
                 <div>需复核总数：{reviewProgress.totalCandidates}</div>
                 <div>已完成：{reviewProgress.completedCount}</div>
                 <div>成功：{reviewProgress.successCount}</div>
                 <div>失败：{reviewProgress.failedCount}</div>
+                <div>待处理：{reviewProgress.pendingCount}</div>
+                <div>当前状态：{formatProgressStatus(reviewProgress.status)}</div>
+                {reviewProgress.totalBatches ? (
+                  <div>
+                    当前批次：{Math.max(reviewProgress.currentBatch ?? 0, 1)}/{reviewProgress.totalBatches}
+                  </div>
+                ) : null}
+                {reviewProgress.cooldownUntil ? (
+                  <div>冷却截止：{formatBeijingDateTime(reviewProgress.cooldownUntil)}</div>
+                ) : null}
               </div>
               <div className="mt-3 text-sm text-slate-600">
                 {reviewProgress.message || "当前尚未开始 AI 完整复核。"}
               </div>
+              {reviewProgress.lastProgressAt ? (
+                <div className="mt-2 text-xs text-slate-500">
+                  最近进度更新时间：{formatBeijingDateTime(reviewProgress.lastProgressAt)}
+                </div>
+              ) : null}
             </div>
+
             {actionMessage ? (
               <div className="rounded-2xl border border-dashed border-slate-300 p-4 text-sm text-slate-600">
                 {actionMessage}
@@ -317,6 +331,101 @@ export function DashboardClient() {
   );
 }
 
+function getReviewActionMessage(action: ReviewAction) {
+  if (action === "cancel") {
+    return "正在请求中断 AI 复核...";
+  }
+  if (action === "restart") {
+    return "正在重新发起 AI 复核，进度会从 0 开始...";
+  }
+  if (action === "retry-failed") {
+    return "正在重试失败项...";
+  }
+  if (action === "continue") {
+    return "正在继续处理未完成的 AI 复核项...";
+  }
+  return "正在启动 AI 完整复核...";
+}
+
+function buildReviewActionButtons(progress: AiReviewProgressPayload) {
+  if (progress.status === "running") {
+    return [
+      {
+        action: "cancel" as const,
+        label: progress.cancelRequested ? "中断中..." : "中断复核",
+        className:
+          "rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+      }
+    ];
+  }
+
+  if (progress.status === "stalled") {
+    return [
+      secondaryAction("continue", "继续复核"),
+      ...(progress.failedCount > 0 ? [secondaryAction("retry-failed", "重试失败项")] : []),
+      secondaryAction("restart", "重新复核")
+    ];
+  }
+
+  if (progress.status === "failed") {
+    return [
+      ...(progress.pendingCount > 0 ? [secondaryAction("continue", "继续复核")] : []),
+      ...(progress.failedCount > 0 ? [secondaryAction("retry-failed", "重试失败项")] : []),
+      secondaryAction("restart", "重新复核")
+    ];
+  }
+
+  if (progress.status === "cancelled") {
+    return [secondaryAction("continue", "继续复核"), secondaryAction("restart", "重新复核")];
+  }
+
+  if (progress.status === "completed") {
+    return [secondaryAction("restart", "重新复核")];
+  }
+
+  return [secondaryAction("start", "开始AI复核")];
+}
+
+function secondaryAction(action: ReviewAction, label: string) {
+  return {
+    action,
+    label,
+    className:
+      "rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+  };
+}
+
+function formatProgressStatus(status: AiReviewProgressPayload["status"]) {
+  if (status === "running") return "复核中";
+  if (status === "completed") return "已完成";
+  if (status === "failed") return "部分失败";
+  if (status === "stalled") return "疑似停滞";
+  if (status === "cancelled") return "已中断";
+  return "未开始";
+}
+
+function formatBeijingDateTime(value?: string | null) {
+  if (!value) {
+    return "暂无";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  }).format(date).replace(/\//g, "-");
+}
+
 function ChartCard({
   title,
   items
@@ -336,10 +445,7 @@ function ChartCard({
               <span>{item.value}</span>
             </div>
             <div className="h-2 rounded-full bg-slate-200">
-              <div
-                className="h-2 rounded-full bg-ink"
-                style={{ width: `${(item.value / max) * 100}%` }}
-              />
+              <div className="h-2 rounded-full bg-ink" style={{ width: `${(item.value / max) * 100}%` }} />
             </div>
           </div>
         ))}
@@ -362,10 +468,7 @@ function TrendCard({
       <div className="flex min-h-44 items-end gap-3">
         {items.map((item) => (
           <div key={item.date} className="flex flex-1 flex-col items-center gap-2">
-            <div
-              className="w-full rounded-t-2xl bg-ember/80"
-              style={{ height: `${Math.max(16, (item.value / max) * 140)}px` }}
-            />
+            <div className="w-full rounded-t-2xl bg-ember/80" style={{ height: `${Math.max(16, (item.value / max) * 140)}px` }} />
             <div className="text-center text-xs text-slate-500">
               <div>{item.date.slice(5)}</div>
               <div>{item.value}</div>
@@ -389,7 +492,7 @@ function SimpleList({
   }
 
   return (
-    <div className={scrollable ? "max-h-[420px] space-y-3 overflow-y-auto pr-2" : "space-y-3"}>
+    <div className={scrollable ? "max-h-[820px] space-y-3 overflow-y-auto pr-2" : "space-y-3"}>
       {rows.map((row) => (
         <div key={`${row.title}-${row.meta}`} className="rounded-2xl border border-slate-200 bg-white p-4">
           <div className="flex items-center justify-between gap-3">

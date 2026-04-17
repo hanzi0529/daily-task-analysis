@@ -1,5 +1,5 @@
 ﻿import { beforeEach, describe, expect, it, vi } from "vitest";
-
+import { afterEach } from "vitest";
 import type { AnalysisDataset } from "@/types/domain";
 import { createRecordListItem } from "@/tests/fixtures/report-samples";
 
@@ -152,6 +152,10 @@ describe("AI 完整复核 service", () => {
     analysisSave.mockReset();
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("会对所有 needAiReview 记录执行 AI 复核，并更新导出就绪状态", async () => {
     let latestDataset = createDataset();
     analysisGetLatest.mockImplementation(async () => latestDataset);
@@ -186,5 +190,66 @@ describe("AI 完整复核 service", () => {
     expect(progress.progress.exportReady).toBe(true);
     expect(progress.progress.successCount).toBe(2);
     expect(analysisSave).toHaveBeenCalled();
+  });
+
+  it("停滞后的重新复核会重新启动新任务", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-04-15T08:00:00.000Z"));
+
+    let latestDataset = createDataset();
+    analysisGetLatest.mockImplementation(async () => latestDataset);
+    analysisGet.mockImplementation(async () => latestDataset);
+    analysisSave.mockImplementation(async (value) => {
+      latestDataset = value;
+    });
+
+    const hangingProvider = {
+      name: "mock" as const,
+      isAvailable: () => true,
+      reviewRecord: vi.fn().mockImplementation((_, options?: { signal?: AbortSignal }) => {
+        return new Promise((_, reject) => {
+          options?.signal?.addEventListener(
+            "abort",
+            () => reject(new Error("aborted by restart")),
+            { once: true }
+          );
+        });
+      }),
+      generateBatchReport: vi.fn()
+    };
+
+    const fastProvider = {
+      name: "mock" as const,
+      isAvailable: () => true,
+      reviewRecord: vi.fn().mockResolvedValue({
+        aiReviewed: true,
+        aiRiskLevel: "medium",
+        aiSummary: "已重新发起复核。",
+        aiConfidence: 0.8,
+        aiReviewLabel: "任务匹配待确认",
+        aiSuggestion: "建议补充结果说明。",
+        aiReviewReason: "重新复核后已返回结果。"
+      }),
+      generateBatchReport: vi.fn()
+    };
+
+    const { startAiReviewAllInBackground } = await import("@/lib/services/ai-review-service");
+
+    const started = await startAiReviewAllInBackground({
+      enabled: true,
+      provider: hangingProvider
+    });
+    expect(started.status).toBe("started");
+
+    await vi.advanceTimersByTimeAsync(7 * 60 * 1000);
+
+    const restarted = await startAiReviewAllInBackground({
+      enabled: true,
+      provider: fastProvider,
+      force: true
+    });
+
+    expect(restarted.status).toBe("started");
+    expect(restarted.started).toBe(true);
   });
 });

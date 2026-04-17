@@ -105,7 +105,11 @@ class LocalFileRepository implements FileRepository {
       return [];
     }
 
-    return readJsonFile<UploadFileMeta[]>(uploadsIndexPath);
+    try {
+      return await readJsonFile<UploadFileMeta[]>(uploadsIndexPath);
+    } catch {
+      return [];
+    }
   }
 
   async getLatestUpload() {

@@ -1,5 +1,5 @@
 ﻿export interface AiReviewProgressPayload {
-  status: "idle" | "running" | "completed" | "failed";
+  status: "idle" | "running" | "completed" | "failed" | "stalled" | "cancelled";
   totalCandidates: number;
   completedCount: number;
   successCount: number;
@@ -8,6 +8,13 @@
   exportReady: boolean;
   startedAt?: string | null;
   finishedAt?: string | null;
+  lastAttemptAt?: string | null;
+  lastProgressAt?: string | null;
+  cooldownUntil?: string | null;
+  currentBatch?: number;
+  totalBatches?: number;
+  currentRecordId?: string | null;
+  cancelRequested?: boolean;
   message?: string | null;
 }
 
@@ -36,11 +43,21 @@ export const EMPTY_AI_REVIEW_PROGRESS: AiReviewProgressPayload = {
   exportReady: true,
   startedAt: null,
   finishedAt: null,
+  lastAttemptAt: null,
+  lastProgressAt: null,
+  cooldownUntil: null,
+  currentBatch: 0,
+  totalBatches: 0,
+  currentRecordId: null,
+  cancelRequested: false,
   message: "当前批次没有需要 AI 复核的记录，可直接导出。"
 };
 
 export async function startFullAiReview(
-  options?: { force?: boolean },
+  options?: {
+    force?: boolean;
+    action?: "start" | "continue" | "restart" | "retry-failed" | "cancel";
+  },
   fetchImpl: typeof fetch = fetch
 ): Promise<AiReviewAllResponse> {
   const response = await fetchImpl("/api/ai/review-all", {
@@ -49,7 +66,8 @@ export async function startFullAiReview(
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      force: options?.force ?? false
+      force: options?.force ?? false,
+      action: options?.action
     })
   });
 

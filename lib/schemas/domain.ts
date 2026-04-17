@@ -100,6 +100,9 @@ export const recordAnalysisResultSchema = z
     workDate: z.string(),
     relatedTaskName: z.string().optional(),
     riskLevel: riskLevelSchema,
+    ruleRiskLevel: riskLevelSchema.optional(),
+    aiRiskLevel: riskLevelSchema.nullable().optional(),
+    finalRiskLevel: riskLevelSchema.optional(),
     issueCount: z.number().nonnegative(),
     needAiReview: z.boolean().default(false),
     ruleFlags: z
@@ -133,6 +136,9 @@ export const recordListItemSchema = z
     workContent: z.string(),
     relatedTaskName: z.string().optional(),
     riskLevel: riskLevelSchema,
+    ruleRiskLevel: riskLevelSchema.optional(),
+    aiRiskLevel: riskLevelSchema.nullable().optional(),
+    finalRiskLevel: riskLevelSchema.optional(),
     issueCount: z.number().nonnegative(),
     needAiReview: z.boolean(),
     ruleFlags: z
@@ -173,7 +179,9 @@ export const dashboardSummarySchema = z
 
 export const aiReviewProgressSchema = z
   .object({
-    status: z.enum(["idle", "running", "completed", "failed"]).default("idle"),
+    status: z
+      .enum(["idle", "running", "completed", "failed", "stalled", "cancelled"])
+      .default("idle"),
     totalCandidates: z.number().nonnegative().default(0),
     completedCount: z.number().nonnegative().default(0),
     successCount: z.number().nonnegative().default(0),
@@ -182,6 +190,13 @@ export const aiReviewProgressSchema = z
     exportReady: z.boolean().default(false),
     startedAt: z.string().nullable().optional(),
     finishedAt: z.string().nullable().optional(),
+    lastAttemptAt: z.string().nullable().optional(),
+    lastProgressAt: z.string().nullable().optional(),
+    cooldownUntil: z.string().nullable().optional(),
+    currentBatch: z.number().nonnegative().optional(),
+    totalBatches: z.number().nonnegative().optional(),
+    currentRecordId: z.string().nullable().optional(),
+    cancelRequested: z.boolean().optional(),
     message: z.string().nullable().optional()
   })
   .passthrough();

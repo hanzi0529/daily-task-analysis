@@ -3,6 +3,7 @@ import {
   getDashboardSummary,
   getDatasetAnalysis,
   getLatestDatasetAnalysis,
+  getPeopleAnalysis,
   getPeopleSummary,
   getRecordList
 } from "@/lib/services/dataset-analysis-service";
@@ -33,4 +34,14 @@ export async function getRecordListV2(
 
 export async function getPeopleListV2(datasetId?: string) {
   return getPeopleSummary(datasetId);
+}
+
+export async function getPeopleAnalysisV2(
+  datasetId?: string,
+  filters?: {
+    memberName?: string;
+    riskLevel?: "normal" | "low" | "medium" | "high";
+  }
+) {
+  return getPeopleAnalysis(datasetId, filters);
 }

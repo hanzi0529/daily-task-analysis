@@ -7,9 +7,7 @@ import { startAiReviewAllInBackground } from "@/lib/services/ai-review-service";
 export async function POST(request: Request) {
   await ensureBootstrapped();
 
-  const body = request.headers.get("content-length")
-    ? await request.json().catch(() => ({}))
-    : {};
+  const body = await request.json().catch(() => ({}));
   const parsed = aiReviewAllRequestSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -18,7 +16,8 @@ export async function POST(request: Request) {
 
   const result = await startAiReviewAllInBackground({
     datasetId: parsed.data.datasetId,
-    force: parsed.data.force
+    force: parsed.data.force,
+    action: parsed.data.action
   });
 
   return NextResponse.json(result, {

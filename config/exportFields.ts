@@ -7,6 +7,8 @@
   { key: "relatedTaskName", title: "关联任务名称" },
   { key: "workContent", title: "工作内容描述" },
   { key: "riskLevel", title: "风险等级" },
+  { key: "ruleRiskLevel", title: "规则风险等级" },
+  { key: "aiRiskLevel", title: "AI复核风险等级" },
   { key: "issueCount", title: "问题数量" },
   { key: "needAiReview", title: "需AI复核" },
   { key: "aiReviewed", title: "AI是否已复核" },

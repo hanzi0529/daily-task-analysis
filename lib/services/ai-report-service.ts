@@ -106,19 +106,27 @@ export function buildBatchReportInput(dataset: AnalysisDataset) {
   const anomalyRate =
     totalRecords > 0 ? Number(((anomalyRecords / totalRecords) * 100).toFixed(1)) : 0;
   const highRiskPeopleCount = new Set(
-    dataset.recordList.filter((item) => item.riskLevel === "high").map((item) => item.memberName)
+    dataset.recordList
+      .filter((item) => getEffectiveRiskLevel(item) === "high")
+      .map((item) => item.memberName)
   ).size;
 
   const riskLevelDistribution = [
-    { label: "high", value: dataset.recordList.filter((item) => item.riskLevel === "high").length },
+    {
+      label: "high",
+      value: dataset.recordList.filter((item) => getEffectiveRiskLevel(item) === "high").length
+    },
     {
       label: "medium",
-      value: dataset.recordList.filter((item) => item.riskLevel === "medium").length
+      value: dataset.recordList.filter((item) => getEffectiveRiskLevel(item) === "medium").length
     },
-    { label: "low", value: dataset.recordList.filter((item) => item.riskLevel === "low").length },
+    {
+      label: "low",
+      value: dataset.recordList.filter((item) => getEffectiveRiskLevel(item) === "low").length
+    },
     {
       label: "normal",
-      value: dataset.recordList.filter((item) => item.riskLevel === "normal").length
+      value: dataset.recordList.filter((item) => getEffectiveRiskLevel(item) === "normal").length
     }
   ];
 
@@ -209,7 +217,15 @@ function buildTopTasks(dataset: AnalysisDataset) {
 }
 
 function isAnomalyRiskRecord(item: { riskLevel: string }) {
-  return item.riskLevel === "medium" || item.riskLevel === "high";
+  const riskLevel = getEffectiveRiskLevel(item);
+  return riskLevel === "medium" || riskLevel === "high";
+}
+
+function getEffectiveRiskLevel(item: {
+  riskLevel: string;
+  finalRiskLevel?: string | null;
+}) {
+  return item.finalRiskLevel ?? item.riskLevel;
 }
 
 export function emptyBatchAiReport(): BatchAiReport {
