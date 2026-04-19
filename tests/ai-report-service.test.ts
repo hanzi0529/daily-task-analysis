@@ -14,7 +14,8 @@ vi.mock("@/lib/storage/repositories", () => ({
     analysis: {
       getLatest: analysisGetLatest,
       get: analysisGet,
-      save: analysisSave
+      save: analysisSave,
+      setLatest: vi.fn()
     }
   }
 }));

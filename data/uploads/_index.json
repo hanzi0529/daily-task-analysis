@@ -1,5 +1,82 @@
 [
   {
+    "id": "file_1776606282777_ai7i4p",
+    "originalFileName": "工时记录_2026-04-13-2026-04-18.xlsx.xlsx",
+    "storedFileName": "file_1776606282777_ai7i4p_工时记录_2026-04-13-2026-04-18.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776606282777_ai7i4p_工时记录_2026-04-13-2026-04-18.xlsx.xlsx",
+    "sizeBytes": 48490,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-19T13:44:42.800Z",
+    "extra": {}
+  },
+  {
+    "id": "file_1776499460831_bhsn0o",
+    "originalFileName": "工时记录_2026-04-13-2026-04-17.xlsx.xlsx",
+    "storedFileName": "file_1776499460831_bhsn0o_工时记录_2026-04-13-2026-04-17.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776499460831_bhsn0o_工时记录_2026-04-13-2026-04-17.xlsx.xlsx",
+    "sizeBytes": 48490,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-18T08:04:20.837Z",
+    "extra": {}
+  },
+  {
+    "id": "file_1776498744107_bkcw96",
+    "originalFileName": "工时记录_2026-04-13-2026-04-17.xlsx.xlsx",
+    "storedFileName": "file_1776498744107_bkcw96_工时记录_2026-04-13-2026-04-17.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776498744107_bkcw96_工时记录_2026-04-13-2026-04-17.xlsx.xlsx",
+    "sizeBytes": 48490,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-18T07:52:24.117Z",
+    "extra": {}
+  },
+  {
+    "id": "file_1776416495503_bxli4z",
+    "originalFileName": "工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "storedFileName": "file_1776416495503_bxli4z_工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776416495503_bxli4z_工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "sizeBytes": 48490,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-17T09:01:35.514Z",
+    "extra": {}
+  },
+  {
+    "id": "file_1776411845084_0jp5yg",
+    "originalFileName": "工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "storedFileName": "file_1776411845084_0jp5yg_工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776411845084_0jp5yg_工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "sizeBytes": 48490,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-17T07:44:05.201Z",
+    "extra": {}
+  },
+  {
+    "id": "file_1776409423692_9v20og",
+    "originalFileName": "工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "storedFileName": "file_1776409423692_9v20og_工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776409423692_9v20og_工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "sizeBytes": 48490,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-17T07:03:43.699Z",
+    "extra": {}
+  },
+  {
+    "id": "file_1776409399296_hqkpwr",
+    "originalFileName": "工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "storedFileName": "file_1776409399296_hqkpwr_工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "storedFilePath": "D:\\VB projects\\daily task analysis\\data\\uploads\\file_1776409399296_hqkpwr_工时记录_2026-04-13-2026-04-19.xlsx.xlsx",
+    "sizeBytes": 48490,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "sourceType": "upload",
+    "importedAt": "2026-04-17T07:03:19.302Z",
+    "extra": {}
+  },
+  {
     "id": "file_1776408053157_p7kv7d",
     "originalFileName": "工时记录_2026-04-13-2026-04-14.xlsx",
     "storedFileName": "file_1776408053157_p7kv7d_工时记录_2026-04-13-2026-04-14.xlsx",

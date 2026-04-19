@@ -96,6 +96,9 @@ export async function importBufferAndAnalyze(params: {
   });
 
   await repositories.analysis.save(output);
+  // Register this dataset as "latest" in the stable import-order index.
+  // This is the only place setLatest() is called — AI review save() never touches the index.
+  await repositories.analysis.setLatest(datasetId);
   return output;
 }
 

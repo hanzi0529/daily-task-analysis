@@ -5,8 +5,10 @@
 } from "@/config/ai-review";
 import {
   type AIReviewProvider,
+  type AiBatchReviewItem,
   type AiRecordReviewResult,
-  getAIReviewProvider
+  getAIReviewProvider,
+  getAIReviewProviderFromConfig
 } from "@/lib/ai/review-provider";
 import { rebuildAnalysisDatasetDerivedState } from "@/lib/services/dataset-analysis-service";
 import {
@@ -37,9 +39,11 @@ const MANAGEMENT_TASK_HINTS = [
 const AI_REVIEW_MAX_ATTEMPTS = 3;
 const AI_REVIEW_RETRY_DELAY_MS = 5000;
 const INTER_RECORD_REVIEW_DELAY_MS = 1500;
+// Fixed batch size for AI calls: 83 records → 17 AI calls instead of 83.
+const AI_BATCH_CALL_SIZE = 5;
 const AI_REVIEW_SLOW_THRESHOLD_MS = 2 * 60 * 1000;
-const AI_REVIEW_STALL_THRESHOLD_MS = 6 * 60 * 1000;
-const GLM_INTER_RECORD_DELAY_MS = 5000;
+const AI_REVIEW_STALL_THRESHOLD_MS = 10 * 60 * 1000;
+const GLM_INTER_RECORD_DELAY_MS = 15000;
 const GLM_MIN_BATCH_COOLDOWN_MS = 20000;
 const GLM_MIN_RATE_LIMIT_COOLDOWN_MS = 60000;
 
@@ -56,6 +60,10 @@ type RunningReviewJob = {
 };
 
 const runningReviewJobs = new Map<string, RunningReviewJob>();
+
+export function isAnyReviewJobRunning(): boolean {
+  return runningReviewJobs.size > 0;
+}
 
 export interface AiReviewCandidate extends RecordListItem {
   candidateReasons: string[];
@@ -191,7 +199,16 @@ export async function reviewAllNeedAiRecords(params?: {
   enabled?: boolean;
   force?: boolean;
   mode?: ReviewMode;
+  boundConfigId?: string | null;
+  boundConfigName?: string | null;
+  boundProvider?: string | null;
+  boundModel?: string | null;
 }) {
+  // params.datasetId is always provided by the background job closure — it is the
+  // id captured at job-start time and never changes during execution.
+  // loadAnalysisDataset() with an explicit id calls repositories.analysis.get()
+  // (direct file lookup), never getLatest(), so no dataset can be substituted
+  // mid-run even if a new file is imported while the job is running.
   const loadedDataset = await loadAnalysisDataset(params?.datasetId);
 
   if (!loadedDataset) {
@@ -212,7 +229,22 @@ export async function reviewAllNeedAiRecords(params?: {
   const mode = params?.mode ?? (params?.force ? "restart" : "continue");
   const dataset = prepareDatasetForReviewMode(loadedDataset, mode);
   if (dataset !== loadedDataset) {
-    await repositories.analysis.save(dataset);
+    // Patch bound fields into the save so the disk never shows null bound fields
+    // between this reset save and the workingDataset save below (line ~330).
+    await repositories.analysis.save(
+      params?.boundConfigId != null
+        ? analysisDatasetSchema.parse({
+            ...dataset,
+            aiReviewProgress: aiReviewProgressSchema.parse({
+              ...dataset.aiReviewProgress,
+              boundConfigId: params.boundConfigId,
+              boundConfigName: params.boundConfigName ?? null,
+              boundProvider: params.boundProvider ?? null,
+              boundModel: params.boundModel ?? null
+            })
+          })
+        : dataset
+    );
   }
 
   const enabled = params?.enabled ?? aiReviewConfig.enabled;
@@ -302,7 +334,11 @@ export async function reviewAllNeedAiRecords(params?: {
       message:
         unresolvedCandidates.length === 0
           ? "当前批次的 AI 复核已完成，可导出包含完整 AI 结果的 Excel。"
-          : `AI 正在执行完整复核，共 ${totalBatches} 批，请稍候。`
+          : `AI 正在执行完整复核，共 ${totalBatches} 批，请稍候。`,
+      boundConfigId: params?.boundConfigId ?? initialProgress.boundConfigId ?? null,
+      boundConfigName: params?.boundConfigName ?? initialProgress.boundConfigName ?? null,
+      boundProvider: params?.boundProvider ?? initialProgress.boundProvider ?? null,
+      boundModel: params?.boundModel ?? initialProgress.boundModel ?? null
     })
   });
 
@@ -312,10 +348,7 @@ export async function reviewAllNeedAiRecords(params?: {
     workingDataset.analyses.map((item) => [item.recordId, item] as const)
   );
 
-  const batches = chunkCandidates(
-    unresolvedCandidates,
-    queueSettings.batchSize
-  );
+  const batches = chunkCandidates(unresolvedCandidates, AI_BATCH_CALL_SIZE);
 
   for (const [batchIndex, batchCandidates] of batches.entries()) {
     if (runningState?.cancelRequested) {
@@ -337,46 +370,22 @@ export async function reviewAllNeedAiRecords(params?: {
     });
     await repositories.analysis.save(workingDataset);
 
-    for (const candidate of batchCandidates) {
-      if (runningState?.cancelRequested) {
-        break;
-      }
+    // One batch AI call for all candidates in this chunk; falls back to
+    // individual calls per record if the batch response is unparseable or incomplete.
+    const reviewedAt = new Date().toISOString();
+    const batchResults = await reviewBatchWithFallback(
+      provider,
+      batchCandidates,
+      analysisByRecordId,
+      runningState
+    );
 
-      const analysis = analysisByRecordId.get(candidate.recordId);
-      const reviewedAt = new Date().toISOString();
-      const attemptAt = new Date().toISOString();
-      if (runningState) {
-        runningState.lastAttemptAt = attemptAt;
-        runningState.currentAbortController = new AbortController();
-      }
+    if (runningState?.cancelRequested) {
+      break;
+    }
 
-      workingDataset = analysisDatasetSchema.parse({
-        ...workingDataset,
-        aiReviewProgress: aiReviewProgressSchema.parse({
-          ...workingDataset.aiReviewProgress,
-          status: "running",
-          lastAttemptAt: attemptAt,
-          cooldownUntil: null,
-          currentBatch: batchIndex + 1,
-          totalBatches,
-          currentRecordId: candidate.recordId,
-          cancelRequested: runningState?.cancelRequested ?? false,
-          message: `AI 正在执行第 ${batchIndex + 1}/${totalBatches} 批，当前处理第 ${candidate.rowIndex} 行记录。`
-        })
-      });
-      await repositories.analysis.save(workingDataset);
-
-      const review = await reviewCandidateWithRetry(
-        provider,
-        candidate,
-        analysis,
-        runningState?.currentAbortController?.signal
-      );
-      if (runningState) {
-        runningState.currentAbortController = null;
-        runningState.lastProgressAt = new Date().toISOString();
-      }
-
+    // Apply all results from this batch at once.
+    for (const { candidate, review } of batchResults) {
       workingDataset = applyReviewToDataset(
         workingDataset,
         candidate.recordId,
@@ -384,31 +393,20 @@ export async function reviewAllNeedAiRecords(params?: {
         reviewedAt,
         provider.name
       );
-      workingDataset = analysisDatasetSchema.parse({
-        ...workingDataset,
-        aiReviewProgress: calculateRunningProgress(workingDataset, {
-          currentBatch: batchIndex + 1,
-          totalBatches
-        })
-      });
-      await repositories.analysis.save(workingDataset);
-
-      if (isRateLimitedReviewFailure(review)) {
-        workingDataset = await applyCooldownProgress(
-          workingDataset,
-          queueSettings.rateLimitCooldownMs,
-          `检测到模型限流，系统将在 ${Math.round(
-            queueSettings.rateLimitCooldownMs / 1000
-          )} 秒后继续复核。`,
-          {
-            currentBatch: batchIndex + 1,
-            totalBatches
-          }
-        );
-      }
-
-      await sleep(queueSettings.interRecordDelayMs);
     }
+
+    // Save once per batch (not per record).
+    workingDataset = analysisDatasetSchema.parse({
+      ...workingDataset,
+      aiReviewProgress: calculateRunningProgress(workingDataset, {
+        currentBatch: batchIndex + 1,
+        totalBatches
+      })
+    });
+    await repositories.analysis.save(workingDataset);
+
+    // Inter-batch delay: one sleep per batch instead of one per record.
+    await sleep(queueSettings.interRecordDelayMs);
 
     if (runningState?.cancelRequested) {
       break;
@@ -430,7 +428,13 @@ export async function reviewAllNeedAiRecords(params?: {
   const progressBase = buildAiReviewProgressFromDataset(workingDataset);
   const wasCancelled = runningState?.cancelRequested === true;
   const finalProgress = aiReviewProgressSchema.parse({
-    ...progressBase,
+    ...workingDataset.aiReviewProgress,
+    totalCandidates: progressBase.totalCandidates,
+    completedCount: progressBase.completedCount,
+    successCount: progressBase.successCount,
+    failedCount: progressBase.failedCount,
+    pendingCount: progressBase.pendingCount,
+    exportReady: progressBase.exportReady,
     status: wasCancelled ? "cancelled" : progressBase.exportReady ? "completed" : "failed",
     startedAt: workingDataset.aiReviewProgress?.startedAt ?? new Date().toISOString(),
     finishedAt: new Date().toISOString(),
@@ -536,10 +540,23 @@ export async function startAiReviewAllInBackground(params?: {
     };
   }
 
+  // Clean up a stalled job for THIS dataset so we can re-enter.
   if (runningJob && isRunningJobStalled(runningJob)) {
     runningJob.cancelRequested = true;
     runningJob.currentAbortController?.abort("restart-from-stalled");
     runningReviewJobs.delete(datasetId);
+  }
+
+  // Cancel any jobs running against OTHER datasets.
+  // Only one dataset can be actively reviewed at a time; old jobs must be
+  // stopped before a new one starts (including when the user imports a new file
+  // and immediately kicks off a review for it).
+  for (const [otherId, otherJob] of runningReviewJobs.entries()) {
+    if (otherId !== datasetId) {
+      otherJob.cancelRequested = true;
+      otherJob.currentAbortController?.abort("cancelled-new-dataset-started");
+      runningReviewJobs.delete(otherId);
+    }
   }
 
   if (action === "continue" && existingProgress.pendingCount === 0 && existingProgress.failedCount > 0) {
@@ -596,6 +613,34 @@ export async function startAiReviewAllInBackground(params?: {
     };
   }
 
+  // Resolve the provider: use an explicit override (e.g. from tests) if provided,
+  // otherwise read the active model config from storage.
+  const enabled = params?.enabled ?? aiReviewConfig.enabled;
+  let resolvedProvider: AIReviewProvider | undefined = params?.provider;
+  let boundConfigId: string | null = currentProgress.boundConfigId ?? null;
+  let boundConfigName: string | null = currentProgress.boundConfigName ?? null;
+  let boundProvider: string | null = currentProgress.boundProvider ?? null;
+  let boundModel: string | null = currentProgress.boundModel ?? null;
+
+  if (!resolvedProvider && enabled) {
+    const activeConfig = await repositories.modelConfigs.getActiveRaw();
+    if (!activeConfig) {
+      return {
+        success: false,
+        status: "no-data" as const,
+        started: false,
+        provider: "none",
+        message: "当前没有配置可用的 AI 模型，请先在模型配置页面添加并启用模型。",
+        progress: currentProgress
+      };
+    }
+    resolvedProvider = getAIReviewProviderFromConfig(activeConfig);
+    boundConfigId = activeConfig.id;
+    boundConfigName = activeConfig.name;
+    boundProvider = activeConfig.provider;
+    boundModel = activeConfig.model;
+  }
+
   const startedAt = new Date().toISOString();
   const jobState: RunningReviewJob = {
     promise: Promise.resolve(),
@@ -610,7 +655,12 @@ export async function startAiReviewAllInBackground(params?: {
     const primaryResult = await reviewAllNeedAiRecords({
       ...params,
       datasetId,
-      mode: action
+      provider: resolvedProvider,
+      mode: action,
+      boundConfigId,
+      boundConfigName,
+      boundProvider,
+      boundModel
     });
 
     if (
@@ -618,11 +668,16 @@ export async function startAiReviewAllInBackground(params?: {
       !jobState.cancelRequested &&
       action !== "retry-failed"
     ) {
-      await sleep(getQueueSettings(params?.provider?.name ?? aiReviewConfig.provider).rateLimitCooldownMs);
+      await sleep(getQueueSettings(resolvedProvider?.name ?? aiReviewConfig.provider).rateLimitCooldownMs);
       await reviewAllNeedAiRecords({
         ...params,
         datasetId,
-        mode: "retry-failed"
+        provider: resolvedProvider,
+        mode: "retry-failed",
+        boundConfigId,
+        boundConfigName,
+        boundProvider,
+        boundModel
       });
     }
   })()
@@ -659,22 +714,33 @@ export async function startAiReviewAllInBackground(params?: {
   jobState.promise = job.then(() => undefined);
   runningReviewJobs.set(datasetId, jobState);
 
+  // Persist "running" to file immediately so that any refreshProgress() call
+  // made right after the API returns sees the correct status, not a stale one.
+  const startingProgress = aiReviewProgressSchema.parse({
+    ...currentProgress,
+    status: "running",
+    startedAt,
+    currentBatch: currentProgress.totalCandidates > 0 ? 1 : 0,
+    totalBatches: getTotalBatches(currentProgress.pendingCount || currentProgress.totalCandidates),
+    cooldownUntil: null,
+    cancelRequested: false,
+    message: "AI 完整复核已开始，系统会持续更新进度。",
+    boundConfigId,
+    boundConfigName,
+    boundProvider,
+    boundModel
+  });
+  await repositories.analysis.save(
+    analysisDatasetSchema.parse({ ...dataset, aiReviewProgress: startingProgress })
+  );
+
   return {
     success: true,
     status: "started" as const,
     started: true,
-    provider: params?.provider?.name ?? aiReviewConfig.provider,
+    provider: boundProvider ?? resolvedProvider?.name ?? aiReviewConfig.provider,
     message: "AI 完整复核已开始，系统会持续更新进度。",
-    progress: {
-      ...currentProgress,
-      status: "running",
-      startedAt,
-      currentBatch: currentProgress.totalCandidates > 0 ? 1 : 0,
-      totalBatches: getTotalBatches(currentProgress.pendingCount || currentProgress.totalCandidates),
-      cooldownUntil: null,
-      cancelRequested: false,
-      message: "AI 完整复核已开始，系统会持续更新进度。"
-    }
+    progress: startingProgress
   };
 }
 
@@ -1020,7 +1086,11 @@ export function buildAiReviewProgressFromDataset(dataset: AnalysisDataset) {
           ? "AI 完整复核已完成，可以导出包含完整 AI 结果的 Excel。"
           : failedCount > 0
             ? "存在未完成的 AI 复核记录，请重试。"
-            : "尚未开始完整 AI 复核。"
+            : "尚未开始完整 AI 复核。",
+    boundConfigId: dataset.aiReviewProgress?.boundConfigId ?? null,
+    boundConfigName: dataset.aiReviewProgress?.boundConfigName ?? null,
+    boundProvider: dataset.aiReviewProgress?.boundProvider ?? null,
+    boundModel: dataset.aiReviewProgress?.boundModel ?? null
   });
 }
 
@@ -1266,6 +1336,101 @@ function normalizeAiRiskLevelForRecord(
   return candidate;
 }
 
+// Executes one AI call for a batch of candidates (up to AI_BATCH_CALL_SIZE).
+// Validates each item in the response by recordId (never by index).
+// Any missing or invalid items fall back to individual reviewCandidateWithRetry calls.
+// If the entire batch call throws, ALL candidates fall back to individual calls.
+async function reviewBatchWithFallback(
+  provider: AIReviewProvider,
+  candidates: AiReviewCandidate[],
+  analysisByRecordId: Map<string, RecordAnalysisResult>,
+  runningState: RunningReviewJob | undefined
+): Promise<Array<{ candidate: AiReviewCandidate; review: AiRecordReviewResult }>> {
+  if (candidates.length === 0) return [];
+
+  const validIds = new Set(candidates.map((c) => c.recordId));
+  const inputs = candidates.map((c) => buildProviderInput(c, analysisByRecordId.get(c.recordId)));
+
+  const batchAbort = new AbortController();
+  if (runningState) {
+    runningState.currentAbortController = batchAbort;
+    runningState.lastAttemptAt = new Date().toISOString();
+  }
+
+  // Attempt batch AI call with up to 2 retries before falling back to individual calls.
+  const BATCH_MAX_ATTEMPTS = 2;
+  let batchResultById: Map<string, AiRecordReviewResult> | null = null;
+  for (let attempt = 1; attempt <= BATCH_MAX_ATTEMPTS; attempt += 1) {
+    try {
+      const items: AiBatchReviewItem[] = await provider.reviewBatch(inputs, {
+        signal: batchAbort.signal
+      });
+
+      batchResultById = new Map();
+      const seenIds = new Set<string>();
+      for (const item of items) {
+        if (
+          typeof item.recordId === "string" &&
+          validIds.has(item.recordId) &&
+          !seenIds.has(item.recordId) &&
+          // Must have at least one meaningful field to be considered valid.
+          (item.aiRiskLevel != null || item.aiSummary != null || item.aiReviewReason != null)
+        ) {
+          const { recordId: _id, ...review } = item;
+          batchResultById.set(item.recordId, review);
+          seenIds.add(item.recordId);
+        }
+      }
+      console.log(`[reviewBatch] resolved ${batchResultById.size}/${candidates.length} from batch`);
+      break;
+    } catch (error) {
+      console.error(`[reviewBatch] attempt ${attempt}/${BATCH_MAX_ATTEMPTS} failed:`, error);
+      if (attempt < BATCH_MAX_ATTEMPTS && !batchAbort.signal.aborted) {
+        await sleep(AI_REVIEW_RETRY_DELAY_MS);
+        continue;
+      }
+      // All attempts exhausted or aborted → all candidates fall back to individual calls.
+      batchResultById = null;
+    }
+  }
+  if (runningState) runningState.currentAbortController = null;
+
+  const results: Array<{ candidate: AiReviewCandidate; review: AiRecordReviewResult }> = [];
+
+  for (const candidate of candidates) {
+    if (runningState?.cancelRequested) break;
+
+    const batchReview = batchResultById?.get(candidate.recordId);
+    if (batchReview && (batchReview.aiSummary != null || batchReview.aiReviewLabel != null || batchReview.aiSuggestion != null || batchReview.aiReviewReason != null)) {
+      results.push({ candidate, review: batchReview });
+      continue;
+    }
+
+    // Individual fallback for this candidate (missing from batch or batch failed entirely).
+    console.warn(`[reviewBatch] fallback: ${candidate.recordId}`);
+    const singleAbort = new AbortController();
+    if (runningState) {
+      runningState.currentAbortController = singleAbort;
+      runningState.lastAttemptAt = new Date().toISOString();
+    }
+    try {
+      const fallbackReview = await reviewCandidateWithRetry(
+        provider,
+        candidate,
+        analysisByRecordId.get(candidate.recordId),
+        singleAbort.signal
+      );
+      results.push({ candidate, review: fallbackReview });
+    } finally {
+      if (runningState) runningState.currentAbortController = null;
+    }
+  }
+
+  if (runningState) runningState.lastProgressAt = new Date().toISOString();
+
+  return results;
+}
+
 async function reviewCandidateWithRetry(
   provider: AIReviewProvider,
   candidate: AiReviewCandidate,
@@ -1313,21 +1478,27 @@ function calculateRunningProgress(
   batchInfo?: { currentBatch?: number; totalBatches?: number }
 ) {
   const progress = buildAiReviewProgressFromDataset(dataset);
-  const isComplete = progress.exportReady || progress.pendingCount === 0;
 
+  // Only emit "running" here — terminal states (completed/failed/cancelled) are
+  // written exclusively at the end of reviewAllNeedAiRecords(), ensuring the
+  // progress is monotonically increasing and never prematurely shows "completed".
+  // Spread dataset.aiReviewProgress first so bound fields are preserved even if
+  // buildAiReviewProgressFromDataset returns null for them (defensive merge).
   return aiReviewProgressSchema.parse({
-    ...progress,
-    status: isComplete ? (progress.exportReady ? "completed" : "failed") : "running",
+    ...dataset.aiReviewProgress,
+    totalCandidates: progress.totalCandidates,
+    completedCount: progress.completedCount,
+    successCount: progress.successCount,
+    failedCount: progress.failedCount,
+    pendingCount: progress.pendingCount,
+    exportReady: progress.exportReady,
+    status: "running",
     startedAt: dataset.aiReviewProgress?.startedAt ?? new Date().toISOString(),
-    finishedAt: isComplete ? new Date().toISOString() : null,
+    finishedAt: null,
     cooldownUntil: null,
     currentBatch: batchInfo?.currentBatch ?? dataset.aiReviewProgress?.currentBatch ?? 0,
     totalBatches: batchInfo?.totalBatches ?? dataset.aiReviewProgress?.totalBatches ?? 0,
-    message: isComplete
-      ? progress.exportReady
-        ? "AI 完整复核已完成，可以导出包含完整 AI 结果的 Excel。"
-        : "仍有部分 AI 复核失败，请重试。"
-      : `AI 正在完整复核中，已完成 ${progress.completedCount}/${progress.totalCandidates}。`
+    message: `AI 正在完整复核中，已完成 ${progress.completedCount}/${progress.totalCandidates}。`
   });
 }
 
@@ -1374,7 +1545,8 @@ function isRetryableAiError(error: unknown) {
 
 function getRetryDelayMs(error: unknown, attempt: number) {
   if (error instanceof Error && /429|rate limit|too many requests/i.test(error.message)) {
-    return AI_REVIEW_RETRY_DELAY_MS * (attempt + 1);
+    // GLM rate limit window is typically 30-60s; use 30s * attempt so attempt 1=30s, 2=60s
+    return 30000 * attempt;
   }
 
   return AI_REVIEW_RETRY_DELAY_MS * attempt;
@@ -1410,8 +1582,10 @@ function getQueueSettings(providerName: string) {
     return baseSettings;
   }
 
+  // batchSize=5: 83 records → 17 batches → 16 batch cooldowns (vs 82 with batchSize=1).
+  // Saves ~22 minutes of pure wait time while keeping serial execution within each batch.
   return {
-    batchSize: 1,
+    batchSize: 5,
     batchCooldownMs: Math.max(baseSettings.batchCooldownMs, GLM_MIN_BATCH_COOLDOWN_MS),
     rateLimitCooldownMs: Math.max(
       baseSettings.rateLimitCooldownMs,
@@ -1468,7 +1642,7 @@ function getTotalBatches(candidateCount: number) {
     return 0;
   }
 
-  return Math.ceil(candidateCount / getQueueSettings(aiReviewConfig.provider).batchSize);
+  return Math.ceil(candidateCount / AI_BATCH_CALL_SIZE);
 }
 
 async function applyCooldownProgress(
@@ -1478,12 +1652,23 @@ async function applyCooldownProgress(
   batchInfo: { currentBatch: number; totalBatches: number }
 ) {
   const cooldownUntil = new Date(Date.now() + cooldownMs).toISOString();
+  const now = new Date().toISOString();
+
+  // Update in-memory heartbeat before sleeping so normalizeAiReviewProgress()
+  // does not classify this cooldown period as a stall.
+  const datasetId = dataset.datasetId ?? dataset.batch.datasetId;
+  const runningJob = runningReviewJobs.get(datasetId);
+  if (runningJob) {
+    runningJob.lastProgressAt = now;
+  }
+
   const nextDataset = analysisDatasetSchema.parse({
     ...dataset,
     aiReviewProgress: aiReviewProgressSchema.parse({
       ...dataset.aiReviewProgress,
       status: "running",
       cooldownUntil,
+      lastProgressAt: now,
       currentBatch: batchInfo.currentBatch,
       totalBatches: batchInfo.totalBatches,
       currentRecordId: null,

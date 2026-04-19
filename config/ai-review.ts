@@ -1,4 +1,4 @@
-﻿export type AiReviewProviderName = "mock" | "glm" | "openai";
+﻿export type AiReviewProviderName = "mock" | "glm" | "openai" | "deepseek" | "custom";
 
 export const aiReviewConfig = {
   enabled: process.env.AI_REVIEW_ENABLED === "true",

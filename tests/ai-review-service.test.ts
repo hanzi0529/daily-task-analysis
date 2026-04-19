@@ -12,7 +12,8 @@ vi.mock("@/lib/storage/repositories", () => ({
     analysis: {
       getLatest: analysisGetLatest,
       get: analysisGet,
-      save: analysisSave
+      save: analysisSave,
+      setLatest: vi.fn()
     }
   }
 }));
@@ -223,6 +224,7 @@ describe("AI 抽样复核 service", () => {
       name: "mock" as const,
       isAvailable: () => true,
       reviewRecord: vi.fn().mockRejectedValue(new Error("provider failed")),
+      reviewBatch: vi.fn().mockRejectedValue(new Error("batch not supported")),
       generateBatchReport: vi.fn()
     };
 
@@ -256,6 +258,7 @@ describe("AI 抽样复核 service", () => {
         aiSuggestion: "建议补充具体处理对象和阶段结果。",
         aiReviewReason: "当前表达缺少任务对象和结果支撑。"
       }),
+      reviewBatch: vi.fn().mockRejectedValue(new Error("batch not supported")),
       generateBatchReport: vi.fn()
     };
 
@@ -315,6 +318,7 @@ describe("AI 抽样复核 service", () => {
         aiSuggestion: "建议补充本次处理对象和联调结论。",
         aiReviewReason: "语义仍有边界，但已有较多具体线索。"
       }),
+      reviewBatch: vi.fn().mockRejectedValue(new Error("batch not supported")),
       generateBatchReport: vi.fn()
     };
 

@@ -64,4 +64,23 @@ export interface StoragePaths {
   uploadsDir: string;
   parsedDir: string;
   cacheDir: string;
+  configDir: string;
+}
+
+export type ModelProviderType = "deepseek" | "glm" | "custom";
+
+export interface ModelProviderConfig {
+  id: string;
+  name: string;
+  provider: ModelProviderType;
+  apiKey: string;
+  baseUrl: string;
+  model: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ModelProviderStore {
+  activeConfigId: string | null;
+  configs: ModelProviderConfig[];
 }

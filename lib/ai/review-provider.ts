@@ -1,4 +1,5 @@
 ﻿import { aiReviewConfig, type AiReviewProviderName } from "@/config/ai-review";
+import type { ModelProviderConfig } from "@/types/domain";
 
 export interface AiRecordReviewInput {
   recordId: string;
@@ -62,6 +63,11 @@ export interface BatchAiReportResult {
   reportingSummary: string;
 }
 
+// Single item in a batch review response — extends AiRecordReviewResult with recordId for alignment.
+export interface AiBatchReviewItem extends AiRecordReviewResult {
+  recordId: string;
+}
+
 export interface AIReviewProvider {
   name: AiReviewProviderName;
   isAvailable(): boolean;
@@ -69,6 +75,12 @@ export interface AIReviewProvider {
     input: AiRecordReviewInput,
     options?: { signal?: AbortSignal }
   ): Promise<AiRecordReviewResult>;
+  // Batch variant: one AI call for multiple records, aligned by recordId.
+  // Implementations that don't support native batch fall back to sequential single calls.
+  reviewBatch(
+    inputs: AiRecordReviewInput[],
+    options?: { signal?: AbortSignal }
+  ): Promise<AiBatchReviewItem[]>;
   generateBatchReport(input: BatchAiReportInput): Promise<BatchAiReportResult>;
 }
 
@@ -105,6 +117,17 @@ class MockAIReviewProvider implements AIReviewProvider {
       aiSuggestion,
       aiReviewReason: buildMockReason(input, labels)
     };
+  }
+
+  async reviewBatch(
+    inputs: AiRecordReviewInput[],
+    _options?: { signal?: AbortSignal }
+  ): Promise<AiBatchReviewItem[]> {
+    const results: AiBatchReviewItem[] = [];
+    for (const input of inputs) {
+      results.push({ ...(await this.reviewRecord(input)), recordId: input.recordId });
+    }
+    return results;
   }
 
   async generateBatchReport(input: BatchAiReportInput): Promise<BatchAiReportResult> {
@@ -166,6 +189,13 @@ class OpenAIReviewProvider implements AIReviewProvider {
 
   async reviewRecord() {
     return unavailableReviewResult("OpenAI provider 已预留接口，当前仓库版本未启用真实模型调用。");
+  }
+
+  async reviewBatch(inputs: AiRecordReviewInput[]): Promise<AiBatchReviewItem[]> {
+    return inputs.map((input) => ({
+      ...unavailableReviewResult("OpenAI provider 已预留接口，当前仓库版本未启用真实模型调用。"),
+      recordId: input.recordId
+    }));
   }
 
   async generateBatchReport() {
@@ -246,6 +276,158 @@ class GLMReviewProvider implements AIReviewProvider {
       reportingSummary: normalizeAssistantText(parsed.reportingSummary) ?? ""
     };
   }
+
+  // Legacy GLM provider does not implement native batch; falls back to sequential single calls.
+  async reviewBatch(
+    inputs: AiRecordReviewInput[],
+    options?: { signal?: AbortSignal }
+  ): Promise<AiBatchReviewItem[]> {
+    const results: AiBatchReviewItem[] = [];
+    for (const input of inputs) {
+      results.push({ ...(await this.reviewRecord(input, options)), recordId: input.recordId });
+    }
+    return results;
+  }
+}
+
+// OpenAI-compatible provider driven by a stored ModelProviderConfig.
+// Handles DeepSeek, GLM, and any custom OpenAI-compatible endpoint.
+// baseUrl must be the base URL WITHOUT a path suffix (e.g. https://api.deepseek.com/v1);
+// /chat/completions is appended automatically.
+class OpenAICompatibleReviewProvider implements AIReviewProvider {
+  readonly name: AiReviewProviderName;
+  private readonly config: ModelProviderConfig;
+
+  constructor(config: ModelProviderConfig) {
+    this.name = config.provider as AiReviewProviderName;
+    this.config = config;
+  }
+
+  isAvailable() {
+    return Boolean(this.config.apiKey && this.config.baseUrl && this.config.model);
+  }
+
+  async reviewRecord(
+    input: AiRecordReviewInput,
+    options?: { signal?: AbortSignal }
+  ): Promise<AiRecordReviewResult> {
+    if (!this.isAvailable()) {
+      return unavailableReviewResult(
+        `Provider ${this.config.provider} 未完整配置，已跳过复核。`
+      );
+    }
+
+    const prompt = buildRecordReviewPrompt(input);
+    const text = await callChatCompletion({
+      url: `${this.config.baseUrl}/chat/completions`,
+      apiKey: this.config.apiKey,
+      model: this.config.model,
+      prompt,
+      temperature: 0.2,
+      topP: 0.7,
+      signal: options?.signal
+    });
+
+    const parsed = parseJsonObject<{
+      aiRiskLevel?: "high" | "medium" | "low";
+      aiSummary?: string;
+      aiReviewLabel?: string;
+      aiSuggestion?: string;
+      aiConfidence?: number | null;
+      aiReviewReason?: string | null;
+    }>(text);
+
+    return {
+      aiReviewed: true,
+      aiRiskLevel: normalizeAiRiskLevel(parsed.aiRiskLevel),
+      aiSummary: normalizeAssistantText(parsed.aiSummary),
+      aiReviewLabel: normalizeAssistantText(parsed.aiReviewLabel),
+      aiSuggestion: normalizeAssistantText(parsed.aiSuggestion),
+      aiConfidence: normalizeConfidence(parsed.aiConfidence),
+      aiReviewReason: normalizeAssistantText(parsed.aiReviewReason)
+    };
+  }
+
+  // Batch review: one AI call for multiple records, returns results aligned by recordId.
+  // Uses {"items":[...]} wrapper to comply with json_object response_format.
+  // If the call fails or returns unparseable output, the caller falls back to single calls.
+  async reviewBatch(
+    inputs: AiRecordReviewInput[],
+    options?: { signal?: AbortSignal }
+  ): Promise<AiBatchReviewItem[]> {
+    if (!this.isAvailable()) {
+      return inputs.map((input) => ({
+        ...unavailableReviewResult(`Provider ${this.config.provider} 未完整配置，已跳过复核。`),
+        recordId: input.recordId
+      }));
+    }
+
+    const prompt = buildBatchRecordReviewPrompt(inputs);
+    const text = await callChatCompletion({
+      url: `${this.config.baseUrl}/chat/completions`,
+      apiKey: this.config.apiKey,
+      model: this.config.model,
+      prompt,
+      temperature: 0.2,
+      topP: 0.7,
+      signal: options?.signal
+    });
+
+    const items = parseJsonArray<{
+      id?: string;
+      recordId?: string;
+      aiRiskLevel?: "high" | "medium" | "low";
+      aiSummary?: string;
+      aiReviewLabel?: string;
+      aiSuggestion?: string;
+      aiConfidence?: number | null;
+      aiReviewReason?: string | null;
+    }>(text);
+
+    return items.map((item) => ({
+      recordId: typeof item.id === "string" ? item.id : (typeof item.recordId === "string" ? item.recordId : ""),
+      aiReviewed: true,
+      aiRiskLevel: normalizeAiRiskLevel(item.aiRiskLevel),
+      aiSummary: normalizeAssistantText(item.aiSummary),
+      aiReviewLabel: normalizeAssistantText(item.aiReviewLabel),
+      aiSuggestion: normalizeAssistantText(item.aiSuggestion),
+      aiConfidence: normalizeConfidence(item.aiConfidence),
+      aiReviewReason: normalizeAssistantText(item.aiReviewReason)
+    }));
+  }
+
+  async generateBatchReport(input: BatchAiReportInput): Promise<BatchAiReportResult> {
+    if (!this.isAvailable()) {
+      return emptyBatchReport();
+    }
+
+    const prompt = buildBatchReportPrompt(input);
+    const text = await callChatCompletion({
+      url: `${this.config.baseUrl}/chat/completions`,
+      apiKey: this.config.apiKey,
+      model: this.config.model,
+      prompt,
+      temperature: 0.3,
+      topP: 0.7
+    });
+
+    const parsed = parseJsonObject<BatchAiReportResult>(text);
+
+    return {
+      overview: normalizeAssistantText(parsed.overview) ?? "",
+      majorFindings: normalizeStringArray(parsed.majorFindings),
+      riskInsights: normalizeStringArray(parsed.riskInsights),
+      focusPeopleSuggestions: normalizeStringArray(parsed.focusPeopleSuggestions),
+      focusTaskSuggestions: normalizeStringArray(parsed.focusTaskSuggestions),
+      managementSuggestions: normalizeStringArray(parsed.managementSuggestions),
+      reportingSummary: normalizeAssistantText(parsed.reportingSummary) ?? ""
+    };
+  }
+}
+
+// Build a provider from a stored ModelProviderConfig (used by the main review pipeline).
+export function getAIReviewProviderFromConfig(config: ModelProviderConfig): AIReviewProvider {
+  return new OpenAICompatibleReviewProvider(config);
 }
 
 export function getAIReviewProvider(
@@ -545,6 +727,73 @@ function parseJsonObject<T>(text: string): T {
   const fencedMatch = text.match(/```json\s*([\s\S]*?)```/i);
   const candidate = fencedMatch?.[1] ?? text;
   return JSON.parse(candidate) as T;
+}
+
+// Parses a JSON array from the model response.
+// Handles both top-level arrays and {"items":[...]} wrappers (needed because
+// json_object response_format disallows top-level JSON arrays).
+function parseJsonArray<T>(text: string): T[] {
+  try {
+    const fencedMatch = text.match(/```json\s*([\s\S]*?)```/i);
+    const candidate = fencedMatch?.[1] ?? text;
+    const parsed = JSON.parse(candidate) as unknown;
+
+    if (Array.isArray(parsed)) {
+      return parsed as T[];
+    }
+
+    if (parsed && typeof parsed === "object") {
+      const obj = parsed as Record<string, unknown>;
+      if (Array.isArray(obj.items)) return obj.items as T[];
+      if (Array.isArray(obj.results)) return obj.results as T[];
+      if (Array.isArray(obj.data)) return obj.data as T[];
+    }
+
+    return [];
+  } catch (e) {
+    console.error("[parseJsonArray] parse failed, raw text:", text?.slice(0, 200), e);
+    return [];
+  }
+}
+
+// Batch record review prompt — same judgment criteria as single-record prompt,
+// adapted to accept a JSON array input and return {"items":[...]} output.
+function buildBatchRecordReviewPrompt(inputs: AiRecordReviewInput[]): string {
+  return [
+    '你是一名企业内部管理分析助手，负责批量判断多条\u201C员工日报内容\u201D与\u201C所关联任务\u201D的语义匹配程度。',
+    "你的判断目标不是文学评价，而是从管理视角判断：该员工当天的工作，是否可以合理认为是在推进该任务。",
+    "本次输入已经由规则系统筛选为需要语义复核的样本。你只判断任务语义风险，不重新判断工时异常、字段缺失、重复填报等硬规则问题。",
+    '严禁：不要评价员工态度，不要否定工作真实性，不要使用\u201C敷衍、无效工作、不合格、明显异常、严重问题、乱填\u201D等强否定词。',
+    "风险标准：",
+    "1. high：明显不相关，或只有极泛化行为且没有具体对象/任务指向，无法合理证明在推进该任务。",
+    "2. medium：可能相关，但证据不足，缺少具体对象、动作、结果或阶段进展，无法确认是否真正推进任务。",
+    "3. low：可以合理认为在推进该任务，内容与任务语义一致，并有具体动作、对象、结果或状态支撑。",
+    "重要规则：项目管理、协调推进、沟通类任务允许较抽象表达，不应轻易判为 high；不要因为没有写百分比就判为风险；判断重点是是否能支持该任务被推进。",
+    "补充约束：如果日报内容达到 20 字，且已经出现具体动作、对象、结果或状态线索，最高只判定为 medium，不要轻易给 high。",
+    "输出要求：",
+    "- 对输入数组中的每条记录分别输出一条结果，顺序不要求，但必须包含原始 id 字段",
+    "- aiSummary 控制在 40 字以内；aiSuggestion 控制在 50 字以内；aiReviewReason 控制在 60 字以内",
+    "- 语气中性、审慎、建议式",
+    "- aiReviewLabel 只从以下标签中选择一个：描述偏简、结果不明确、进度表达不足、会议描述泛化、任务匹配待确认、表达基本合理",
+    `返回格式（JSON对象，items为结果数组）：{"items":[{"id":"<原始id>","aiRiskLevel":"high|medium|low","aiSummary":string,"aiReviewLabel":string,"aiSuggestion":string,"aiConfidence":number,"aiReviewReason":string},...]}`,
+    "以下是结构化输入（JSON数组，每条含 id 和记录内容）：",
+    JSON.stringify(
+      inputs.map((input) => ({
+        id: input.recordId,
+        taskName: input.relatedTaskName ?? null,
+        workContent: input.workContent,
+        reportedHours: input.registeredHours ?? null,
+        ruleRiskLevel: input.ruleRiskLevel ?? null,
+        primaryIssueTypes: input.primaryIssueTypes ?? [],
+        ruleSummary: input.ruleSummary ?? null,
+        ruleSignals: buildReadableRuleSignals(input.ruleFlags ?? {}),
+        ruleFlags: input.ruleFlags ?? {},
+        isManagementTask: input.isManagementTask
+      })),
+      null,
+      2
+    )
+  ].join("\n");
 }
 
 function normalizeText(value: string) {

@@ -9,11 +9,13 @@ import type {
   UploadSourceType
 } from "@/types/domain";
 import { createId } from "@/lib/utils";
+import { modelConfigRepository } from "@/lib/storage/model-config-repository";
 import {
   ensureDataDirectories,
   fileExists,
   listFilesSorted,
   readJsonFile,
+  tryReadJsonFile,
   writeJsonFile
 } from "@/lib/storage/fs";
 
@@ -44,9 +46,12 @@ export interface AnalysisRepository {
   save(result: AnalysisDataset): Promise<void>;
   get(datasetId: string): Promise<AnalysisDataset | null>;
   getLatest(): Promise<AnalysisDataset | null>;
+  // Only called during import — never during AI review save()
+  setLatest(datasetId: string): Promise<void>;
 }
 
 const uploadsIndexPath = path.join(storagePaths.uploadsDir, "_index.json");
+const analysisIndexPath = path.join(storagePaths.cacheDir, "_index.json");
 
 class LocalFileRepository implements FileRepository {
   async saveUploadedFile(params: {
@@ -143,7 +148,9 @@ class LocalParsedRepository implements ParsedRepository {
     if (!(await fileExists(filePath))) {
       return null;
     }
-    return hydrateDatasetIdentity(await readJsonFile<ParsedDataset>(filePath));
+    // tryReadJsonFile returns null instead of throwing if the file is corrupt.
+    const result = await tryReadJsonFile<ParsedDataset>(filePath);
+    return result ? hydrateDatasetIdentity(result) : null;
   }
 }
 
@@ -159,6 +166,28 @@ class LocalAnalysisRepository implements AnalysisRepository {
         batchId: getBatchIdFromContainer(result)
       }
     );
+    // NOTE: intentionally does NOT update analysisIndexPath.
+    // The "latest" pointer is managed exclusively by setLatest(), which is
+    // only called during import — never during AI review writes.
+  }
+
+  // Called once per import to record the new dataset as "latest".
+  // Prepends the new datasetId and deduplicates any prior entry.
+  async setLatest(datasetId: string) {
+    await ensureDataDirectories();
+    let index: string[] = [];
+    try {
+      if (await fileExists(analysisIndexPath)) {
+        const raw = await readJsonFile<unknown>(analysisIndexPath);
+        if (Array.isArray(raw)) {
+          index = raw.filter((id): id is string => typeof id === "string");
+        }
+      }
+    } catch {
+      index = [];
+    }
+    const deduped = index.filter((id) => id !== datasetId);
+    await writeJsonFile(analysisIndexPath, [datasetId, ...deduped]);
   }
 
   async get(datasetId: string) {
@@ -166,26 +195,78 @@ class LocalAnalysisRepository implements AnalysisRepository {
     if (!(await fileExists(filePath))) {
       return null;
     }
-
-    return hydrateDatasetIdentity(await readJsonFile<AnalysisDataset>(filePath));
+    // Use tryReadJsonFile so a file that is momentarily corrupt (race window
+    // on a non-atomic filesystem, stale .tmp, etc.) is treated as "not found"
+    // rather than crashing the caller.
+    const result = await tryReadJsonFile<AnalysisDataset>(filePath);
+    return result ? hydrateDatasetIdentity(result) : null;
   }
 
   async getLatest() {
     await ensureDataDirectories();
-    const files = await listFilesSorted(storagePaths.cacheDir);
-    const latest = files.find((entry) => entry.name.endsWith(".json"));
-    if (!latest) {
+
+    // Primary: read from the stable import-order index.
+    // tryReadJsonFile is used so a corrupt _index.json falls through to rebuild.
+    const indexRaw = await tryReadJsonFile<unknown>(analysisIndexPath);
+    if (Array.isArray(indexRaw) && indexRaw.length > 0) {
+      const latestId = indexRaw[0];
+      if (typeof latestId === "string") {
+        const result = await this.get(latestId);
+        if (result) {
+          return result;
+        }
+        // Indexed file was deleted or corrupt — fall through and rebuild.
+      }
+    }
+
+    // Fallback: mtime sort over all dataset files.
+    // Also rebuilds _index.json so the next call uses the stable pointer.
+    const candidates = await this.scanCandidates();
+    if (candidates.length === 0) {
       return null;
     }
 
-    return hydrateDatasetIdentity(await readJsonFile<AnalysisDataset>(latest.filePath));
+    // Rebuild index from filesystem state (best-effort, non-fatal if it fails).
+    try {
+      await writeJsonFile(
+        analysisIndexPath,
+        candidates.map((entry) => entry.name.slice(0, -5))
+      );
+    } catch {
+      // ignore — index rebuild failure must not block the read
+    }
+
+    // Iterate candidates in mtime order and return the first readable one.
+    // Skips files that are currently unreadable (corrupt, mid-write race, etc.)
+    // so a single bad file cannot bring down the entire API.
+    for (const candidate of candidates) {
+      const result = await tryReadJsonFile<AnalysisDataset>(candidate.filePath);
+      if (result) {
+        return hydrateDatasetIdentity(result);
+      }
+    }
+
+    return null;
+  }
+
+  // Scan cache dir for dataset files sorted by mtime desc, excluding _index.json
+  // and any leftover .tmp files from a previous crashed atomic write.
+  private async scanCandidates() {
+    const files = await listFilesSorted(storagePaths.cacheDir);
+    return files.filter(
+      (entry) =>
+        entry.name.endsWith(".json") &&
+        entry.name !== "_index.json" &&
+        !entry.name.endsWith(".tmp")
+    );
   }
 }
 
 export const repositories = {
   files: new LocalFileRepository(),
   parsed: new LocalParsedRepository(),
-  analysis: new LocalAnalysisRepository()
+  analysis: new LocalAnalysisRepository(),
+  modelConfigs: modelConfigRepository
 };
 
 function getDatasetIdFromContainer(value: { datasetId?: string; batch?: { datasetId?: string } }) {

@@ -13,7 +13,8 @@ export const storagePaths: StoragePaths = {
   rootDir,
   uploadsDir: path.join(rootDir, "data", "uploads"),
   parsedDir: path.join(rootDir, "data", "parsed"),
-  cacheDir: path.join(rootDir, "data", "cache")
+  cacheDir: path.join(rootDir, "data", "cache"),
+  configDir: path.join(rootDir, "data", "config")
 };
 
 export const localSourceOptions: LocalSourceOptions = {

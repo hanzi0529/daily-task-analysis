@@ -10,7 +10,8 @@ vi.mock("@/lib/storage/repositories", () => ({
   repositories: {
     analysis: {
       getLatest: analysisGetLatest,
-      get: analysisGet
+      get: analysisGet,
+      setLatest: vi.fn()
     }
   }
 }));

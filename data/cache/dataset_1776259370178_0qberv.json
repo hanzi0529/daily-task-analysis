@@ -12571,6 +12571,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "指挥决策生产大屏模块开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -12609,7 +12612,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request timeout after 60000ms",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -13187,6 +13190,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "cypher执行过程中的语法注入问题软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -13216,7 +13222,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370301_q8txts",
@@ -13226,6 +13234,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "PC树形视图需要支持批量移动软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -13255,7 +13266,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370301_gevmnx",
@@ -13409,6 +13422,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "脑建立支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -13445,7 +13461,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -13482,6 +13498,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "数据修复--ideal等",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -13513,7 +13532,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370302_0e69pj",
@@ -13523,6 +13544,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "指标中心-开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -13559,7 +13583,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -13573,6 +13597,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "数据修复--ideal等",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": true,
       "ruleFlags": {
@@ -13618,7 +13645,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -13632,6 +13659,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "指标中心-开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -13668,7 +13698,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -13908,6 +13938,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "产业大脑等保推进支撑性活动记录",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -13944,7 +13977,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -13958,6 +13991,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "数字飞机黄绿区打通现场问题处理运维支持",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": true,
       "ruleFlags": {
@@ -14003,7 +14039,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -14017,6 +14053,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "数字飞机黄绿区打通现场问题处理运维支持",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -14053,7 +14092,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -14067,6 +14106,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "S37 5G网络安全服务",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -14103,7 +14145,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -14381,6 +14423,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "个人指挥中心软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -14410,7 +14455,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370303_v9swbf",
@@ -14420,6 +14467,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "v2.27-过程模型引用模板开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -14449,7 +14499,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370303_j2fmtc",
@@ -14573,6 +14625,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "脑建立分析库-开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -14602,7 +14657,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370303_xprh68",
@@ -14690,6 +14747,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "511眼镜展示场景、客户端调研、项目需求对接等支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -14723,13 +14783,13 @@
         }
       ],
       "summary": "结果痕迹较弱；任务匹配较弱",
-      "aiReviewed": true,
-      "aiSummary": "参与客户端及脑执行业务目标讨论。",
-      "aiConfidence": 0.9,
-      "aiReviewLabel": "会议描述泛化",
-      "aiSuggestion": "建议补充讨论主题、结论及后续行动计划。",
-      "aiReviewReason": "会议描述泛化，缺乏具体的讨论主题和结论性产出。",
-      "aiReviewedAt": "2026-04-15T13:24:59.088Z",
+      "aiReviewed": false,
+      "aiSummary": null,
+      "aiConfidence": null,
+      "aiReviewLabel": null,
+      "aiSuggestion": null,
+      "aiReviewReason": null,
+      "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
       }
@@ -15327,6 +15387,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "人机共融语言知识图谱建模规范",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -15356,7 +15419,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370304_22xnrx",
@@ -15750,6 +15815,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "v2.26-复材mesiorc新增弹窗重构开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -15779,7 +15847,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370304_ginlox",
@@ -16266,6 +16336,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "执行触发实例软件技术方案设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -16297,13 +16370,13 @@
         }
       ],
       "summary": "结果痕迹较弱；任务匹配较弱",
-      "aiReviewed": true,
-      "aiSummary": "进行产品需求研究与评审。",
-      "aiConfidence": 0.9,
-      "aiReviewLabel": "结果不明确",
-      "aiSuggestion": "建议补充需求评审结论及产出文档。",
-      "aiReviewReason": "工作内容仅罗列动作，缺少需求评审的结论或具体产出物。",
-      "aiReviewedAt": "2026-04-15T13:25:24.842Z",
+      "aiReviewed": false,
+      "aiSummary": null,
+      "aiConfidence": null,
+      "aiReviewLabel": null,
+      "aiSuggestion": null,
+      "aiReviewReason": null,
+      "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
       }
@@ -18101,6 +18174,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "指挥决策系统通用查询算法优化及集成开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -18130,7 +18206,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370308_pqor80",
@@ -18785,6 +18863,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "511指挥决策系统大屏",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -18814,7 +18895,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370313_k47zcv",
@@ -19074,6 +19157,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "手机端访问进不去或则黑屏时间长和运维一起同蓝信、蔚领排查问题，今天务必确定下问题原因模块开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -19110,7 +19196,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -19170,6 +19256,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "日常运维支撑工作",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -19208,7 +19297,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370314_dpf2ko",
@@ -19441,6 +19532,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "26.4.13~4.17脑建立-建模支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -19470,7 +19564,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370314_vqgpew",
@@ -19669,6 +19765,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "个人档案页面-职位、工龄、联系电脑保存设置接口后端开发及接口联调模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -19698,7 +19797,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370315_3ddv60",
@@ -19958,6 +20059,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "脑实例-v2.27-应实例应实例自增编号生效软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -19989,7 +20093,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370315_liy6ak",
@@ -19999,6 +20105,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "脑实例-v2.27-应实例应实例自增编号生效软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -20030,7 +20139,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370315_elke5v",
@@ -20040,6 +20151,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "海关模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -20071,7 +20185,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370315_t0x587",
@@ -20577,6 +20693,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "接待大屏产品设计元宇宙软件通用需求分析/功能设计/UI设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -20619,7 +20738,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370315_m5ka3l",
@@ -20741,6 +20862,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "接待版本开发开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -20779,7 +20903,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -20793,6 +20917,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "元宇宙复杂模型拓补重建优化",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -20831,7 +20958,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "extra": {
         "aiProvider": "glm"
@@ -21191,6 +21318,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "生产管理-CMES相关产品部分ppt补充",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -21231,7 +21361,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370318_bzn44a",
@@ -21393,6 +21525,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "上飞运维合同签订支持支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -21433,7 +21568,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370318_hhxuwy",
@@ -21443,6 +21580,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "上飞运维合同签订支持支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -21483,7 +21623,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370318_qdxmu9",
@@ -21540,6 +21682,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "指挥决策系统大屏需求技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -21569,7 +21714,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370318_c5dexy",
@@ -21579,6 +21726,9 @@
       "workDate": "2026-04-13",
       "relatedTaskName": "指挥决策系统功能开发开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -21608,7 +21758,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370318_p2sygx",
@@ -21618,6 +21770,9 @@
       "workDate": "2026-04-14",
       "relatedTaskName": "指挥决策系统功能开发开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -21647,7 +21802,9 @@
       "aiSuggestion": null,
       "aiReviewReason": null,
       "aiReviewedAt": null,
-      "extra": {}
+      "extra": {
+        "aiProvider": "glm"
+      }
     },
     {
       "id": "analysis_record_1776259370318_sgcyde",
@@ -22275,6 +22432,9 @@
       "workContent": "一、今日进展\n1、检查采购、外协、差旅的项目赤字，筛选是否存在项目已关闭，仍可以选择的情况。\n二、存在风险/问题",
       "relatedTaskName": "PMO工作分配梳理和对接",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -22317,6 +22477,9 @@
       "workContent": "一、今日工作进展\n1、和技术还有产品讨论实现方案，优化实现逻辑，简化实现功能\n二、存在风险/问题",
       "relatedTaskName": "资源管理方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -22361,6 +22524,9 @@
       "workContent": "一、今日进展\n1.【完成C大脑2.23版本生产环境功能验证和用户手册更新】已完成100%，工时：4h\n2.【C大脑客户问题反馈及跟踪支持相关工作20260413】今日处理2个问题，工时：4h\n3.【协助上飞厂注册外部系统接入C大脑应用上架】今日注册1个应用，工时：1h\n4.【支持刘晓宇员工异动和离职app定制化接口测试联调】已完成离职事件配置联调，工时：1\n二、存在问题/风险\n无",
       "relatedTaskName": "C大脑客户问题反馈及跟踪支持相关工作（20260413-20260417）支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -22397,6 +22563,9 @@
       "workContent": "一、今日进展\n1.【完成C大脑2.24版本生产环境功能验证和用户手册更新】已完成50%，工时：4h\n2.【C大脑客户问题反馈及跟踪支持相关工作20260414】今日处理4个问题，工时：4h\n3.【协助上飞厂注册外部系统接入C大脑应用上架】今日注册3个应用，工时：1h\n二、存在问题/风险\n无",
       "relatedTaskName": "C大脑客户问题反馈及跟踪支持相关工作（20260413-20260417）支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -22433,6 +22602,9 @@
       "workContent": "1.今日完成：\n（1）V2.27版本迭代：V2.27_外部数据接入、自动编号在应实例尽实例时生效、添加团队成员支持通过工号搜索用户等UI设计，进度40%；\n2.问题/需要协助：\n有无：无\n阻塞：无",
       "relatedTaskName": "脑实例V2.27_外部数据接入、自动编号在应实例尽实例时生效、添加团队成员支持通过工号搜索用户等UI设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -22469,6 +22641,9 @@
       "workContent": "手机改本需求测试",
       "relatedTaskName": "天眼移动端测试软件测试",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -22514,6 +22689,9 @@
       "workContent": "钣金蒙皮天眼需求测试",
       "relatedTaskName": "天眼移动端测试软件测试",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -22559,6 +22737,9 @@
       "workContent": "一、今日进展\n指挥决策系统四期:测试用例设计（进度60）\n二、存在问题/风险\n无",
       "relatedTaskName": "V2.25-脑进化-测试方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -22601,6 +22782,9 @@
       "workContent": "一、今日进展\n指挥决策系统四期:测试用例设计（进度100）\n二、存在问题/风险\n无",
       "relatedTaskName": "V2.25-脑进化-测试方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -22643,6 +22827,9 @@
       "workContent": "1、测试2.26版本需求==已完成20%\n2、无风险",
       "relatedTaskName": "V2.26-脑执行-测试报告",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -22679,6 +22866,9 @@
       "workContent": "1、测试2.26版本需求==已完成40%\n2、无风险",
       "relatedTaskName": "V2.26-脑执行-测试报告",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -22715,6 +22905,9 @@
       "workContent": "1、周计划开发逻辑协助，月计划功能验收确认；\n2、复材项目MES部分汇报材料整理；\n3、工序下发方案和开发初步沟通；\n4、移动端APP固化特种工艺需求沟通；\n5、库房管理原型初步调整",
       "relatedTaskName": "CMES-V0.2现场需求采集",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -22759,6 +22952,9 @@
       "workContent": "1、复材现场会议参与，MES待确认清单需求已明确后续推进安排，已完成，100%         6h\n2、脱模周计划、生产准备周计划初次需求梳理已完成，待安排原型设计，进行中，50%     1.5h\n3、周计划开发疑问点协助，周计划测试进度跟进，已完成    1h\n4、辅料库房原型设计，进行中，50%   0.5h",
       "relatedTaskName": "CMES-V0.2现场需求采集",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -22795,6 +22991,9 @@
       "workContent": "1、机加周计划接口联调\n2、月计划、固化周计划bug修复\n3、UI验收样式修改",
       "relatedTaskName": "前端开发开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -22837,6 +23036,9 @@
       "workContent": "1、固化bug修复\n2、月计划更新记录接口联调",
       "relatedTaskName": "前端开发开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -22879,6 +23081,9 @@
       "workContent": "专题卡片图表样式会议评审，后端接口确认及分工",
       "relatedTaskName": "指挥决策生产大屏模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -22921,6 +23126,9 @@
       "workContent": "大屏需求通用图表组件配置讨论，确定后台接口逻辑",
       "relatedTaskName": "指挥决策生产大屏模块开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -22943,7 +23151,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request timeout after 60000ms",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "17",
@@ -22969,6 +23177,9 @@
       "workContent": "指定指挥决策系统后续工作计划，完成人工智能组织周例会及材料填报，讨论查询算子相关技术方案",
       "relatedTaskName": "2026通用查图开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23011,6 +23222,9 @@
       "workContent": "完成数据接入工具数据入图功能，整体开发完成待部署，参加脑执行2.27版本执行触发实例评审，参加脑实例2.27版本迭代计划会和技术方案评审会",
       "relatedTaskName": "C大脑-脑实例-v2.27-模块技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {
@@ -23051,6 +23265,9 @@
       "workContent": "参加大屏数据对焦会，参加计划接入脑实例平台对接讨论会，参加统一开发平台正向开发方案对齐会，与上航讨论供应链数据接入问题，整理供应链链式智能模拟数据",
       "relatedTaskName": "C大脑-脑实例-v2.27-模块技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {
@@ -23091,6 +23308,9 @@
       "workContent": "审核流，执行级过程模型的自定义按钮名称不能重复前端开发",
       "relatedTaskName": "表单、子表单、视图、的自定义按钮名称不能重复前端开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {
@@ -23131,6 +23351,9 @@
       "workContent": "表单，视图，审核流，执行流批量转移bug修复，ui验收修复",
       "relatedTaskName": "表单、视图、审核流、执行流要实现批量所有者转移前端开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -23167,6 +23390,9 @@
       "workContent": "迭代技术风险识别及技术方案分工",
       "relatedTaskName": "脑执行模块技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23209,6 +23435,9 @@
       "workContent": "代码review，提测问题处理",
       "relatedTaskName": "V2.26脑执行模块功能集成",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23251,6 +23480,9 @@
       "workContent": "召开版本迭代计划会",
       "relatedTaskName": "脑执行模块技术方案设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -23296,6 +23528,9 @@
       "workContent": "表单、子表单、视图、的自定义按钮名称不能重复提测并冒烟完成",
       "relatedTaskName": "表单、子表单、视图、的自定义按钮名称不能重复发起提测申请",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -23332,6 +23567,9 @@
       "workContent": "视图列表列冻结提测并冒烟完成",
       "relatedTaskName": "视图列表列冻结发起提测申请",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23374,6 +23612,9 @@
       "workContent": "完成初步数据大脑多实例技术方案设计",
       "relatedTaskName": "数据大脑多实例软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23416,6 +23657,9 @@
       "workContent": "完成初步数据大脑增加接口限制增强稳定性技术方案设计",
       "relatedTaskName": "数据大脑增加接口限制增强稳定行软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23458,6 +23702,9 @@
       "workContent": "完成Amis的结构化设计方案",
       "relatedTaskName": "AMIS整体架构、数据源软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23500,6 +23747,9 @@
       "workContent": "内部开会讨论，对其初步技术方案",
       "relatedTaskName": "数据大脑增加接口限制增强稳定行软件技术方案设计",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -23548,6 +23798,9 @@
       "workContent": "内部开会讨论，对其初步技术方案",
       "relatedTaskName": "数据大脑多实例软件技术方案设计",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -23596,6 +23849,9 @@
       "workContent": "cypher执行过程中的语法注入问题技术方案设计20%",
       "relatedTaskName": "cypher执行过程中的语法注入问题软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -23639,6 +23895,9 @@
       "workContent": "PC树形视图需要支持批量移动技术方案设计20%",
       "relatedTaskName": "PC树形视图需要支持批量移动软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -23682,6 +23941,9 @@
       "workContent": "AMIS组件等技术方案设计20%",
       "relatedTaskName": "AMIS组件（多行文本、下拉选、数值）等软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -23718,6 +23980,9 @@
       "workContent": "周计划开发",
       "relatedTaskName": "周计划开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23762,6 +24027,9 @@
       "workContent": "复材mes集成数据大脑的功能",
       "relatedTaskName": "复材mes数据大脑功能模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -23804,6 +24072,9 @@
       "workContent": "参加客户端业务目标对齐会；\n客户端原生化方案调整，修改目标和供应商需要对齐的内容；\n联系钉钉的业务人员对接；\n复现内网专机消息推送崩溃问题，参与C工厂例会；\n参加v2.26测试用例评审和v2.27迭代计划会；",
       "relatedTaskName": "V2.26客户端模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -23840,6 +24111,9 @@
       "workContent": "1. 中国商飞全面计划管理需求对接会；\n2. wms个人指挥中心需求沟通；\n3. 钉钉app服务钉钉交流；\n4. 计划、工时、日报会议并检查任务；\n5. 生产环境指挥决策系统无法访问问题跟进；\n6. C工厂例会\n7. 上飞公司系统接入C大脑问题对接\n8.客户端公众号消息卡顿，数据删除逻辑确认",
       "relatedTaskName": "V2.26客户端模块功能集成",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -23876,6 +24150,9 @@
       "workContent": "脑建立季度目标梳理\nAI脑建立技术路径对齐",
       "relatedTaskName": "脑建立支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -23896,7 +24173,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "40",
@@ -23922,6 +24199,9 @@
       "workContent": "1、组织完成Dify搭建AI脑建立智能体工作路径讨论，分配团队成员进行工作流搭建验证，查看验证效果，解决相关问题，总体搭建进度30%，明日继续验证\n2、完善脑建立季度目标PBS文档\n3、规划2.28版本版本内容，规划中，进度20%\n4、沟通价值流schema导出需求，完成开发对接，100%",
       "relatedTaskName": "脑建立支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -23958,6 +24238,9 @@
       "workContent": "中台数仓及应用开发项目建表ddl恢复，数据更新",
       "relatedTaskName": "数据修复--ideal等",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -24003,6 +24286,9 @@
       "workContent": "指揮決策系统指标计算需求评审会",
       "relatedTaskName": "指标中心-开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -24023,7 +24309,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "43",
@@ -24049,6 +24335,9 @@
       "workContent": "数据任务恢复错误记录与问题排查",
       "relatedTaskName": "数据修复--ideal等",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": true,
       "ruleFlags": {
@@ -24072,7 +24361,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "44",
@@ -24098,6 +24387,9 @@
       "workContent": "完善通用指标查询与计算接口技术实施文档",
       "relatedTaskName": "指标中心-开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -24118,7 +24410,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "45",
@@ -24144,6 +24436,9 @@
       "workContent": "大屏数据对焦对接会",
       "relatedTaskName": "指标中心-开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -24192,6 +24487,9 @@
       "workContent": "一、今日进展：调研设备层的技术架构，进行进一步实施。二、风险：无",
       "relatedTaskName": "兼容性测试系统-设备层设计与开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -24234,6 +24532,9 @@
       "workContent": "一、今日进展：完成科室内部工作汇报与讨论，AI大模型进行自动化测试探索。二、风险：无",
       "relatedTaskName": "兼容性测试系统-设备层设计与开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -24276,6 +24577,9 @@
       "workContent": "问题分析",
       "relatedTaskName": "出后端接口的熔断方案、健康检查方案，和问题推送机制",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -24321,6 +24625,9 @@
       "workContent": "方案策划",
       "relatedTaskName": "软件技术方案策划",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -24366,6 +24673,9 @@
       "workContent": "今日进展：产业大脑材料更新\n当前问题：暂无",
       "relatedTaskName": "产业大脑等保推进支撑性活动记录",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -24386,7 +24696,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "51",
@@ -24412,6 +24722,9 @@
       "workContent": "今日进展：梳理网络链路，排查问题\n当前问题：需要新增开通的端口",
       "relatedTaskName": "数字飞机黄绿区打通现场问题处理运维支持",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": true,
       "ruleFlags": {
@@ -24435,7 +24748,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "52",
@@ -24461,6 +24774,9 @@
       "workContent": "今日进展：开通数字飞机网络链路 \n当前问题：联合蔚领进行问题处理",
       "relatedTaskName": "数字飞机黄绿区打通现场问题处理运维支持",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -24481,7 +24797,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "53",
@@ -24507,6 +24823,9 @@
       "workContent": "今日进展：处理C工厂网络访问问题\n当前问题：终端启动失败",
       "relatedTaskName": "S37 5G网络安全服务",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -24527,7 +24846,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "54",
@@ -24553,6 +24872,9 @@
       "workContent": "1.生产大脑二期生运积分技术方案设计\n2.集采平台上线\n3.智能体门户功能",
       "relatedTaskName": "生产大脑模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -24595,6 +24917,9 @@
       "workContent": "1、完成执行触发实例方案联合评审\n2、完成脑实例业务目标拆解",
       "relatedTaskName": "执行触发实例方案联合评审支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -24637,6 +24962,9 @@
       "workContent": "今日进展：设计、生产接入脑实例引擎，统一工时填报入口需求初步对接，已完成，进度：100%",
       "relatedTaskName": "设计、生产接入脑实例引擎，统一工时填报入口需求讨论支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -24673,6 +25001,9 @@
       "workContent": "vibeCoding提示词生成\nCC生成完整前后端Cmes项目demo\n修改skill更新整个项目，debugAI项目",
       "relatedTaskName": "C大脑-V2.26基础开发开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -24715,6 +25046,9 @@
       "workContent": "参加会议：晚例会，纳什租房会议，智慧传媒会议",
       "relatedTaskName": "个人指挥中心软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -24761,6 +25095,9 @@
       "workContent": "指挥决策系统业务域配置",
       "relatedTaskName": "个人指挥中心软件技术方案设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -24806,6 +25143,9 @@
       "workContent": "个人指挥中心-WMS技术方案初评",
       "relatedTaskName": "个人指挥中心软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -24848,6 +25188,9 @@
       "workContent": "个人指挥中心--大数据表技术方案设计，进度20%",
       "relatedTaskName": "个人指挥中心软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -24891,6 +25234,9 @@
       "workContent": "过程模型画布增加引入和查看引用情况弹窗+引入的格式转换交互",
       "relatedTaskName": "v2.27-过程模型引用模板开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -24934,6 +25280,9 @@
       "workContent": "1.今日完成：\n统一智能体开发应用平台：应用图标总共2的设计和输出，进度完成8个（30%）；",
       "relatedTaskName": "统一智能体开发平台应用图标（约20）",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -24976,6 +25325,9 @@
       "workContent": "1.今日完成： 统一智能体开发应用平台：应用图标总共2的设计和输出，进度完成18个（90%）；",
       "relatedTaskName": "统一智能体开发平台应用图标（约20）",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25018,6 +25370,9 @@
       "workContent": "分析库SCHEMA关系接口API的梳理；https经过nginx转http的环境demo示例准备",
       "relatedTaskName": "脑建立分析库-开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25060,6 +25415,9 @@
       "workContent": "分析库SCHEMA关系接口API的梳理",
       "relatedTaskName": "脑建立分析库-开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -25103,6 +25461,9 @@
       "workContent": "编制智能设计开发资源方案汇报材料、人年当量梳理和方案编制",
       "relatedTaskName": "人工智能组织-PEMO计划整体管理（0413-0417）",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25147,6 +25508,9 @@
       "workContent": "梳理产品软件BOM树和研发迭代方案",
       "relatedTaskName": "完成产品研发整体管理（0413-0417）",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25189,6 +25553,9 @@
       "workContent": "客户端、脑执行业务目标讨论",
       "relatedTaskName": "511眼镜展示场景、客户端调研、项目需求对接等支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -25206,13 +25573,13 @@
         "结果痕迹较弱",
         "任务匹配较弱"
       ],
-      "aiReviewed": true,
-      "aiSummary": "参与客户端及脑执行业务目标讨论。",
-      "aiConfidence": 0.9,
-      "aiReviewLabel": "会议描述泛化",
-      "aiSuggestion": "建议补充讨论主题、结论及后续行动计划。",
-      "aiReviewReason": "会议描述泛化，缺乏具体的讨论主题和结论性产出。",
-      "aiReviewedAt": "2026-04-15T13:24:59.088Z",
+      "aiReviewed": false,
+      "aiSummary": null,
+      "aiConfidence": null,
+      "aiReviewLabel": null,
+      "aiSuggestion": null,
+      "aiReviewReason": null,
+      "aiReviewedAt": null,
       "rawData": {
         "序号": "70",
         "账号": "AI0094",
@@ -25237,6 +25604,9 @@
       "workContent": "参与统一开发平台规范内部评审，理解规范为设计统一开发平台门户奠定基础",
       "relatedTaskName": "511眼镜展示场景、客户端调研、项目需求对接等支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25281,6 +25651,9 @@
       "workContent": "调研钉钉客户端，联系飞书客户端，形成调研报告",
       "relatedTaskName": "511眼镜展示场景、客户端调研、项目需求对接等支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25323,6 +25696,9 @@
       "workContent": "个人指挥中心承接商飞全面计划，WMS的需求分析和讨论，梳理出确定可以做的需求，未来个人指挥中心技术框架变成要关注的重点",
       "relatedTaskName": "511眼镜展示场景、客户端调研、项目需求对接等支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25367,6 +25743,9 @@
       "workContent": "工作进展\n一、测试用例评审功能前端UI优化，新增下载用例编写规范按钮",
       "relatedTaskName": "AI生成自动化用例工具，新增用例评审功能",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25411,6 +25790,9 @@
       "workContent": "工作进展：\n完成测试用例评审功能的线上部署，新增问题定位跳转功能",
       "relatedTaskName": "AI生成自动化用例工具，新增用例评审功能",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25453,6 +25835,9 @@
       "workContent": "技术方案评审，原型评审",
       "relatedTaskName": "脑实例-v2.27-开发人员首页软件技术方案设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -25501,6 +25886,9 @@
       "workContent": "修复计划调整页面的BUG",
       "relatedTaskName": "脑实例-v2.27-开发人员首页软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25543,6 +25931,9 @@
       "workContent": "研究关联数据类型的编辑方案",
       "relatedTaskName": "脑实例-v2.27-开发人员首页软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25585,6 +25976,9 @@
       "workContent": "研究变更列表对比技术方案",
       "relatedTaskName": "脑实例-v2.27-开发人员首页软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25627,6 +26021,9 @@
       "workContent": "一、今日进展 等保测评材料编写 二、存在问题/风险 无",
       "relatedTaskName": "天镜等保工作推进支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25671,6 +26068,9 @@
       "workContent": "一、今日进展 等保测评材料修改  二、存在问题/风险 无",
       "relatedTaskName": "天镜等保工作推进支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25713,6 +26113,9 @@
       "workContent": "1、岗位需求对接\n2、采购流程跟踪\n3、手机端和眼镜端启动蓝牙wifi链接",
       "relatedTaskName": "支撑任务数据修改",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25755,6 +26158,9 @@
       "workContent": "1、岗位需求对接\n2、眼睛端app开发调试\n3、外部部门修改数据",
       "relatedTaskName": "眼镜端app开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25799,6 +26205,9 @@
       "workContent": "C项目管理2.28版本计划时间录入；元宇宙开发表单重建；C项目管理系统问题处理",
       "relatedTaskName": "系统技术支持、问题反馈等支撑性工作0417",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25843,6 +26252,9 @@
       "workContent": "三楼实验室材料布置；新疆机场C大脑系统技术支持；资产元宇宙系统支持；C项目管理平台用户问题处理",
       "relatedTaskName": "系统技术支持、问题反馈等支撑性工作0417",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -25879,6 +26291,9 @@
       "workContent": "细化知识图谱建模规范下规则化建模章节，整体进度40%",
       "relatedTaskName": "人机共融语言知识图谱建模规范",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -25922,6 +26337,9 @@
       "workContent": "1. 行业内业务规则分类调研并形成报告：SBVR 体系、BRS、IBM业务规则\n2. 知识图谱建模规范更新，结构调整并添加案例，整体进度50%",
       "relatedTaskName": "人机共融语言知识图谱建模规范",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -25964,6 +26382,9 @@
       "workContent": "完成PPDS、低温单系统数据需求申请提交，需求接收审批中",
       "relatedTaskName": "推动复材CMES库房对接",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26006,6 +26427,9 @@
       "workContent": "查询算子的分类和完善",
       "relatedTaskName": "PC端指挥决策通用查询技术方案/与指挥决策框架联调开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -26051,6 +26475,9 @@
       "workContent": "查询算子技术方案评审，423指挥决策系统测试用例评审",
       "relatedTaskName": "PC端指挥决策通用查询技术方案/与指挥决策框架联调开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26093,6 +26520,9 @@
       "workContent": "指挥决策系统验证指导",
       "relatedTaskName": "指挥决策系统验证编写材料",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -26138,6 +26568,9 @@
       "workContent": "数据集准备指导",
       "relatedTaskName": "L1-S1数据集准备编写材料",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -26183,6 +26616,9 @@
       "workContent": "复材过程建模功能自测",
       "relatedTaskName": "复材mes搭建自动建模功能单元测试",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -26228,6 +26664,9 @@
       "workContent": "V2.27脑建立需求评审",
       "relatedTaskName": "v2.26-复材mesiorc新增弹窗重构开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26270,6 +26709,9 @@
       "workContent": "控制节点新增弹窗重构",
       "relatedTaskName": "v2.26-复材mesiorc新增弹窗重构开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -26315,6 +26757,9 @@
       "workContent": "资源节点、数据对象节点拖拽新增弹窗重构",
       "relatedTaskName": "v2.26-复材mesiorc新增弹窗重构开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -26358,6 +26803,9 @@
       "workContent": "过程建模泛化iorc影响范围评估",
       "relatedTaskName": "v2.26-数据大脑-数据对象、关系、标签、树模板支持批量转移单元测试",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26400,6 +26848,9 @@
       "workContent": "完成脑实例v2.27技术方案编写，参与脑实例2.27迭代计划会和2.27技术方案评审，参与脑执行执行触发实例评审，参与能效讨论；且技术方案评审提前，为链式智能的需求开发预留时间，往前赶进度；",
       "relatedTaskName": "脑实例-v2.27-开发场景注册软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {
@@ -26440,6 +26891,9 @@
       "workContent": "完成内网电脑编程环境搭建，用于链式智能开发，完成工号搜索功能开发，完成外包简历审阅",
       "relatedTaskName": "脑实例-v2.27-添加团队成员支持工号搜索开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26484,6 +26938,9 @@
       "workContent": "批量转移、作废联调",
       "relatedTaskName": "批量转移、作废开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26526,6 +26983,9 @@
       "workContent": "批量转移、作废、活动节点编号联调，改bug，提测",
       "relatedTaskName": "批量转移、作废开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -26562,6 +27022,9 @@
       "workContent": "业财账单列表分页查询、按条件查询、多表联查",
       "relatedTaskName": "业财融合-业财账单列表功能开发模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26604,6 +27067,9 @@
       "workContent": "业财账单列表单条详情，单条编辑，添加合同日期和合同金额",
       "relatedTaskName": "业财融合-业财账单列表功能开发模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26646,6 +27112,9 @@
       "workContent": "根据测试评审用例进行自定义卡片位置与地铁图优化自测与更改，并在测试机进行蓝信认证测试与逻辑修改",
       "relatedTaskName": "v2.26开发-中国商飞租户忘记密码能通过蓝信重置密码前端",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26690,6 +27159,9 @@
       "workContent": "部署任务到开发环境进行测试，并进行优化修改",
       "relatedTaskName": "v2.26单元测试-个人指挥中心卡片层级位置调整",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26734,6 +27206,9 @@
       "workContent": "用真机预发内网环境情况下，进行测试，并根据内网环境测试进行更改优化，并完成提测",
       "relatedTaskName": "v2.26单元测试-中国商飞租户忘记密码能通过蓝信重置密码前端",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26778,6 +27253,9 @@
       "workContent": "进行卡片与地铁图优化任务提测",
       "relatedTaskName": "v2.26客户端发起提测申请-个人指挥中心优化",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26822,6 +27300,9 @@
       "workContent": "",
       "relatedTaskName": "复材mes数据大脑开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26864,6 +27345,9 @@
       "workContent": "",
       "relatedTaskName": "数据大脑批量转移单元测试",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -26906,6 +27390,9 @@
       "workContent": "产品需求研究，产品需求评审",
       "relatedTaskName": "执行触发实例软件技术方案设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -26921,13 +27408,13 @@
         "结果痕迹较弱",
         "任务匹配较弱"
       ],
-      "aiReviewed": true,
-      "aiSummary": "进行产品需求研究与评审。",
-      "aiConfidence": 0.9,
-      "aiReviewLabel": "结果不明确",
-      "aiSuggestion": "建议补充需求评审结论及产出文档。",
-      "aiReviewReason": "工作内容仅罗列动作，缺少需求评审的结论或具体产出物。",
-      "aiReviewedAt": "2026-04-15T13:25:24.842Z",
+      "aiReviewed": false,
+      "aiSummary": null,
+      "aiConfidence": null,
+      "aiReviewLabel": null,
+      "aiSuggestion": null,
+      "aiReviewReason": null,
+      "aiReviewedAt": null,
       "rawData": {
         "序号": "110",
         "账号": "AI0169",
@@ -26952,6 +27439,9 @@
       "workContent": "技术方案初步设计",
       "relatedTaskName": "执行触发实例软件技术方案设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -26997,6 +27487,9 @@
       "workContent": "1. 参加【V2.27执行触发实例】评审，了解需求，为后续验证支持\n2. 需求调研：V2.28审核流权限配置：字段配置及执行侧保持一致+审核流/执行流单选支持模糊搜索\n3. 需求讨论：WMS个人指挥需求同开发讨论实现路径\n4. 需求接收：V2.28解决方案需求传递",
       "relatedTaskName": "V2.28需求采集",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {
@@ -27037,6 +27530,9 @@
       "workContent": "脑实例v2.27技术方案编写，完成10%",
       "relatedTaskName": "脑实例-v2.27-数据源配置软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -27073,6 +27569,9 @@
       "workContent": "脑实例v2.27技术方案-数据数据映射规则，实例化自动编号写入。完成度50%",
       "relatedTaskName": "脑实例-v2.27-数据源配置软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -27109,6 +27608,9 @@
       "workContent": "一、今日进展：完成V2.26功能测试冒烟",
       "relatedTaskName": "V2.26-脑执行-测试报告",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -27145,6 +27647,9 @@
       "workContent": "一、今日进展：1、完成V2.26测试环境系统测试",
       "relatedTaskName": "V2.26-脑执行-测试报告",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -27181,6 +27686,9 @@
       "workContent": "2.26首页样式更新",
       "relatedTaskName": "v2.26开发-用户姓名太长在首页优化展示",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27229,6 +27737,9 @@
       "workContent": "切换租户样式更新",
       "relatedTaskName": "v2.26单元测试-切换租户标识现在所在租户",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27277,6 +27788,9 @@
       "workContent": "内网消息推送+首页样式交互更新",
       "relatedTaskName": "v2.26开发-切换租户标识现在所在租户",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -27322,6 +27836,9 @@
       "workContent": "首页布局更新",
       "relatedTaskName": "v2.26开发-公共服务平台web端首页优化",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27370,6 +27887,9 @@
       "workContent": "首页字体字号颜色背景标语图片更新",
       "relatedTaskName": "v2.26单元测试--公共服务平台web端首页优化",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -27415,6 +27935,9 @@
       "workContent": "方案验证",
       "relatedTaskName": "v2.26开发-专机推送浏览器方案",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27463,6 +27986,9 @@
       "workContent": "插件修复",
       "relatedTaskName": "v2.26单元测试-专机推送浏览器方案",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27511,6 +28037,9 @@
       "workContent": "用户姓名过长",
       "relatedTaskName": "v2.26单元测试-用户姓名太长在首页优化展示",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27559,6 +28088,9 @@
       "workContent": "2.27导出",
       "relatedTaskName": "v2.26开发-用户姓名太长在首页优化展示",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27607,6 +28139,9 @@
       "workContent": "2.27导入弹窗",
       "relatedTaskName": "v2.26开发-公共服务平台web端首页优化",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27655,6 +28190,9 @@
       "workContent": "导入弹窗",
       "relatedTaskName": "v2.26单元测试--公共服务平台web端首页优化",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27703,6 +28241,9 @@
       "workContent": "提测",
       "relatedTaskName": "v2.26单元测试-用户姓名太长在首页优化展示",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 4,
       "needAiReview": false,
       "ruleFlags": {
@@ -27754,6 +28295,9 @@
       "workContent": "提测",
       "relatedTaskName": "v2.26开发-切换租户标识现在所在租户",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 4,
       "needAiReview": false,
       "ruleFlags": {
@@ -27805,6 +28349,9 @@
       "workContent": "切换租户标识",
       "relatedTaskName": "v2.26单元测试-切换租户标识现在所在租户",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27853,6 +28400,9 @@
       "workContent": "插件修复",
       "relatedTaskName": "v2.26开发-专机推送浏览器方案",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27901,6 +28451,9 @@
       "workContent": "保活插件",
       "relatedTaskName": "v2.26单元测试-专机推送浏览器方案",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -27949,6 +28502,9 @@
       "workContent": "分析库脑实例数据改造-迭代内容开发",
       "relatedTaskName": "脑实例脑执行分析库-开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -27993,6 +28549,9 @@
       "workContent": "数据修复",
       "relatedTaskName": "数据修复--元宇宙等",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -28038,6 +28597,9 @@
       "workContent": "",
       "relatedTaskName": "分布式事务缺失 + 跨服务调用无一致性保障发起提测申请",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28080,6 +28642,9 @@
       "workContent": "",
       "relatedTaskName": "流程引擎幂等性 + 并发控制问题发起提测申请",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28122,6 +28687,9 @@
       "workContent": "",
       "relatedTaskName": "ai眼镜开发支持支撑性活动记录",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28164,6 +28732,9 @@
       "workContent": "",
       "relatedTaskName": "针对跨服务调用无法参与本地事务的问题（本案例 接口逻辑：脑执行自身逻辑→任务中心调用→脑执 行自身逻辑→数据大脑调用→结束），计划采用 “同步执行+补偿机制”的方式进行优化纠正措施",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28206,6 +28777,9 @@
       "workContent": "",
       "relatedTaskName": "通过调整查询实现为“按id取最新一条数据”可有效规避该问题。纠正措施",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28248,6 +28822,9 @@
       "workContent": "",
       "relatedTaskName": "ai眼镜开发支持支撑性活动记录",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28290,6 +28867,9 @@
       "workContent": "1.统一智能体开发平台门户，智能体开发、智能体头像交互更改，细节补充标注——已完成\n2.指挥决策系统大屏PC端二评补充\n3.航司logo处理临时支持——已完成",
       "relatedTaskName": "统一智能体开发平台门户及指挥决策系统PC大屏端软件UI设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28332,6 +28912,9 @@
       "workContent": "1.统一智能体开发平台内部评审及审核意见修改——tab、审核结果及表格列宽优化，已完成\n2.V2.27脑执行内部评审——已通过\n3.一智能体开发平台卡片内容丰富及样式优化——50%",
       "relatedTaskName": "统一智能体开发平台门户及指挥决策系统PC大屏端软件UI设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28374,6 +28957,9 @@
       "workContent": "接口补充参数校验与异常处理；\nformVersion更新逻辑开发\n开发环境调试",
       "relatedTaskName": "C大脑-100934-后端加强参数校验与异常处理，防止非法值覆盖；同时修改formVersion更新时机，由原来的提交前的保存更新修改(stash接口)为提交时更新版本(submit接口)",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28418,6 +29004,9 @@
       "workContent": "接口优化",
       "relatedTaskName": "C大脑-100934-举一反三：梳理其他接口必填校验和有效性校验（本次整改输入、控制和资源回显保存和删除功能、保存功能）",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -28465,6 +29054,9 @@
       "workContent": "",
       "relatedTaskName": "视图查询条件配置：10个不够用，扩充到15个软件技术方案设计",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28507,6 +29099,9 @@
       "workContent": "智能体广场前端开发",
       "relatedTaskName": "智能体开发门户前端开发开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -28554,6 +29149,9 @@
       "workContent": "生产执行增加图表库",
       "relatedTaskName": "智能生产appbug修复开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -28599,6 +29197,9 @@
       "workContent": "智能体工具\n\n前端开发",
       "relatedTaskName": "智能体开发门户前端开发开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -28646,6 +29247,9 @@
       "workContent": "解决小节拍天数问题",
       "relatedTaskName": "智能排产优化项开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -28691,6 +29295,9 @@
       "workContent": "完善将小图数据格式处理成cypher建图语句，将抽小图问题结合历史记录进行澄清",
       "relatedTaskName": "指挥决策系统通用查询算法优化及集成开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -28734,6 +29341,9 @@
       "workContent": "调研讨论制定通用查询事实类查询算子方案，开发16个域数据和大图抽小图加入子表单转成cypher同步到md文件，参加指挥决策系统4.23版本测试评审",
       "relatedTaskName": "指挥决策系统通用查询算法优化及集成开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28778,6 +29388,9 @@
       "workContent": "对反馈的问题进行修改",
       "relatedTaskName": "理清数据源和接口清单",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -28823,6 +29436,9 @@
       "workContent": "铺贴周计划开发",
       "relatedTaskName": "铺贴周计划模块开发单元测试",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -28870,6 +29486,9 @@
       "workContent": "铺贴周计划测试Bug修复",
       "relatedTaskName": "铺贴周计划模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -28912,6 +29531,9 @@
       "workContent": "接待场景模型合并",
       "relatedTaskName": "上飞院场景合并",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 4,
       "needAiReview": false,
       "ruleFlags": {
@@ -28963,6 +29585,9 @@
       "workContent": "灯光调整",
       "relatedTaskName": "完成动态实时光线和阴影优化",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -29011,6 +29636,9 @@
       "workContent": "接待场景模型合并",
       "relatedTaskName": "上飞院场景合并",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 4,
       "needAiReview": false,
       "ruleFlags": {
@@ -29062,6 +29690,9 @@
       "workContent": "针对511发布会节点对智能生产智能供应链所需组件进行评估，预计需要柱状图、折线图、表格、饼图、地铁图组件。\n目前进度10%，预计明日完成产品功能设计。",
       "relatedTaskName": "指挥决策系统大屏端demo设计支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -29104,6 +29735,9 @@
       "workContent": "进行指挥决策系统大屏环形图，表格，饼图组件的设计，继续与解决方案对齐 511发布会内容剧本，并根据剧本针对性设计组件。\n今日已完成表格、饼图组件设计。整体完成50%。预计明天完成设计并完成产品需求评审",
       "relatedTaskName": "指挥决策系统大屏端demo设计支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -29146,6 +29780,9 @@
       "workContent": "今日进展：\n1，打印机IP分配部署完成；\n2，弱电机房标签打印完成；\n3，2F到6F主机房光纤排查完成；\n风险：\n无",
       "relatedTaskName": "人工岛二楼入驻网络支持支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -29188,6 +29825,9 @@
       "workContent": "今日进展：\n1，弱电机房标签打印完成；\n2，门禁权限更新\n风险：\n无",
       "relatedTaskName": "人工岛二楼入驻网络支持支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -29230,6 +29870,9 @@
       "workContent": "1",
       "relatedTaskName": "NL2cypher各模块迭代优化开发",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -29275,6 +29918,9 @@
       "workContent": "2",
       "relatedTaskName": "NL2cypher各模块迭代优化开发",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -29320,6 +29966,9 @@
       "workContent": "1.参加UI组内部AI知识分享会，后续结合分享会上推荐的AI工具设计新版工作台的概念稿子；2.参加产品511指挥决策系统大屏评审会，确定设计范围；3.511指挥决策系统大屏暗色风格设计，进度100%",
       "relatedTaskName": "511指挥决策系统大屏",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {
@@ -29360,6 +30009,9 @@
       "workContent": "511决策系统大屏白色版本UI设计：进度50%",
       "relatedTaskName": "511指挥决策系统大屏",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -29403,6 +30055,9 @@
       "workContent": "开发",
       "relatedTaskName": "NL2Cypher技能封装开发",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -29450,6 +30105,9 @@
       "workContent": "上飞院场景搭建",
       "relatedTaskName": "铁鸟实验室 设计院场景搭建",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -29495,6 +30153,9 @@
       "workContent": "上飞院场景搭建2",
       "relatedTaskName": "铁鸟实验室 设计院场景搭建",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -29540,6 +30201,9 @@
       "workContent": "前端页面开发",
       "relatedTaskName": "三维交互前端开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -29587,6 +30251,9 @@
       "workContent": "主页资产内容开发",
       "relatedTaskName": "三维交互前端开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -29637,6 +30304,9 @@
       "workContent": "同运维和蓝信工作人员排查情况。与蔚领的测试人员找机器进行测试",
       "relatedTaskName": "手机端访问进不去或则黑屏时间长和运维一起同蓝信、蔚领排查问题，今天务必确定下问题原因模块开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -29657,7 +30327,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "171",
@@ -29683,6 +30353,9 @@
       "workContent": "脑实例-v2.27-添加团队成员支持工号搜索软件技术方案设计",
       "relatedTaskName": "脑实例-v2.27-添加团队成员支持工号搜索软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -29719,6 +30392,9 @@
       "workContent": "脑实例-v2.27-添加团队成员支持工号搜索软件技术方案设计",
       "relatedTaskName": "脑实例-v2.27-添加团队成员支持工号搜索软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -29755,6 +30431,9 @@
       "workContent": "一、今日进展： \n项目管理平台图库不可用根因定位排查\n二.、存在问题/风险： 无",
       "relatedTaskName": "日常运维支撑工作",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -29801,6 +30480,9 @@
       "workContent": "",
       "relatedTaskName": "完成nl2cypher开发、优化、上线开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -29843,6 +30525,9 @@
       "workContent": "",
       "relatedTaskName": "完成nl2cypher开发、优化、上线开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -29885,6 +30570,9 @@
       "workContent": "测试后，有额外情况需要处理，需要修改代码后再测试",
       "relatedTaskName": "v2.26单元测试-组织用户数据清洗",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -29927,6 +30615,9 @@
       "workContent": "完成预发环境用户数据清洗，当前所有用户只保留一个节点",
       "relatedTaskName": "v2.26单元测试-组织用户数据清洗",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -29969,6 +30660,9 @@
       "workContent": "1.V2.27执行触发实例需求评审会通过，进入设计阶段\n2.V2.26脑执行视图表单UI首轮验收报告已反馈，等待前端修改完后复验",
       "relatedTaskName": "V2.27脑执行需求评审、V2.26UI验收",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -30005,6 +30699,9 @@
       "workContent": "V2.27公共服务平台UI设计，完成80%",
       "relatedTaskName": "V2.27公共服务平台软件UI设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -30041,6 +30738,9 @@
       "workContent": "1 V2.27 公共服务平台UI设计已完成\n2 V2.27脑执行、公共服务平台UI内审，评审通过，明日与前端、测试UI同步",
       "relatedTaskName": "V2.27公共服务平台软件UI设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -30077,6 +30777,9 @@
       "workContent": "1. 参与脑建立V2.25迭代复盘会\n2. 参与智能体验证AI脑建立研讨会",
       "relatedTaskName": "26.4.13~4.17脑建立-建模支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -30120,6 +30823,9 @@
       "workContent": "1. 完成V2.27需求评审\n2. 完成AI脑建立实现方式讨论",
       "relatedTaskName": "V2.27AI脑建立等需求产品设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -30156,6 +30862,9 @@
       "workContent": "一、今日工作完成情况\n1. Dify搭建AI脑、建立智能体：进行中（进度99%），目前正推进核心能力验证，确保智能体搭建合规且满足预期需求。\n2. 脑建立V2.27迭代计划确认：已完成（进度100%），明确迭代节点及核心任务。\n二、需协调事项\n因ChatGPT对Dify搭建相关操作及优化有较强指导作用，为提升工作效率、保障智能体搭建效果，请领导开通部分大模型会员账号。\n三、明日工作计划\n1. 搭建基于PR文件的工作流，输出模型json；搭建AI建模的智能体，可以调用已搭建好的工作流 ，持续推进Dify智能体搭建验证工作，针对当前测试中发现的问题进行优化调整，提升智能体运行稳定性及实用性。",
       "relatedTaskName": "26.4.13~4.17脑建立-建模支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -30192,6 +30901,9 @@
       "workContent": "1. 完成人员负荷看板需求对接\n2. 完成28版本批量填报工时产品设计\n3. 与开发确认27版本疑问项",
       "relatedTaskName": "V2.28脑实例C大脑产研需求采集",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -30236,6 +30948,9 @@
       "workContent": "完成人员负荷看板需求对接",
       "relatedTaskName": "脑实例V2.28批量填报工时等需求采集",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -30278,6 +30993,9 @@
       "workContent": "1. 参与人员负荷看板二次讨论，待确认后续具体方案，80%\n2. 完成智能设计工时看板需求确认，100%",
       "relatedTaskName": "脑实例V2.28迭代规划",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -30320,6 +31038,9 @@
       "workContent": "nl2cypher 独立接口开发",
       "relatedTaskName": "nl2cypher 算法模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {
@@ -30360,6 +31081,9 @@
       "workContent": "查找定位沙盘处前往资产位置功能失效的问题",
       "relatedTaskName": "个人档案页面-职位、工龄、联系电脑保存设置接口后端开发及接口联调模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -30403,6 +31127,9 @@
       "workContent": "车间元宇宙导航网格体的构建导致漫游卡顿的问题解决",
       "relatedTaskName": "完成导航网格构建卡顿优化，排查卡顿的点和问题",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -30445,6 +31172,9 @@
       "workContent": "",
       "relatedTaskName": "单位级门户-单位级静态看板开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -30487,6 +31217,9 @@
       "workContent": "",
       "relatedTaskName": "单位级门户-单位级静态看板开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -30532,6 +31265,9 @@
       "workContent": "场景优化开发",
       "relatedTaskName": "场景优化开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -30576,6 +31312,9 @@
       "workContent": "",
       "relatedTaskName": "车间推演跳转功能开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -30618,6 +31357,9 @@
       "workContent": "接待版本开发，串流程，修问题",
       "relatedTaskName": "车间推演跳转功能开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -30665,6 +31407,9 @@
       "workContent": "今日进展：开始编写技术方案 风险：无",
       "relatedTaskName": "脑实例-v2.27-应实例应实例自增编号生效软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -30710,6 +31455,9 @@
       "workContent": "今日进展：继续编写技术方案 风险：无",
       "relatedTaskName": "脑实例-v2.27-应实例应实例自增编号生效软件技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -30755,6 +31503,9 @@
       "workContent": "海关后端警告视频MP4转码为WebM开发",
       "relatedTaskName": "海关模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -30800,6 +31551,9 @@
       "workContent": "海关后端视频转码前后端联调和bug修复",
       "relatedTaskName": "海关模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -30842,6 +31596,9 @@
       "workContent": "完成看板的bug修复",
       "relatedTaskName": "机加周计划后端开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -30887,6 +31644,9 @@
       "workContent": "完成月计划数据接入",
       "relatedTaskName": "机加周计划后端开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -30935,6 +31695,9 @@
       "workContent": "调研mes系统功能",
       "relatedTaskName": "机加周计划后端开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 3,
       "needAiReview": false,
       "ruleFlags": {
@@ -30983,6 +31746,9 @@
       "workContent": "框架确认材料签字",
       "relatedTaskName": "上飞公司运维售前解决方案",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -31028,6 +31794,9 @@
       "workContent": "1、脑建立实时方案初稿设计\n2、指挥决策系统-大屏初步沟通。\n3、大屏指标中心511 - 生产域指标 api来源初步沟通。\n4、指标中心-方案同步及分配",
       "relatedTaskName": "分析库项目模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31070,6 +31839,9 @@
       "workContent": "1、供应链指标口径对焦。\n2、指标中心-交互接口的沟通评审\n3、分析库- 顶点/非顶点功能上线复核。",
       "relatedTaskName": "分析库项目模块开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31114,6 +31886,9 @@
       "workContent": "模型输出合成版本，材质MatFunction基础蓝图编写+功能测试，模型场景搭建（六个上海中心关卡），上飞院、上航、总部合并后模型测试+测试后反馈",
       "relatedTaskName": "4.15接待转场动画：建筑生长开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31158,6 +31933,9 @@
       "workContent": "六个中心场景搭建，模型材质替换，建立材质实例并替换，动画制作：场景sequence镜头搭建移动动画帧制作，模型生长过程/楼宇先后建立关系动画制作",
       "relatedTaskName": "4.15接待转场动画：建筑生长开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31200,6 +31978,9 @@
       "workContent": "查图工具开发",
       "relatedTaskName": "指挥决策系统四期开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -31247,6 +32028,9 @@
       "workContent": "指挥决策系统四期连调",
       "relatedTaskName": "指挥决策系统四期开发",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -31292,6 +32076,9 @@
       "workContent": "接待大屏脚本讨论与开发计划会议",
       "relatedTaskName": "接待大屏产品设计元宇宙软件通用需求分析/功能设计/UI设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -31342,6 +32129,9 @@
       "workContent": "场景技术支持与资源协调",
       "relatedTaskName": "接待大屏场景设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -31389,6 +32179,9 @@
       "workContent": "指挥决策系统大屏需求技术方案设计",
       "relatedTaskName": "指挥决策系统大屏需求技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -31425,6 +32218,9 @@
       "workContent": "接待版本开发，数字飞机测试云渲染断联重连",
       "relatedTaskName": "接待版本开发开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31469,6 +32265,9 @@
       "workContent": "接待版本开发，串流程，修问题\n更新数字飞机断线重连，进度小超人数据联调",
       "relatedTaskName": "接待版本开发开发",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -31491,7 +32290,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "214",
@@ -31517,6 +32316,9 @@
       "workContent": "元宇宙平台复杂模型拓补重建、减面优化",
       "relatedTaskName": "元宇宙复杂模型拓补重建优化",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -31539,7 +32341,7 @@
       "aiConfidence": null,
       "aiReviewLabel": null,
       "aiSuggestion": null,
-      "aiReviewReason": "Model request failed: 429 {\"error\":{\"code\":\"1302\",\"message\":\"您的账户已达到速率限制，请您控制请求频率\"}}",
+      "aiReviewReason": null,
       "aiReviewedAt": null,
       "rawData": {
         "序号": "215",
@@ -31565,6 +32367,9 @@
       "workContent": "元宇宙平台各公司场景材质合并",
       "relatedTaskName": "上飞公司场景合并",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -31610,6 +32415,9 @@
       "workContent": "元宇宙复杂模型拓补重建、减面优化",
       "relatedTaskName": "元宇宙复杂模型拓补重建优化",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -31657,6 +32465,9 @@
       "workContent": "元宇宙平台各公司场景材质合并",
       "relatedTaskName": "上飞公司场景合并",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -31702,6 +32513,9 @@
       "workContent": "参加脑建立V2.25迭代复盘会",
       "relatedTaskName": "C大脑版本迭代日常会议支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31746,6 +32560,9 @@
       "workContent": "AI文档转图谱中有关条件配置的调研",
       "relatedTaskName": "AI文档转图谱条件配置、树实例界面交互设计调研支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31788,6 +32605,9 @@
       "workContent": "成功在5G环境-中国商飞租户上线应用效能统计看板；\n总人数指标涉及的历史遗留用户数据处理方案已同开发传递清楚问题，预计周五整改完毕",
       "relatedTaskName": "应用效能统计看板中人员指标问题处理支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31832,6 +32652,9 @@
       "workContent": "树实例相关竞品的调研",
       "relatedTaskName": "AI文档转图谱条件配置、树实例界面交互设计调研支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -31877,6 +32700,9 @@
       "workContent": "完成集中办公验证dify搭建AI脑建立智能体的能力，进行中，60%",
       "relatedTaskName": "验证Dify搭建AI脑建立智能体支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -31919,6 +32745,9 @@
       "workContent": "讨论并补充PPTMES部分内容",
       "relatedTaskName": "生产管理-CMES相关产品部分ppt补充",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -31967,6 +32796,9 @@
       "workContent": "对接黑湖科技，明确周四会议议程",
       "relatedTaskName": "CMES-V0.2现场需求采集",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32009,6 +32841,9 @@
       "workContent": "梳理目前产品工作进展，汇总知识库方便后续外部厂商对接，涵盖调研记录、解决方案、原型设计、prd、评审记录等内容",
       "relatedTaskName": "CMES-V0.2C大脑现场需求迭代规划",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32051,6 +32886,9 @@
       "workContent": "对接黑湖科技，明确周四来访会议安排，形成会议议程",
       "relatedTaskName": "C-MES产品调研支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32093,6 +32931,9 @@
       "workContent": "1. 对接张涵，收集当前C大脑产研工作任务清单\n2. 调研学习产研项目管理理论及AI工具，完成度10%",
       "relatedTaskName": "C大脑产研项目管理-支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32135,6 +32976,9 @@
       "workContent": "去上飞厂找王斌部长沟通2026年运维合同事宜",
       "relatedTaskName": "上飞运维合同签订支持支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -32183,6 +33027,9 @@
       "workContent": "找采供部沟通2026年运维合同事宜",
       "relatedTaskName": "上飞运维合同签订支持支撑性活动记录",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": true,
       "ruleFlags": {
@@ -32231,6 +33078,9 @@
       "workContent": "眼睛端技术路径拉通",
       "relatedTaskName": "指挥决策系统大屏需求技术方案设计",
       "riskLevel": "low",
+      "ruleRiskLevel": "low",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "low",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -32276,6 +33126,9 @@
       "workContent": "眼睛端技术路径拉通+指挥决策系统大屏端",
       "relatedTaskName": "指挥决策系统大屏需求技术方案设计",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -32319,6 +33172,9 @@
       "workContent": "确定脑进化4-6月份目标和指挥决策大图抽小图与图查询融合的方案",
       "relatedTaskName": "指挥决策系统功能开发开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -32362,6 +33218,9 @@
       "workContent": "确定指挥决策大屏数据侧和前后端交互方案",
       "relatedTaskName": "指挥决策系统功能开发开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": true,
       "ruleFlags": {
@@ -32405,6 +33264,9 @@
       "workContent": "合并",
       "relatedTaskName": "919一体化厂房场景搭建",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -32450,6 +33312,9 @@
       "workContent": "灯光修改",
       "relatedTaskName": "元宇宙上飞公司C12车间灯光修改",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -32495,6 +33360,9 @@
       "workContent": "1、质量平台人员配置页面前后端开发\n2、质量平台考核页面人员分类逻辑增加\n3、外包面试",
       "relatedTaskName": "质量平台开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32539,6 +33407,9 @@
       "workContent": "1、质量平台质量考核页面缺陷增加优先级判断\n2、质量考核页面人员展示科室或者项目的全部人员\n3、外包面试\n2、",
       "relatedTaskName": "质量平台开发",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32581,6 +33452,9 @@
       "workContent": "1. C大脑每日任务根据，计划通知，整理台账 【1h】\n2. 针对日报做AI审核的智能体, 调研vibe coding, 安装调试相关软件，完成初版50%的 MVP  [5H]\n3.  开系统事业群  工作计划管理会 【4h】",
       "relatedTaskName": "C大脑产研项目管理",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -32617,6 +33491,9 @@
       "workContent": "用VSCODE 构建日报管理分析产品MVP版本，集合前端看板、AI分析、EXCEL输出等功能，完成度60%",
       "relatedTaskName": "AI日报审核智能体MVP版本构建",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32659,6 +33536,9 @@
       "workContent": "辅助脑建立完成验证Dify搭建AI智能体，提供解决方案",
       "relatedTaskName": "验证Dify搭建AI脑建立智能体",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32701,6 +33581,9 @@
       "workContent": "1. 每日任务追踪\n2. 4月份日报数据分析，缺项漏项通知\n3. 与李璟交接C大脑产研管理内容、工具",
       "relatedTaskName": "C大脑产研项目管理",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32743,6 +33626,9 @@
       "workContent": "一、今日进展\n1.图库异常问题排查——4h\n2.图库数据迁移——4h\n二、存在问题/风险\n无",
       "relatedTaskName": "信创图数据库适配支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32785,6 +33671,9 @@
       "workContent": "一、今日进展\n1.迁移多个图库到新库中——6h\n2.创建新库并创建账号、授权——2h\n二、存在问题/风险\n无",
       "relatedTaskName": "信创图数据库适配支撑性活动记录",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32827,6 +33716,9 @@
       "workContent": "智能体开发",
       "relatedTaskName": "统一智能体门户demo开发单元测试",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -32874,6 +33766,9 @@
       "workContent": "智能体开发",
       "relatedTaskName": "统一智能体门户demo开发单元测试",
       "riskLevel": "medium",
+      "ruleRiskLevel": "medium",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "medium",
       "issueCount": 2,
       "needAiReview": false,
       "ruleFlags": {
@@ -32921,6 +33816,9 @@
       "workContent": "",
       "relatedTaskName": "接待大屏产品设计产品设计",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -32963,6 +33861,9 @@
       "workContent": "",
       "relatedTaskName": "接待大屏产品设计产品设计",
       "riskLevel": "high",
+      "ruleRiskLevel": "high",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "high",
       "issueCount": 1,
       "needAiReview": false,
       "ruleFlags": {
@@ -33005,6 +33906,9 @@
       "workContent": "参加V2.27脑建立产品需求评审，进度100%；开展UI设计，进度20%",
       "relatedTaskName": "v2.27脑建立-AI建模支持多轮对话",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {
@@ -33045,6 +33949,9 @@
       "workContent": "V2.27脑建立-AI建模支持多轮对话的UI设计，进度40%",
       "relatedTaskName": "v2.27脑建立-AI建模支持多轮对话",
       "riskLevel": "normal",
+      "ruleRiskLevel": "normal",
+      "aiRiskLevel": null,
+      "finalRiskLevel": "normal",
       "issueCount": 0,
       "needAiReview": false,
       "ruleFlags": {},
@@ -34308,15 +35215,80 @@
     }
   ],
   "aiReviewProgress": {
-    "status": "running",
+    "status": "idle",
     "totalCandidates": 37,
-    "completedCount": 14,
-    "successCount": 2,
-    "failedCount": 12,
-    "pendingCount": 23,
+    "completedCount": 0,
+    "successCount": 0,
+    "failedCount": 0,
+    "pendingCount": 37,
     "exportReady": false,
-    "startedAt": "2026-04-15T13:22:55.396Z",
+    "startedAt": "2026-04-16T13:40:17.839Z",
     "finishedAt": null,
-    "message": "AI 正在完整复核中，已完成 14/37。"
+    "lastAttemptAt": "2026-04-16T13:42:10.617Z",
+    "lastProgressAt": "2026-04-16T13:42:12.346Z",
+    "currentRecordId": null,
+    "cancelRequested": false,
+    "message": "尚未开始完整 AI 复核。"
+  },
+  "batchAiReport": {
+    "overview": "本批次共处理250条日报记录，异常率为26.4%，其中高风险记录38条，中等风险28条，低风险40条。团队总工时1721.1小时，15名人员被标记为高风险，37条记录需要AI审核。主要问题集中在任务匹配较弱(48条)和单日总工时偏高(39条)两个方面。",
+    "majorFindings": [
+      "任务匹配较弱是主要问题，占比高达48条异常记录",
+      "单日总工时偏高问题突出，有39条相关异常记录",
+      "内容质量问题明显，包括内容过短(19条)、缺少日报内容(16条)和内容较短(13条)",
+      "结果记录不充分，结果痕迹较弱仅4条，可能影响工作成果评估"
+    ],
+    "riskInsights": [
+      "高风险人员(15人)的异常记录占总异常数的22.7%，需要重点关注",
+      "多个v2.26版本相关任务存在风险，可能影响版本进度",
+      "缺少日报内容的情况多见于高风险人员，可能存在工作透明度问题",
+      "AI审核发现会议描述泛化和结果不明确问题，表明工作成果记录规范性有待提高"
+    ],
+    "focusPeopleSuggestions": [
+      "毛晨弘(16条异常)：建议加强日报内容质量，特别是任务匹配和工时记录的准确性",
+      "齐雨石(6条异常，高风险)：需重点关注日报内容完整性，避免缺少日报内容的情况",
+      "钱胜充、苗天宁、吴绍峰、徐亮(3-4条异常，高风险)：建议关注任务匹配和工时记录的规范性",
+      "姜楠、张宁(2条异常，高风险)：需关注日报内容完整性和工时记录的合理性"
+    ],
+    "focusTaskSuggestions": [
+      "v2.26系列开发任务：建议加强任务描述与实际工作的匹配度",
+      "指标中心-开发：建议提高日报质量，确保工作内容记录完整",
+      "数字飞机黄绿区打通现场问题处理运维支持：建议加强工作成果记录",
+      "多个公共服务平台相关任务：建议关注任务执行过程和结果的记录"
+    ],
+    "managementSuggestions": [
+      "建议组织日报填写规范培训，特别是针对任务匹配和结果记录",
+      "考虑建立日报质量抽查机制，提高团队对日报质量的重视",
+      "针对高风险人员，建议进行一对一沟通，了解工作记录困难的原因",
+      "考虑优化日报模板，简化填写流程，提高内容质量"
+    ],
+    "reportingSummary": "本批次日报处理共250条，异常率26.4%，主要问题集中在任务匹配和工时记录方面。15名高风险人员需要重点关注，特别是毛晨弘、齐雨石等异常记录较多的成员。v2.26系列任务存在较多风险，建议加强过程管理。团队总工时1721.1小时，整体工作量正常，但工作成果记录规范性有待提高。建议加强日报填写培训和模板优化，提高工作透明度和成果评估准确性。",
+    "generatedAt": "2026-04-16T06:49:23.138Z",
+    "extra": {
+      "provider": "glm",
+      "aiInput": {
+        "metrics": {
+          "totalRecords": 250,
+          "anomalyRecords": 66,
+          "anomalyRate": 26.4,
+          "highRiskPeopleCount": 15,
+          "needAiReviewCount": 37,
+          "totalHours": 1721.1
+        },
+        "aiReviewSummary": {
+          "reviewedCount": 2,
+          "labelDistribution": [
+            {
+              "label": "会议描述泛化",
+              "value": 1
+            },
+            {
+              "label": "结果不明确",
+              "value": 1
+            }
+          ]
+        }
+      }
+    }
   }
 }

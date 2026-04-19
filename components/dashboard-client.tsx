@@ -129,7 +129,8 @@ export function DashboardClient() {
     try {
       const result = await startFullAiReview({ action, force: action === "restart" });
       setActionMessage(result.message || "AI 复核状态已更新。");
-      setReviewProgress(result.progress ?? EMPTY_AI_REVIEW_PROGRESS);
+      // Do NOT use result.progress directly — it may reflect an in-flight state that
+      // hasn't been persisted yet. Always read from the file via refreshProgress().
       await refreshProgress();
       await refreshAiReport();
       await refreshDashboard();

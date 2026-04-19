@@ -197,7 +197,11 @@ export const aiReviewProgressSchema = z
     totalBatches: z.number().nonnegative().optional(),
     currentRecordId: z.string().nullable().optional(),
     cancelRequested: z.boolean().optional(),
-    message: z.string().nullable().optional()
+    message: z.string().nullable().optional(),
+    boundConfigId: z.string().nullable().optional(),
+    boundConfigName: z.string().nullable().optional(),
+    boundProvider: z.string().nullable().optional(),
+    boundModel: z.string().nullable().optional()
   })
   .passthrough();
 

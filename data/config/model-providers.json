@@ -1,0 +1,15 @@
+{
+  "activeConfigId": "cfg_1776524814342_yhhldn",
+  "configs": [
+    {
+      "id": "cfg_1776524814342_yhhldn",
+      "name": "DeepSeek",
+      "provider": "deepseek",
+      "apiKey": "sk-2b5107194fa842da94823756455363c6",
+      "baseUrl": "https://api.deepseek.com/v1",
+      "model": "deepseek-chat",
+      "createdAt": "2026-04-18T15:06:54.342Z",
+      "updatedAt": "2026-04-18T15:06:54.342Z"
+    }
+  ]
+}

@@ -13,14 +13,34 @@ export async function ensureDataDirectories() {
   );
 }
 
+// Atomic write: write to a sibling .tmp file, then rename over the target.
+// On the same filesystem partition, rename(2) is atomic — readers always see
+// either the old complete file or the new complete file, never partial data.
+// This prevents the "Unterminated string in JSON" / "Unexpected end of JSON"
+// errors that occur when a concurrent read catches a file mid-write.
 export async function writeJsonFile(filePath: string, data: unknown) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf8");
+  const tmpPath = `${filePath}.tmp`;
+  await fs.writeFile(tmpPath, JSON.stringify(data, null, 2), "utf8");
+  await fs.rename(tmpPath, filePath);
 }
 
+// Throws on read or parse error — use when the caller already handles errors.
 export async function readJsonFile<T>(filePath: string) {
   const buffer = await fs.readFile(filePath, "utf8");
   return JSON.parse(buffer) as T;
+}
+
+// Returns null on any error (ENOENT, parse failure, etc.).
+// Use for resilient reads where a missing or corrupt file should be treated
+// as "not available" rather than a fatal error.
+export async function tryReadJsonFile<T>(filePath: string): Promise<T | null> {
+  try {
+    const buffer = await fs.readFile(filePath, "utf8");
+    return JSON.parse(buffer) as T;
+  } catch {
+    return null;
+  }
 }
 
 export async function fileExists(filePath: string) {
