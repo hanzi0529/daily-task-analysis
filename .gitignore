@@ -32,3 +32,15 @@ latest-export*.xlsx
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
+# === 项目运行数据（必须忽略）===
+data/uploads/
+
+# Excel数据
+*.xlsx
+
+# AI中间文件
+review-*.txt
+review-*.json
+
+# 临时调试文件
+*.tmp
